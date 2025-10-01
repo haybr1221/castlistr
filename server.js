@@ -9,12 +9,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const path = require("path");
+const { create } = require("domain");
 
 // Serve static files from "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(port, () => {
-  console.log("Server running on http://localhost:3000");
+    console.log("Server running on http://localhost:3000");
 });
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -33,6 +34,7 @@ app.post("/auth/send-otp", async (req, res) => {
             email,
             options: {
                 shouldCreateUser: true,
+                channel: "email"
             }
         });
 
@@ -54,7 +56,7 @@ app.post("/auth/verify-otp", async (req, res) => {
         const { data, error } = await supabase.auth.verifyOtp({
             email,
             token,
-            type: "magiclink"
+            type: "email"
         });
 
         if (error) {
@@ -66,5 +68,20 @@ app.post("/auth/verify-otp", async (req, res) => {
     } catch (err) {
         console.error("Unexpected error verifying OTP:", err);
         return res.status(500).json({ error: err.message || String(err) });
+    }
+});
+
+app.get("/performer", async (req, res) => {
+    try {
+        const { data, error } = await supabase.from("performer").select("*");
+        
+        if (error) {
+            console.error("Error fetching performers:", error);
+            return res.status(500).json({ error: error.message || error });
+        }
+        return res.json(data);
+    }
+    catch (err) {
+        console.error("Unexpected error fetching performers:", err);
     }
 });
