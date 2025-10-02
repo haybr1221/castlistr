@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Create a List</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,16 +17,24 @@
             <a id="sign-out" class="button">Sign Out</a>
         </nav>
     </header>
-    <main id="home-page">
-        <div id="castlist-container">
-            
-        </div>
-        <div id="profile-container">
-            <div id="profile-pic">
-                <div id="profile-pic-holder"></div>
+
+    <main id="create-main">
+        <div id="create-container">
+            <h1 id="create-title">Create a new list</h1>
+            <div id="step-one">
+                <h2 id="create-step">Step 1: Choose a show</h2>
+                <div id="form">
+                    <form>
+                        <label class="label" id="show">Show:</label>
+                        <select id="show-dropdown">
+                            <option value="" disabled selected>Select a show</option>
+                        </select>
+                    </form>
+                </div>
             </div>
-            <p id="username">username</p>
         </div>
     </main>
+
+    <script src="create.js"></script>
 </body>
 </html>

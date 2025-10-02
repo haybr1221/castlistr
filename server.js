@@ -85,3 +85,18 @@ app.get("/performer", async (req, res) => {
         console.error("Unexpected error fetching performers:", err);
     }
 });
+
+app.get("/show", async (req, res) => {
+    try {
+        const { data, error } = await supabase.from("show").select("*");
+        
+        if (error) {
+            console.error("Error fetching shows:", error);
+            return res.status(500).json({ error: error.message || error });
+        }
+        return res.json(data);
+    }
+    catch (err) {
+        console.error("Unexpected error fetching shows:", err);
+    }
+});

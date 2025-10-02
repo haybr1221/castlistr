@@ -1,4 +1,3 @@
-console.log("performers.js");
 async function fetchPerformers() {
     console.log("fetching")
     try {
@@ -11,11 +10,12 @@ async function fetchPerformers() {
             console.log("Fetched performers:", data);
             const tbody = document.getElementById("performer-list");
             data.forEach(element => {
-                console.log("Element:", element);
+                const { first_name, middle_name, last_name } = element;
                 const row = document.createElement("tr");
+                const full_name = `${first_name} ${middle_name ? middle_name + ' ' : ''}${last_name}`;
                 row.innerHTML = `
                     <td>${element.id}</td>
-                    <td>${element.first_name}</td>
+                    <td>${full_name}</td>
                 `;
                 tbody.appendChild(row);
             });

@@ -184,3 +184,34 @@ main {
     font-family: 'coolvetica', sans-serif;
     font-size: 20px;
 }
+
+/* Create page */
+
+#create-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+
+#create-container {
+    background-color: white;
+    border-radius: 20px;
+    width: 800px;
+    height: 500px;
+}
+
+#create-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 30px;
+    text-align: left;
+    padding: 20px;
+}
+
+#create-step {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--black);
+    font-size: 20px;
+    text-align: left;
+    padding-left: 20px;
+}
