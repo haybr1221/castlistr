@@ -100,3 +100,24 @@ app.get("/show", async (req, res) => {
         console.error("Unexpected error fetching shows:", err);
     }
 });
+
+app.get(`/show/:id/characters`, async (req, res) => {
+    // Get the characters for a specific show
+    const showId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("character")
+        .select(`
+            *,
+            show_has_character!inner (show_id, char_id)`)
+        .eq("show_has_character.show_id", showId);
+
+    console.log(data)
+    if (error) { console.error("Error fetching characters:", error) }
+
+    res.json(data);
+});
+
+app.set("/cast-lists", async (req, res) => {
+    
+});

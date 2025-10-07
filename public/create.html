@@ -22,7 +22,7 @@
         <div id="create-container">
             <h1 id="create-title">Create a new list</h1>
             <div id="step-one">
-                <h2 id="create-step">Step 1: Choose a show</h2>
+                <h2 id="create-step" class="step">Step 1: Choose a show</h2>
                 <div id="form">
                     <form>
                         <label class="label" id="show">Show:</label>
@@ -31,6 +31,21 @@
                         </select>
                     </form>
                 </div>
+            </div>
+            <div id="step-two">
+                <h2 id="select-characters" class="step">Step 2: Choose your characters</h2>
+                <p class="text">Select the actors you want to see in <span id="selected-show-title"></span>!</p>
+                <form id="character-form">
+                    
+                </form>
+            </div>
+            <div id="step-three">
+                <h2 id="name-list" class="step">Step 3: Name your list</h2>
+                <form id="finalize-list">
+                    <label class="label" for="list-name">List Name:</label>
+                    <input type="text" id="list-name" name="list-name" required>
+                    <button type="submit" id="create-list-button" class="button">Create List</button>
+                </form>
             </div>
         </div>
     </main>

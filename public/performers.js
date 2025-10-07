@@ -1,9 +1,6 @@
 async function fetchPerformers() {
-    console.log("fetching")
     try {
-        console.log("trying");
         const response = await fetch("/performer");
-    
 
         if (response.ok) {
             const data = await response.json();
@@ -20,7 +17,6 @@ async function fetchPerformers() {
                 tbody.appendChild(row);
             });
         }
-
 
     }
     catch (err) {
