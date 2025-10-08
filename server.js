@@ -117,7 +117,3 @@ app.get(`/show/:id/characters`, async (req, res) => {
 
     res.json(data);
 });
-
-app.set("/cast-lists", async (req, res) => {
-    
-});

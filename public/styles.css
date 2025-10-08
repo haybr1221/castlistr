@@ -226,6 +226,84 @@ main {
     box-sizing: border-box;
 }
 
+.dropdown-box {
+    width: 300px;
+    position: relative;
+}
+
+
+.dropdown-box input {
+    width: 100%;
+    border: 1px solid pink;
+    outline: none;
+    border-radius: 5px;
+    padding: 3px 10px;
+    color: rgb(78, 78, 78);
+}
+
+.dropdown-box .selected-item {
+    position: relative;
+}
+
+.dropdown-box .selected-item::after {
+    content: "";
+    width: 3px;
+    height: 3px;
+    border: 2px solid;
+    border-color: transparent pink pink transparent;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-70%) rotate(45deg);
+}
+
+.dropdown-box .selected-item, .dropdown-box .selected-item input {
+    cursor: pointer;
+}
+
+.dropdown-box .dropdown-content {
+    box-shadow: 0px 5px 15px black 15%;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow: auto;
+    display: none;
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+}
+
+.dropdown-box.active .dropdown-content {
+    display: block;
+}
+
+.dropdown-box .dropdown-content .search-input {
+    padding: 5px;
+}
+
+.dropdown-box .dropdown-content ul {
+    list-style: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.dropdown-box .dropdown-content ul li {
+    font-size: 0.8rem;
+    padding: 2px 5px;
+    cursor: pointer;
+}
+
+.dropdown-box .dropdown-content ul li.hide {
+    display: none;
+}
+
+.dropdown-box .dropdown-content ul li:hover {
+    background-color: rgb(245 245 245);
+}
+
+.dropdown-box .dropdown-content ul li .active {
+    background-color: rgb(213, 242, 246);
+    color: rgb(0, 0, 191)
+}
+
 .character-form {
     display: flex;
     flex-wrap: wrap;
