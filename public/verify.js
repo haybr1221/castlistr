@@ -1,3 +1,10 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 async function sendOtp() {
     console.log("Sending OTP...");
     const email = document.getElementById("email").value;
@@ -52,6 +59,11 @@ async function verifyOtp() {
             return;
         }
 
+        await supabase.auth.setSession({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+        });
+
         console.log("Verification successful:", data);
         // Redirect to home
         window.location.href = '/home.html';
@@ -60,10 +72,5 @@ async function verifyOtp() {
     }
 }
 
-async function signOut() {
-    const { error } = await supabase.auth.signOut()
-}
-
 document.getElementById("sign-in").addEventListener("click", sendOtp);
 document.getElementById("verifyBtn").addEventListener("click", verifyOtp);
-document.getElementById("sign-out").addEventListener("click", signOut);

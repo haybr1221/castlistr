@@ -231,7 +231,6 @@ main {
     position: relative;
 }
 
-
 .dropdown-box input {
     width: 100%;
     border: 1px solid pink;
@@ -312,4 +311,9 @@ main {
 .entry {
     border-radius: 100px;
     padding: 20px;
+}
+
+#step-one {
+    display: flex;
+    align-items: center;
 }

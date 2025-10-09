@@ -64,7 +64,12 @@ app.post("/auth/verify-otp", async (req, res) => {
             return res.status(400).json({ error: error.message || error });
         }
 
-        return res.json({ message: "OTP verified", data });
+        return res.json({ 
+            message: "OTP verified",
+            access_token: data.session?.access_token,
+            refresh_token: data.session?.refresh_token,
+            user: data.user,
+            data });
     } catch (err) {
         console.error("Unexpected error verifying OTP:", err);
         return res.status(500).json({ error: err.message || String(err) });
