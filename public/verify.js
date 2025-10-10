@@ -65,8 +65,9 @@ async function verifyOtp() {
         });
 
         console.log("Verification successful:", data);
+        console.log("Tokens returned from verify endpoint:", data);
         // Redirect to home
-        window.location.href = '/home.html';
+        // window.location.href = '/home.html';
     } catch (err) {
         console.error("Network or parsing error:", err);
     }

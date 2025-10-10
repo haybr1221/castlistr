@@ -24,4 +24,11 @@ async function fetchPerformers() {
     }
 }
 
+async function redirectToCreate() {
+    window.location.href = '/create-performer.html';
+}
+
 fetchPerformers();
+
+const newPerf = document.getElementById("new-performer-button")
+newPerf.addEventListener("click", redirectToCreate)

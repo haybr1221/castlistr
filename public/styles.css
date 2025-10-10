@@ -82,6 +82,7 @@ header {
 
 main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding-top: 100px;
@@ -117,6 +118,11 @@ main {
 .text {
     font-family: 'coolvetica', sans-serif;
     color: black;
+}
+
+#select-step {
+    padding-left: 20px;
+    padding-bottom: 20px;
 }
 
 .hide {
@@ -227,7 +233,7 @@ main {
 }
 
 .dropdown-box {
-    width: 300px;
+    width: 200px;
     position: relative;
 }
 
@@ -238,6 +244,10 @@ main {
     border-radius: 5px;
     padding: 3px 10px;
     color: rgb(78, 78, 78);
+}
+
+.selected-item {
+    max-width: 200px;
 }
 
 .dropdown-box .selected-item {
@@ -303,9 +313,10 @@ main {
     color: rgb(0, 0, 191)
 }
 
-.character-form {
+#character-form {
     display: flex;
     flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .entry {
@@ -313,7 +324,53 @@ main {
     padding: 20px;
 }
 
-#step-one {
+.search-container {
     display: flex;
+    flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.character-label {
+    margin-right: 0.5rem;
+}
+
+/* Display shows/performers */
+
+table {
+    max-width: 500px;
+    background-color: white;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+thead {
+    background-color: rgb(202, 202, 202);
+}
+
+tbody {
+    width: 100%;
+}
+
+th {
+    width: 300px;
+}
+
+/* New performer */
+
+#new-performer {
+    display: flex;
+    flex-direction: column;
+}
+
+#first-name, #middle-name, #last-name {
+    width: 200px;
+}
+
+#button-box {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
 }

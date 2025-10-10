@@ -9,9 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-
 // Get the list of shows
-console.log("hello")
 const response = await fetch("/show");
 const data = await response.json();
 
@@ -30,10 +28,11 @@ data.forEach(element => {
 });
 
 let showId;
+
 // When a show is selected, fetch the characters for that show
 parent.addEventListener("click", async (event) => {
     // Save the show id
-    const showId = event.target.value;
+    showId = event.target.value;
     const clickedShow = event.target.closest(".dropdown-item");
     console.log("Creating for ", showId);
 
@@ -42,15 +41,15 @@ parent.addEventListener("click", async (event) => {
     document.getElementById("selected-show-title").innerText = showTitle
     console.log("Fetching characters");
     
-    const response = await fetch(`/show/${showId}/characters`);
-    const data = await response.json();
+    const charResponse = await fetch(`/show/${showId}/characters`);
+    const charData = await charResponse.json();
 
-    console.log("Characters for show:", data)
+    console.log("Characters for show:", charData)
 
     const characterForm = document.getElementById("character-form");
     characterForm.innerHTML= ""
 
-    data.forEach(element => {
+    charData.forEach(element => {
         createCharacterSelector(element, characterForm)
     })
 
@@ -64,10 +63,17 @@ async function createCharacterSelector(element, characterForm) {
     // Get all necessary values to format later
     const { first_name, middle_name, last_name, suffix, title } = element;
 
+    // Create a new div container for each caracter
+    const charContainer = document.createElement("div");
+    charContainer.className = "search-container"
+    characterForm.appendChild(charContainer);
+
     // Create a new row for each character
     const label = document.createElement("p");
     label.className = "label";
-    characterForm.appendChild(label);
+
+    // Add to the container
+    charContainer.appendChild(label)
 
     // Set the full name for character
     // Keeping in mind some characters are missing some data type (e.g may have title but no first name)
@@ -95,13 +101,13 @@ async function createCharacterSelector(element, characterForm) {
                 <input type="text" name="" id="">
             </div>
             <ul id="char-${element.id}-list">
-                <li class="dropdown-item active">Select</li>
+                <li class="dropdown-item active">Select a performer</li>
             </ul>
         </div>
     `
 
     // Append label to select form
-    characterForm.appendChild(dropdown);
+    charContainer.appendChild(dropdown);
 
     const listId = `char-${element.id}-list`;
 
@@ -109,7 +115,7 @@ async function createCharacterSelector(element, characterForm) {
     createPerformerSelector(listId, element.id);
 }
 
-async function createPerformerSelector(selectId, charId) {
+async function createPerformerSelector(selectId, charId, charContainer) {
     // First call for performers from the backend
     try {
         const response = await fetch("/performer");
@@ -165,6 +171,7 @@ async function createPerformerSelector(selectId, charId) {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(showId);
 
     const { data: castListData, error: castListError } = await supabase
         .from('cast_lists')
@@ -203,6 +210,8 @@ const handleSubmit = async (e) => {
     else {
         console.log("Saved cast list.")
     }
+
+    window.location.href = '/home.html';
 }
 
 async function setPerformerForChar(charId, perfId)

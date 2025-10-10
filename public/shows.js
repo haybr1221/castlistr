@@ -23,9 +23,4 @@ async function fetchShows() {
     }
 }
 
-function router() {
-    const path = window.location.pathname;
-    
-}
-
 fetchShows();

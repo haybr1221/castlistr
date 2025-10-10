@@ -93,7 +93,9 @@ app.get("/performer", async (req, res) => {
 
 app.get("/show", async (req, res) => {
     try {
-        const { data, error } = await supabase.from("show").select("*");
+        const { data, error } = await supabase
+            .from("show")
+            .select("*");
         
         if (error) {
             console.error("Error fetching shows:", error);
@@ -117,8 +119,64 @@ app.get(`/show/:id/characters`, async (req, res) => {
             show_has_character!inner (show_id, char_id)`)
         .eq("show_has_character.show_id", showId);
 
-    console.log(data)
     if (error) { console.error("Error fetching characters:", error) }
 
     res.json(data);
 });
+
+app.get("/cast-lists", async (req, res) => {
+    // Get cast lists
+    const { data, error } = await supabase
+        .from("cast_lists")
+        .select(`*`)
+
+    if (error) {
+        console.error("Error fetching cast lists: ", error)
+    }
+    res.json(data);
+})
+
+app.get(`/cast-lists/:id`, async (req, res) => {
+    // Get cast lists for a specific user
+    const userId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("cast_lists")
+        .select(`*`)
+        .eq("user_id", userId)
+
+    if (error)
+        console.error("Error fetching cast lists for USER_ID: ", userId, " - ", error);
+    res.json(data);
+})
+
+app.get(`cast-lists/:id/cast-list-entry`, async (req, res) => {
+    // Get entries for a given cast list
+    const castListId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("cast_list_entry")
+        .select(`*`)
+        .eq("cast_list_id", castListId)
+
+    if (error)
+        console.error("Error fetching cast list entries for CAST_LIST_ID: ", castListId, " - ")
+
+    res.json(data)
+})
+
+app.get(`show`, async (req, res) => {
+    // Get show title
+    console.log("getting show id")
+    const showId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("show")
+        .select(`*`)
+        .eq("id", showId)
+    
+    if (error)
+        console.error("Error fetching show title: ", error)
+
+    res.json(data)
+})

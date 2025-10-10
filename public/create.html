@@ -23,24 +23,26 @@
             <h1 id="create-title">Create a new list</h1>
             <div id="step-one">
                 <h2 id="create-step" class="step">Step 1: Choose a show</h2>
-                <p class="label" id="show">Show:</p>
-                <div class="dropdown-box">
-                    <div class="selected-item">
-                        <input type="text" name="" value="Select" readonly id="">
-                    </div>
-                    <div class="dropdown-content" id="show-dropdown">
-                        <div class="search-input">
-                            <input type="text" name="" id="">
+                <div class="search-container">
+                    <p class="label" id="show">Show:</p>
+                    <div class="dropdown-box">
+                        <div class="selected-item">
+                            <input type="text" name="" value="Select" readonly id="">
                         </div>
-                        <ul id="show-list">
-                            <li class="dropdown-item active">Select</li>
-                        </ul>
+                        <div class="dropdown-content" id="show-dropdown">
+                            <div class="search-input">
+                                <input type="text" name="" id="">
+                            </div>
+                            <ul id="show-list">
+                                <li class="dropdown-item active">Select</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="step-two">
                 <h2 id="select-characters" class="step">Step 2: Choose your characters</h2>
-                <p class="text">Select the actors you want to see in <span id="selected-show-title"></span>!</p>
+                <p class="text" id="select-step">Select the actors you want to see in <span id="selected-show-title"></span>!</p>
                 <div id="character-form">
                     
                 </div>
