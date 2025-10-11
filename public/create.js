@@ -199,7 +199,7 @@ const handleSubmit = async (e) => {
         performer_id: Number(perfId)
     }))
 
-    const { data: entryData, error: entryError } = await supabase
+    const { error: entryError } = await supabase
         .from('cast_list_entry')
         .insert(entries)
 
@@ -272,7 +272,6 @@ document.addEventListener("click", (event) => {
     // Close this dropdown
     dropdownBox.classList.remove("active");
 });
-const searchInput = document.querySelector(".search-input input");
 
 document.addEventListener("keyup", (event) => {
     const searchInput = event.target.closest(".search-input input");
@@ -292,5 +291,4 @@ document.addEventListener("keyup", (event) => {
     });
 });
 
-const submitButton = document.getElementById("finalize-list")
-submitButton.addEventListener("submit", handleSubmit)
+document.getElementById("finalize-list").addEventListener("submit", handleSubmit)

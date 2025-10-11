@@ -18,17 +18,13 @@ const handleSubmit = async (e) => {
 
     console.log("submit being handled")
 
-    const firstName = document.getElementById("first-name").value;
-    const middleName = document.getElementById("middle-name").value;
-    const lastName = document.getElementById("last-name").value;
+    const title = document.getElementById("title-input").value;
 
     const { error } = await supabase
-        .from("performer")
+        .from("show")
         .insert([
             {
-                first_name: firstName,
-                middle_name: middleName,
-                last_name: lastName,
+                title: title,
                 user_id: user.id
             }
         ])

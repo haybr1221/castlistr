@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Performer</title>
+    <title>Create a Show</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,14 +20,10 @@
 
     <main id="create-main">
         <div id="create-container">
-            <h1 id="title">Create a Performer</h1>
-            <form id="new-performer">
-                <label class="label" for="first-name" id="first-name-label">First Name:</label>
-                <input type="text" id="first-name" name="first-name" required>
-                <label class="label" for="middle-name" id="middle-name-label">Middle Name (or initial):</label>
-                <input type="text" id="middle-name" name="middle-name">
-                <label class="label" for="last-name" id="last-title-label">Last Name:</label>
-                <input type="text" id="last-name" name="last-name">
+            <h1 id="title">Create a Show</h1>
+            <form id="new-show">
+                <label class="label" for="title" id="show-title-label">Title:</label>
+                <input type="text" id="title-input" name="title" required>
                 <div id="button-box">
                     <button type="submit" class="button" id="create-btn">Create</button>
                     <button type="submit" class="button" id="create-create-another">Create & Create Another</button>
@@ -37,6 +33,6 @@
     </main>
         
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script type="module" src="create-performer.js"></script>
+    <script type="module" src="create-show.js"></script>
 </body>
 </html>

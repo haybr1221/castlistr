@@ -24,3 +24,9 @@ async function fetchShows() {
 }
 
 fetchShows();
+
+async function redirectToCreate() {
+    window.location.href = '/create-show.html';
+}
+
+document.getElementById("new-show-button").addEventListener("click", redirectToCreate)
