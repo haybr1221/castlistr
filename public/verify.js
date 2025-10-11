@@ -39,38 +39,37 @@ async function verifyOtp() {
 
     console.log("Token for ", email, " is ", token);
 
-    try {
-        const response = await fetch("/auth/verify-otp", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, token })
-        });
+    const { response, error } = await fetch("/auth/verify-otp", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, token })
+    });
 
-        console.log("Response: ", response);
+    if (error) throw error;
 
-        // attempt to parse JSON, but don't crash if it's empty
-        const data = await response.json().catch(() => null);
+    console.log("Response: ", response);
 
-        if (!response.ok) {
-            console.error("Verification failed:", data || response.statusText);
-            if (msgEl) msgEl.innerText = (data && (data.error || data.message)) || 'Verification failed';
-            return;
-        }
+    // attempt to parse JSON, but don't crash if it's empty
+    const data = await response.json().catch(() => null);
 
-        await supabase.auth.setSession({
-            access_token: data.access_token,
-            refresh_token: data.refresh_token,
-        });
-
-        console.log("Verification successful:", data);
-        console.log("Tokens returned from verify endpoint:", data);
-        // Redirect to home
-        window.location.href = '/home.html';
-    } catch (err) {
-        console.error("Network or parsing error:", err);
+    if (!response.ok) {
+        console.error("Verification failed:", data || response.statusText);
+        if (msgEl) msgEl.innerText = (data && (data.error || data.message)) || 'Verification failed';
+        return;
     }
+
+    await supabase.auth.setSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+    });
+
+    console.log("Verification successful:", data);
+    console.log("Tokens returned from verify endpoint:", data);
+    // Redirect to home
+    window.location.href = '/home.html';
+    
 }
 
 document.getElementById("sign-in").addEventListener("click", sendOtp);

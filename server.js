@@ -29,83 +29,68 @@ app.use(bodyParser.json());
 
 app.post("/auth/send-otp", async (req, res) => { 
     const { email } = req.body;
-    try {
-        const { data, error } = await supabase.auth.signInWithOtp({
-            email,
-            options: {
-                shouldCreateUser: true,
-                channel: "email"
-            }
-        });
 
-        if (error) {
-            console.error("Error sending OTP:", error);
-            return res.status(500).json({ error: error.message || error });
+    const { data, error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+            shouldCreateUser: true,
+            channel: "email"
         }
+    });
 
-        return res.json({ message: "OTP sent!", data });
-    } catch (err) {
-        console.error("Unexpected error sending OTP:", err);
-        return res.status(500).json({ error: err.message || String(err) });
+    if (error) {
+        console.error("Error sending OTP:", error);
+        return;
     }
+
+    return res.json({ message: "OTP sent!", data });
 });
 
 app.post("/auth/verify-otp", async (req, res) => {
     const { email, token } = req.body;
-    try {
-        const { data, error } = await supabase.auth.verifyOtp({
-            email,
-            token,
-            type: "email"
-        });
 
-        if (error) {
-            console.error("Error verifying OTP:", error);
-            return res.status(400).json({ error: error.message || error });
-        }
+    const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: "email"
+    });
 
-        return res.json({ 
-            message: "OTP verified",
-            access_token: data.session?.access_token,
-            refresh_token: data.session?.refresh_token,
-            user: data.user,
-            data });
-    } catch (err) {
-        console.error("Unexpected error verifying OTP:", err);
-        return res.status(500).json({ error: err.message || String(err) });
+    if (error) {
+        console.error("Error verifying OTP:", error);
+        return;
     }
+
+    return res.json({ 
+        message: "OTP verified",
+        access_token: data.session?.access_token,
+        refresh_token: data.session?.refresh_token,
+        user: data.user,
+        data });
+
 });
 
-app.get("/performer", async (req, res) => {
-    try {
-        const { data, error } = await supabase.from("performer").select("*");
-        
-        if (error) {
-            console.error("Error fetching performers:", error);
-            return res.status(500).json({ error: error.message || error });
-        }
-        return res.json(data);
+app.get("/performer", async (res) => {
+    const { data, error } = await supabase.from("performer").select("*");
+    
+    if (error) {
+        console.error("Error fetching performers:", error);
+        return res.status(500).json({ error: error.message || error });
     }
-    catch (err) {
-        console.error("Unexpected error fetching performers:", err);
-    }
+    return res.json(data);
+
 });
 
-app.get("/show", async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from("show")
-            .select("*");
-        
-        if (error) {
-            console.error("Error fetching shows:", error);
-            return res.status(500).json({ error: error.message || error });
-        }
-        return res.json(data);
+app.get("/show", async (res) => {
+    const { data, error } = await supabase
+        .from("show")
+        .select("*");
+    
+    if (error) {
+        console.error("Error fetching shows:", error);
+        return;
     }
-    catch (err) {
-        console.error("Unexpected error fetching shows:", err);
-    }
+    return res.json(data);
+    
 });
 
 app.get(`/show/:id/characters`, async (req, res) => {
@@ -124,7 +109,7 @@ app.get(`/show/:id/characters`, async (req, res) => {
     res.json(data);
 });
 
-app.get("/cast-lists", async (req, res) => {
+app.get("/cast-lists", async (res) => {
     // Get cast lists
     const { data, error } = await supabase
         .from("cast_lists")

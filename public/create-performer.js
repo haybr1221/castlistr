@@ -10,13 +10,11 @@ const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
 function create() {
-    
+    // Create just one
 }
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("submit being handled")
 
     const firstName = document.getElementById("first-name").value;
     const middleName = document.getElementById("middle-name").value;

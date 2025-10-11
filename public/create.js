@@ -27,28 +27,34 @@ data.forEach(element => {
     parent.appendChild(item);
 });
 
+// Define show id so we can use it later
 let showId;
 
 // When a show is selected, fetch the characters for that show
 parent.addEventListener("click", async (event) => {
-    // Save the show id
+    // Store the show id based on input
     showId = event.target.value;
     const clickedShow = event.target.closest(".dropdown-item");
-    console.log("Creating for ", showId);
 
-    // Save the show title
+    // Save the show title to
     const showTitle = clickedShow.textContent.trim();
+
+    // Display the show title on the next step
     document.getElementById("selected-show-title").innerText = showTitle
-    console.log("Fetching characters");
     
+    // Fetch characters from backend
     const charResponse = await fetch(`/show/${showId}/characters`);
     const charData = await charResponse.json();
 
-    console.log("Characters for show:", charData)
+    // console.log("Characters for show:", charData)
 
+    // Set the character form
     const characterForm = document.getElementById("character-form");
+
+    // Clear it in case another show had been selected before
     characterForm.innerHTML= ""
 
+    // Loop through each character and create a sleector for them
     charData.forEach(element => {
         createCharacterSelector(element, characterForm)
     })
@@ -115,7 +121,7 @@ async function createCharacterSelector(element, characterForm) {
     createPerformerSelector(listId, element.id);
 }
 
-async function createPerformerSelector(selectId, charId, charContainer) {
+async function createPerformerSelector(selectId, charId) {
     // First call for performers from the backend
     try {
         const response = await fetch("/performer");
@@ -162,7 +168,6 @@ async function createPerformerSelector(selectId, charId, charContainer) {
                 })
             });
         }
-
     }
     catch (err) {
         console.error("Error fetching performers:", err);
@@ -173,7 +178,7 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(showId);
 
-    const { data: castListData, error: castListError } = await supabase
+    const { data, error } = await supabase
         .from('cast_lists')
         .insert([
             // Inital cast list needs cast_list_id, show_id, user_id, title, created_at
@@ -186,10 +191,10 @@ const handleSubmit = async (e) => {
         .select()
 
     // Log an error if it finds one
-    if (castListError) throw castListError;
+    if (error) throw error;
 
-    // Get the ID so we can add the cast list entries
-    const castListId = castListData[0].id;
+    // Get the ID of the new list so we can add the cast list entries
+    const castListId = data[0].id;
 
     console.log(castSelections);
     // Create a bulk array to add all entries at once
@@ -204,13 +209,10 @@ const handleSubmit = async (e) => {
         .insert(entries)
 
     if (entryError)
-    {
         console.log("Error adding entires: ", entryError)
-    }
-    else {
-        console.log("Saved cast list.")
-    }
 
+    // Go back home
+    // TODO: redirect to newly created list?
     window.location.href = '/home.html';
 }
 
@@ -218,7 +220,7 @@ async function setPerformerForChar(charId, perfId)
 {
     if (perfId == null || perfId == "")
     {
-        // If performerId is null or if performerId doesn't exist, 
+        // If performerId is null or if performerId doesn't exist somehow, 
         // take it off from the list
         delete castSelections[charId];
     }
@@ -247,12 +249,6 @@ window.addEventListener("click", (event) => {
     }
 });
 
-function closeDropdown() {
-    const dropdown = document.querySelector(".dropdown-box");
-    dropdown.classList.remove("active")
-}
-
-const dropdownItems = document.querySelectorAll(".dropdown-item");
 document.addEventListener("click", (event) => {
     const clickedItem = event.target.closest(".dropdown-item");
     if (!clickedItem) return;
@@ -274,14 +270,18 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keyup", (event) => {
+    // For every key typed, update the search results
     const searchInput = event.target.closest(".search-input input");
     if (!searchInput) return;
 
+    // Get the dropdownbox and items this came from
     const dropdownBox = searchInput.closest(".dropdown-box");
     const dropdownItems = dropdownBox.querySelectorAll(".dropdown-item");
 
+    // Filter to lowercase so results are accurate
     const filter = searchInput.value.toLowerCase();
 
+    // For each item in this box, either hide or show it
     dropdownItems.forEach(item => {
         if (item.textContent.toLowerCase().startsWith(filter)) {
             item.classList.remove("hide");
