@@ -9,28 +9,49 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-function create() {
+const create = async (e) => {
     // Create just one
-}
-
-const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const title = document.getElementById("title-input").value;
+    const title = document.getElementById("title-input");
 
     const { error } = await supabase
         .from("show")
         .insert([
             {
-                title: title,
+                title: title.value,
+                user_id: user.id
+            }
+        ])
+    
+    if (error) throw error;
+
+    // Send them home
+    window.location.href = "./home.html";
+}
+
+const createMore = async (e) => {
+    // Create one and then submit
+    e.preventDefault();
+
+    const title = document.getElementById("title-input");
+
+    const { error } = await supabase
+        .from("show")
+        .insert([
+            {
+                title: title.value,
                 user_id: user.id
             }
         ])
 
     if (error) throw error;
 
-    console.log("Success!")
+    // Display a message so they know the last one went through
+    document.getElementById("success-message").innerHTML = `Success! ${title.value} can now have lists.`
+
+    // Reset the form for the next
+    title.value = "";
 }
 
-document.getElementById("create-btn").addEventListener("click", handleSubmit);
-// document.getElementById("create-create-another").addEventListener("click", createMore)
+document.getElementById("create-btn").addEventListener("click", create);
+document.getElementById("create-create-another").addEventListener("click", createMore)

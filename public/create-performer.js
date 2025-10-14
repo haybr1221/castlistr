@@ -9,17 +9,14 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-function create() {
+const create = async (e) => {
     // Create just one
-}
-
-const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const firstName = document.getElementById("first-name").value;
     const middleName = document.getElementById("middle-name").value;
     const lastName = document.getElementById("last-name").value;
-
+    
     const { error } = await supabase
         .from("performer")
         .insert([
@@ -30,11 +27,42 @@ const handleSubmit = async (e) => {
                 user_id: user.id
             }
         ])
-
+    
     if (error) throw error;
 
-    console.log("Success!")
+    // Send them home
+    window.location.href = "./home.html";
 }
 
-document.getElementById("create-btn").addEventListener("click", handleSubmit);
-// document.getElementById("create-create-another").addEventListener("click", createMore)
+const createMore = async (e) => {
+    // Create one and then submit
+    e.preventDefault();
+    
+    const firstName = document.getElementById("first-name");
+    const middleName = document.getElementById("middle-name");
+    const lastName = document.getElementById("last-name");
+    
+    const { error } = await supabase
+        .from("performer")
+        .insert([
+            {
+                first_name: firstName.value,
+                middle_name: middleName.value,
+                last_name: lastName.value,
+                user_id: user.id
+            }
+        ])
+    
+    if (error) throw error;
+
+    // Display a message so they know the last one went through
+    document.getElementById("success-message").innerHTML = `Success! ${firstName.value ? firstName.value + ' ' : ''} ${middleName.value ? middleName.value + ' ' : ''} ${lastName.value ? lastName.value + ' ' : ''} can now be cast.`
+
+    // Reset the form for the next
+    firstName.value = "";
+    middleName.value = "";
+    lastName.value = "";
+}
+
+document.getElementById("create-btn").addEventListener("click", create);
+document.getElementById("create-create-another").addEventListener("click", createMore)

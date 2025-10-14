@@ -69,7 +69,7 @@ app.post("/auth/verify-otp", async (req, res) => {
 
 });
 
-app.get("/performer", async (res) => {
+app.get("/performer", async (req, res) => {
     const { data, error } = await supabase.from("performer").select("*");
     
     if (error) {
@@ -80,7 +80,7 @@ app.get("/performer", async (res) => {
 
 });
 
-app.get("/show", async (res) => {
+app.get("/show", async (req, res) => {
     const { data, error } = await supabase
         .from("show")
         .select("*");
@@ -109,11 +109,18 @@ app.get(`/show/:id/characters`, async (req, res) => {
     res.json(data);
 });
 
-app.get("/cast-lists", async (res) => {
+app.get("/cast-lists", async (req, res) => {
     // Get cast lists
     const { data, error } = await supabase
         .from("cast_lists")
-        .select(`*`)
+        .select(`
+            *,
+            show ( title ),
+            cast_list_entry (
+                id,
+                character:character_id ( first_name ),
+                performer:performer_id ( first_name )
+            )`)
 
     if (error) {
         console.error("Error fetching cast lists: ", error)
