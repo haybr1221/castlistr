@@ -1,6 +1,11 @@
 @font-face {
     font-family: 'coolvetica';
-    src: url(/fonts/coolvetica.ttf) format('opentype');
+    src: url(/fonts/coolvetica.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'lexend';
+    src: url(/fonts/Lexend-VariableFont_wght.ttf) format('truetype');
 }
 
 :root {
@@ -336,7 +341,58 @@ main {
     margin-right: 0.5rem;
 }
 
-/* Display shows/performers */
+.hide {
+    display: none;
+}
+
+/* Display show */
+#show-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#shows {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.poster {
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    background-color: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.show-title {
+    font-family: 'lexend', sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.count {
+    font-family: 'Lexend', sans-serif;
+    font-weight: light;
+    text-align: center;
+}
+
+/* Display performers */
 
 table {
     max-width: 500px;
@@ -373,4 +429,59 @@ th {
     flex-direction: row;
     gap: 20px;
     padding: 20px;
+}
+
+/* FEED STYLING */
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.cast-list {
+    max-height: 600px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 30px;
+}
+
+.list-header {
+    font-family: 'coolvetica', sans-serif;
+    background-color: white;
+    width: 600px;
+    padding: 10px;
+    border-bottom: 0.5px solid black;
+}
+
+.list-title {
+    font-size: 20px;
+}
+
+.list-subtitle {
+    font-size: 12px;
+}
+
+.charDiv {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    font-family: 'lexend', sans-serif;
+    text-align: center;
+    font-size: 15px;
+}
+
+.character {
+    font-weight: bold;
+}
+
+.performer {
+    font-weight: light;
+}
+
+.cast-list-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
 }

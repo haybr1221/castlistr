@@ -40,19 +40,23 @@
                         </div>
                     </div>
                 </div>
+                <button type="button" class="button" id="step-one-to-two">Next Step</button>
             </div>
-            <div id="step-two">
+            <div id="step-two" class="hide">
                 <h2 id="select-characters" class="step">Step 2: Choose your characters</h2>
                 <p class="text" id="select-step">Select the actors you want to see in <span id="selected-show-title"></span>!</p>
                 <div id="character-form">
                     
                 </div>
+                <button type="button" class="button" id="step-two-to-one">Previous Step</button>
+                <button type="button" class="button" id="step-two-to-three">Next Step</button>
             </div>
-            <div id="step-three">
+            <div id="step-three" class="hide">
                 <h2 id="name-list" class="step">Step 3: Name your list</h2>
                 <form id="finalize-list">
                     <label class="label" for="list-name" id="list-title">List Name:</label>
                     <input type="text" id="list-name" name="list-name" required>
+                    <button type="button" class="button" id="step-three-to-two">Previous Step</button>
                     <button type="submit" id="create-list-button" class="button">Create List</button>
                 </form>
             </div>

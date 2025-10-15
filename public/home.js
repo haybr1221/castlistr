@@ -20,33 +20,71 @@ listsData.forEach(element => {
 
 async function formatList(element, feedDiv) {
     /* FORMAT EACH LIST NICELY */
-    console.log("formatting for ", element.id);
     
     // Set up a div for this list
     const parentDiv = document.createElement("div");
     parentDiv.id = `cast-list-${element.id}`;
+    parentDiv.className = "cast-list";
     feedDiv.appendChild(parentDiv);
-
-    // TODO: Get show title to display
-    // const showResponse = await fetch(`show/${element.show_id}`);
-    // const showData = await showResponse.json();
-
-    // TODO: Get user's name to display
-
-    // TODO: Display the title of the list
-    // "[username]'s cast list for [show]"
-    // Get the entries for this list
-
-    const castListEntriesResponse = await fetch(`cast-list-entry/${element.id}`)
-    const castListEntries = await castListEntriesResponse.json();
-    console.log(castListEntries)
-        // Get the character list
-    const charResponse = await fetch(`/show/${showId}/characters`)
-
-
-    // Inner container will have the names for each person
     
-    // Need: list title, user's name, show title, character name, performer name
+    // Create a div for the header
+    const headerDiv = document.createElement("div");
+    headerDiv.className = "list-header";
+    parentDiv.appendChild(headerDiv);
+
+    // Create the list title
+    const listTitle = document.createElement("p");
+    listTitle.className = "list-title";
+    listTitle.innerHTML = element.title;
+    headerDiv.appendChild(listTitle)
+
+    const header = document.createElement("p");
+    header.className = "list-subtitle"
+    header.innerHTML = `[username]'s dream cast for ${element.show.title}`
+    headerDiv.appendChild(header)
+
+    // Create a div for the body of the cast list
+    const bodyDiv = document.createElement("div");
+    bodyDiv.className = "cast-list-body";
+    parentDiv.appendChild(bodyDiv);
+
+    element.cast_list_entry.forEach(element => {
+        formatCharacter(element, bodyDiv)
+    });
+}
+
+function formatCharacter(element, parentDiv) {
+    // Create a div for this one
+    const charDiv = document.createElement("div");
+    charDiv.className = "charDiv";
+    charDiv.id = `char-perf-combo-${element.id}`
+    parentDiv.appendChild(charDiv)
+    
+    // Format the element for ease of use
+    const charElement = element.character
+
+    // First display the character name
+    // Space it correctly taking into account which values may be null
+    const charName = document.createElement("p");
+    charName.className = "character";
+    charName.id = `char-${charElement.id}`
+    const full_char_name = `${charElement.title ? charElement.title + ' ' : ''}
+                    ${charElement.first_name ? charElement.first_name + ' ' : ''}
+                    ${charElement.middle_name ? charElement.middle_name + ' ' : ''}
+                    ${charElement.last_name ? charElement.last_name + ' ' : ''}
+                    ${charElement.suffix ? charElement.suffix : ''}`;
+    charName.innerHTML = full_char_name;
+    charDiv.appendChild(charName);
+
+    // Format the element for more ease of use
+    const perfElement = element.performer;
+    // Get the performer name
+    const perfName = document.createElement("p");
+    perfName.className = "performer";
+    perfName.id = `perf-${perfElement.id}`;
+    const full_perf_name = `${perfElement.first_name} ${perfElement.middle_name ? perfElement.middle_name + ' ' : ''}${perfElement.last_name}`;
+    perfName.innerHTML = full_perf_name;
+    charDiv.appendChild(perfName)
 }
 
 async function signOut() {

@@ -118,9 +118,10 @@ app.get("/cast-lists", async (req, res) => {
             show ( title ),
             cast_list_entry (
                 id,
-                character:character_id ( first_name ),
-                performer:performer_id ( first_name )
+                character:character_id ( * ),
+                performer:performer_id ( first_name, middle_name, last_name, id )
             )`)
+        .order("created_at", { ascending: false })
 
     if (error) {
         console.error("Error fetching cast lists: ", error)

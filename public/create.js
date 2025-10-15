@@ -291,4 +291,41 @@ document.addEventListener("keyup", (event) => {
     });
 });
 
+function goToThree() {
+    console.log("Getting next tstep")
+    const two = document.getElementById("step-two");
+    const three = document.getElementById("step-three")
+
+    two.classList.add("hide");
+    three.classList.remove("hide")
+}
+
+function goToTwo() {
+    // Check to see if it was one or two that called it
+    if (document.getElementById("step-three").className == "hide") {
+        // One called it, since stree is still hidden
+        const now = document.getElementById("step-one")
+        now.classList.add("hide");
+    }
+    else {
+        const now = document.getElementById("step-three")
+        now.classList.add("hide");
+    }
+    const two = document.getElementById("step-two");
+
+    two.classList.remove("hide")
+}
+
+function goToOne() {
+    const two = document.getElementById("step-two");
+    const one = document.getElementById("step-one")
+
+    two.classList.add("hide")
+    one.classList.remove("hide");
+}
+
 document.getElementById("finalize-list").addEventListener("submit", handleSubmit)
+document.getElementById("step-one-to-two").addEventListener("click", goToTwo)
+document.getElementById("step-two-to-one").addEventListener("click", goToOne)
+document.getElementById("step-two-to-three").addEventListener("click", goToThree)
+document.getElementById("step-three-to-two").addEventListener("click", goToTwo)
