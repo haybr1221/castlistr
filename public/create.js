@@ -196,7 +196,6 @@ const handleSubmit = async (e) => {
     // Get the ID of the new list so we can add the cast list entries
     const castListId = data[0].id;
 
-    console.log(castSelections);
     // Create a bulk array to add all entries at once
     const entries = Object.entries(castSelections).map(([charId, perfId]) => ({
         cast_list_id: castListId,

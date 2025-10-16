@@ -20,9 +20,53 @@
     </header>
 
     <main id="show-main">
-        
+        <div id="show-info">
+            <div id="basic-info">
+                <img id="poster" src="https://zanpecuhaoukjvjkvyxh.supabase.co/storage/v1/object/public/posters/LegallyBlondeTheMusical.jpg">
+                <p class="show-title">Legally Blonde</p>
+            </div>
+            <div id="dynamic-info">
+                <p class="dynamic-info" id="cast-list-count">10 Cast Lists</p>
+                <p class="dynamic-info" id="character-count">32 Characters</p>
+                <p class="dynamic-info" id="tour-count">37 Tours</p>
+            </div>
+        </div>
+        <div id="interesting-info">
+            <div id="tabs">
+                <p id="characters" class="selected-tab">Characters</p>
+                <p id="tours">Tours</p>
+            </div>
+            <div class="info-tab" id="character-info">
+                <button class="button" id="new-char">Add character</button>
+                <ul id="char-list">
+                    <li>Elle Woods</li>
+                    <li>Emmett Forrest</li>
+                    <li>Warner Huntington III</li>
+                    <li>Vivienne Kensington</li>
+                    <li>Paulette Bonafonte</li>
+                    <li>Professor Callahan</li>
+                    <li>Enid Hoopes</li>
+                    <li>Dad</li>
+                    <li>Mom</li>
+                </ul>
+            </div>
+            <div class="hidden" id="tour-info">
+                <button class="button" id="new-char">Add tour</button>
+                <ul id="tour-list">
+                    <li>Broadway</li>
+                    <li>First US National Tour</li>
+                    <li>Second US National Tour (Non-Equity)</li>
+                    <li>West End</li>
+                    <li>First UK Tour</li>
+                    <li>Second UK Tour</li>
+                    <li>Third US National Tour</li>
+                    <li>Reagent's Park Open Air Theatre</li>
+                    <li>La Mirada Theatre</li>
+                </ul>
+            </div>
+        </div>
     </main>
 
-    <script src="shows.js"></script>
+    <script src="show.js"></script>
 </body>
 </html>

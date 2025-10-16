@@ -359,8 +359,8 @@ main {
     flex-wrap: wrap;
     gap: 50px;
     padding: 20px;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
 }
 
 .poster {
@@ -373,23 +373,32 @@ main {
     justify-content: center;
 }
 
+.poster img:hover {
+    transform: scale(1.2);
+}
+
 .poster img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.3s;
 }
 
 .show-title {
     font-family: 'lexend', sans-serif;
     font-weight: bold;
     text-align: center;
+    position: relative;
+    z-index: 1000;
 }
 
 .count {
     font-family: 'Lexend', sans-serif;
     font-weight: light;
     text-align: center;
+    position: relative;
+    z-index: 1000;
 }
 
 /* Display performers */
@@ -436,6 +445,8 @@ th {
     display: flex;
     flex-direction: column;
     gap: 50px;
+    max-height: fit-content;
+    overflow: scroll;
 }
 
 .cast-list {
@@ -483,5 +494,101 @@ th {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* show info pages */
+#show-main {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+#show-info {
+    height: 600px;
+    width: 300px;
+    background-color: white;
+    border-radius: 25px;
+}
+
+#show-info img {
+    height: 350px;
+}
+
+#basic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+#dynamic-info {
+    font-family: 'lexend', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#interesting-info {
+    font-family: 'lexend', sans-serif;
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    justify-content: center;
+    align-items: center;
+}
+
+#tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+#tabs p {
+    border-radius: 20px;
+    padding: 20px;
+    font-weight: bold;
+}
+
+#tabs p:hover {
+    background-color: rgb(222, 222, 222);
+}
+
+.selected-tab {
+    background-color: white;
+}
+
+.info-tab {
+    background-color: white;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: -12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: scroll;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.info-tab li {
+    padding: 10px;
+    border-top: 0.5px black solid;
+    list-style: none;
+    font-size: 13.5px;
+}
+
+.hidden {
+    display: none;
 }

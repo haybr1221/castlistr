@@ -4,29 +4,30 @@ async function fetchShows() {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             const div = document.getElementById("shows");
+            const totalCastLists = await countCastLists()
             data.forEach(element => {
-                formatShow(element, div)
+                formatShow(element, div, totalCastLists)
             });
         }
-
     }
     catch (err) {
         console.error("Error fetching shows:", err);
     }
 }
 
-function formatShow(element, parentDiv) {
+function formatShow(element, parentDiv, totalCastLists) {
     // Create a div for the show
     const showDiv = document.createElement("div");
     showDiv.className = "show-div";
     parentDiv.appendChild(showDiv)
 
-    // Create image
     const poster = document.createElement("img");
     poster.className = "poster"
-    poster.src = element.poster_url;
+    // Create image
+    if (element.poster_url != null) {
+        poster.src = element.poster_url;
+    }
     showDiv.appendChild(poster);
 
     // Create title box
@@ -34,13 +35,65 @@ function formatShow(element, parentDiv) {
     showTitle.className = "show-title";
     showTitle.innerHTML = element.title;
     showDiv.appendChild(showTitle);
+
+    // Display cast list count
+    displayCastLists(element.id, totalCastLists, showDiv)
+}
+
+async function countCastLists() {
+    // Count the cast lists each show has
     
-    // TODO get cast lists count
+    // Create an array to store these
+    // The ID will be the show id, the value will be the count
+    const castListCounts = {};
+
+    // Fetch cast lists
+    const response = await fetch ("/cast-lists");
+
+    if (response.ok)
+    {
+        const castLists = await response.json();
+        
+        castLists.forEach(list => {
+            if (castListCounts[list.show_id])
+            {
+                // If it already exists, incremenet the count
+                castListCounts[list.show_id] += 1;
+            }
+            else
+            {
+                // Hasn't been added yet, create it
+                // This is the first so set it to one
+                castListCounts[list.show_id] = 1;
+            }
+        })
+
+    }
+
+    return castListCounts;
+}
+
+function displayCastLists(showId, list, parentDiv) {
+    // Find the ID in the list
+    let listCount = list[showId]
+    if (!listCount)
+    {
+        listCount = 0;
+    }
+    
+    console.log(showId)
+    console.log("list count:")
+    console.log(listCount)
     // Display amount of cast lists
     const castListCount = document.createElement("p");
     castListCount.className = "count";
-    castListCount.innerHTML = `0 Cast Lists`;
-    showDiv.appendChild(castListCount);
+
+    if (listCount == 1)
+        // Display properly
+        castListCount.innerHTML = `${listCount} Cast List`;
+    else
+        castListCount.innerHTML = `${listCount} Cast Lists`;
+    parentDiv.appendChild(castListCount);
 }
 
 fetchShows();
