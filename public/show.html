@@ -22,13 +22,13 @@
     <main id="show-main">
         <div id="show-info">
             <div id="basic-info">
-                <img id="poster" src="https://zanpecuhaoukjvjkvyxh.supabase.co/storage/v1/object/public/posters/LegallyBlondeTheMusical.jpg">
-                <p class="show-title">Legally Blonde</p>
+                <img id="poster">
+                <p class="show-title"></p>
             </div>
             <div id="dynamic-info">
-                <p class="dynamic-info" id="cast-list-count">10 Cast Lists</p>
-                <p class="dynamic-info" id="character-count">32 Characters</p>
-                <p class="dynamic-info" id="tour-count">37 Tours</p>
+                <p class="dynamic-info"><span id="cast-list-count">0</span> Cast Lists</p>
+                <p class="dynamic-info"><span id="character-count">0</span> Characters</p>
+                <p class="dynamic-info"><span id="tour-count">0</span> Tours</p>
             </div>
         </div>
         <div id="interesting-info">
@@ -39,15 +39,6 @@
             <div class="info-tab" id="character-info">
                 <button class="button" id="new-char">Add character</button>
                 <ul id="char-list">
-                    <li>Elle Woods</li>
-                    <li>Emmett Forrest</li>
-                    <li>Warner Huntington III</li>
-                    <li>Vivienne Kensington</li>
-                    <li>Paulette Bonafonte</li>
-                    <li>Professor Callahan</li>
-                    <li>Enid Hoopes</li>
-                    <li>Dad</li>
-                    <li>Mom</li>
                 </ul>
             </div>
             <div class="hidden" id="tour-info">
@@ -67,6 +58,6 @@
         </div>
     </main>
 
-    <script src="show.js"></script>
+    <script type="module" src="show.js"></script>
 </body>
 </html>

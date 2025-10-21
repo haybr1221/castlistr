@@ -27,47 +27,47 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post("/auth/send-otp", async (req, res) => { 
-    const { email } = req.body;
+// app.post("/auth/send-otp", async (req, res) => { 
+//     const { email } = req.body;
 
-    const { data, error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-            shouldCreateUser: true,
-            channel: "email"
-        }
-    });
+//     const { data, error } = await supabase.auth.signInWithOtp({
+//         email,
+//         options: {
+//             shouldCreateUser: true,
+//             channel: "email"
+//         }
+//     });
 
-    if (error) {
-        console.error("Error sending OTP:", error);
-        return;
-    }
+//     if (error) {
+//         console.error("Error sending OTP:", error);
+//         return;
+//     }
 
-    return res.json({ message: "OTP sent!", data });
-});
+//     return res.json({ message: "OTP sent!", data });
+// });
 
-app.post("/auth/verify-otp", async (req, res) => {
-    const { email, token } = req.body;
+// app.post("/auth/verify-otp", async (req, res) => {
+//     const { email, token } = req.body;
 
-    const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token,
-        type: "email"
-    });
+//     const { data, error } = await supabase.auth.verifyOtp({
+//         email,
+//         token,
+//         type: "email"
+//     });
 
-    if (error) {
-        console.error("Error verifying OTP:", error);
-        return;
-    }
+//     if (error) {
+//         console.error("Error verifying OTP:", error);
+//         return;
+//     }
 
-    return res.json({ 
-        message: "OTP verified",
-        access_token: data.session?.access_token,
-        refresh_token: data.session?.refresh_token,
-        user: data.user,
-        data });
+//     return res.json({ 
+//         message: "OTP verified",
+//         access_token: data.session?.access_token,
+//         refresh_token: data.session?.refresh_token,
+//         user: data.user,
+//         data });
 
-});
+// });
 
 app.get("/performer", async (req, res) => {
     const { data, error } = await supabase.from("performer").select("*");
@@ -108,6 +108,53 @@ app.get(`/show/:id/characters`, async (req, res) => {
 
     res.json(data);
 });
+
+app.get(`/show/:id`, async (req, res) => {
+    // Get information from a given show
+    const showId = req.params.id;
+
+    // Get show info
+    const { data: show, error: showError } = await supabase
+        .from("show")
+        .select(
+            `*`
+        )
+        .eq("id", showId)
+        .single();
+
+    if (showError) {console.error("Error fetching for show: ", showError)}
+
+    // Get character info and count
+    const { count: charCount, error: charError } = await supabase
+        .from("show_has_character")
+        .select(`show_id`, { count: 'exact', head: false})
+        .eq("show_id", showId);
+
+    if (charError) {console.error("Error fetching for characters: ", charError)}
+
+    // Get tour info and count
+    const { data: tourData, count: tourCount, error: tourError } = await supabase
+        .from("tour")
+        .select(`*`, { count: 'exact', head: false})
+        .eq("show_id", showId);
+
+    if (tourError) {console.error("Error fetching for tours: ", tourCount)}
+
+    // Get cast list count
+    const { count: castListCount, error: castListError } = await supabase
+        .from("cast_lists")
+        .select(`id`, {count: 'exact', head: true})
+        .eq("show_id", showId);
+    
+    if (castListError) {console.error("Error fetching for show: ", castListError)}
+
+    res.json({
+        show,
+        charCount,
+        tours: { data: tourData, count: tourCount },
+        castListCount
+    });
+})
 
 app.get("/cast-lists", async (req, res) => {
     // Get cast lists
@@ -160,7 +207,6 @@ app.get(`cast-lists/:id/cast-list-entry`, async (req, res) => {
 
 app.get(`show`, async (req, res) => {
     // Get show title
-    console.log("getting show id")
     const showId = req.params.id;
 
     const { data, error } = await supabase
@@ -172,4 +218,8 @@ app.get(`show`, async (req, res) => {
         console.error("Error fetching show title: ", error)
 
     res.json(data)
+})
+
+app.get("/*", (req, res) => {
+    res.sendFile(path.resolve("public", "shows.html"))
 })

@@ -63,12 +63,9 @@ parent.addEventListener("click", async (event) => {
 
 // Create an array to store slections client-side while they save
 // The key will be the character ID and the value will be the performer ID
-const castSelections = {};
+let castSelections = {};
 
 async function createCharacterSelector(element, characterForm) {
-    // Get all necessary values to format later
-    const { first_name, middle_name, last_name, suffix, title } = element;
-
     // Create a new div container for each caracter
     const charContainer = document.createElement("div");
     charContainer.className = "search-container"
@@ -80,18 +77,9 @@ async function createCharacterSelector(element, characterForm) {
 
     // Add to the container
     charContainer.appendChild(label)
-
-    // Set the full name for character
-    // Keeping in mind some characters are missing some data type (e.g may have title but no first name)
-    // So format it to space it correctly
-    const full_name = `${title ? title + ' ' : ''}
-                    ${first_name ? first_name + ' ' : ''}
-                    ${middle_name ? middle_name + ' ' : ''}
-                    ${last_name ? last_name + ' ' : ''}
-                    ${suffix ? suffix : ''}`.replace(/\s+/g, ' ').trim();
     
     // Create label for character
-    label.innerHTML = `${full_name}:`
+    label.innerHTML = `${element.name}:`
     label.htmlFor = `char-${element.id}`
     
     // Create dropdown box for performers
@@ -302,7 +290,7 @@ function goToThree() {
 function goToTwo() {
     // Check to see if it was one or two that called it
     if (document.getElementById("step-three").className == "hide") {
-        // One called it, since stree is still hidden
+        // One called it, since three is still hidden
         const now = document.getElementById("step-one")
         now.classList.add("hide");
     }
@@ -316,6 +304,11 @@ function goToTwo() {
 }
 
 function goToOne() {
+    // Clear the cast selections so they are logged correctly,
+    // just in case the user goes back to select a different show
+    console.log(castSelections);
+    castSelections = {};
+    console.log(castSelections);
     const two = document.getElementById("step-two");
     const one = document.getElementById("step-one")
 

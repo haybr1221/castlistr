@@ -6,6 +6,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const { data: { user } } = await supabase.auth.getUser();
+console.log(supabase.auth.getSession());
 console.log("User recognized:", user);
 
 const lists = await fetch (`/cast-lists`);

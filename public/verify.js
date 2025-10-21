@@ -9,63 +9,38 @@ async function sendOtp() {
     console.log("Sending OTP...");
     const email = document.getElementById("email").value;
     
-    const response = await fetch("http://localhost:3000/auth/send-otp", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email })
-    });
-    
-    const data = await response.json();
-    // Display message in console
-    console.log(data);
+    const { error } = await supabase.auth.signInWithOtp({ email });
 
-    // Hide sign in container and show OTP container
-    console.log("Hiding sign-in, displaying OTP...");
-    document.getElementById("sign-in-container").classList.add("hide");
-    document.getElementById("sign-in-container").classList.remove("display-container");
-    document.getElementById("otp-container").classList.remove("hide");
-    document.getElementById("otp-container").classList.add("display-container");
+    if (error) {
+        console.error("Error sending OTP:", error.message);
+    } else {
+        console.log("OTP sent to", email);
+            
+        // Hide sign in container and show OTP container
+        console.log("Hiding sign-in, displaying OTP...");
+        document.getElementById("sign-in-container").classList.add("hide");
+        document.getElementById("sign-in-container").classList.remove("display-container");
+        document.getElementById("otp-container").classList.remove("hide");
+        document.getElementById("otp-container").classList.add("display-container");
+    }
 }
 
 async function verifyOtp() {
-    console.log("Verifying OTP...");
-    const givenEmail = document.getElementById("email");
-    const givenOtp = document.getElementById("otp");
+    const email = document.getElementById("email").value;
+    const token = document.getElementById("otp").value;
 
-    const email = givenEmail ? givenEmail.value : "";
-    const token = givenOtp ? givenOtp.value : "";
+    const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: "magiclink" // or 'email' depending on your setup
+    });
 
-    console.log("Token for ", email, " is ", token);
-
-    
-    try {
-        const response = await fetch("/auth/verify-otp", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, token })
-        });
-
-        const data = await response.json().catch(() => null);
-
-        if (!response.ok) {
-            console.error("Verification failed:", data || response.statusText);
-            if (msgEl)
-                msgEl.innerText =
-                    (data && (data.error || data.message)) || "Verification failed";
-            return;
-        }
-
-        console.log("Verification success:", data);
-
-    } catch (err) {
-        console.error("Error verifying OTP:", err);
+    if (error) {
+        console.error("OTP verification failed:", error.message);
+    } else {
+        console.log("User logged in:", data.user);
+        window.location.href = "/home.html";
     }
-    
-    window.location.href = '/home.html';
 }
 
 document.getElementById("sign-in").addEventListener("click", sendOtp);

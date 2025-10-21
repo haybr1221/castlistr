@@ -20,15 +20,20 @@ function formatShow(element, parentDiv, totalCastLists) {
     // Create a div for the show
     const showDiv = document.createElement("div");
     showDiv.className = "show-div";
+    showDiv.id = `show-div-${element.id}`
     parentDiv.appendChild(showDiv)
 
+    const navLink = document.createElement("a");
+    navLink.href = `show.html?id=${element.id}`;
+    showDiv.appendChild(navLink)
+    
     const poster = document.createElement("img");
     poster.className = "poster"
     // Create image
     if (element.poster_url != null) {
         poster.src = element.poster_url;
     }
-    showDiv.appendChild(poster);
+    navLink.appendChild(poster);
 
     // Create title box
     const showTitle = document.createElement("p");
