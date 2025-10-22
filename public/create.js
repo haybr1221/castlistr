@@ -291,6 +291,14 @@ function goToTwo() {
     // Check to see if it was one or two that called it
     if (document.getElementById("step-three").className == "hide") {
         // One called it, since three is still hidden
+
+        // Check to be sure they have selected a show, if not, prevent them from proceeding
+        if (!showId)
+        {
+            const warning = document.getElementById("warning")
+            warning.innerHTML = "Please select a show."
+            return
+        }
         const now = document.getElementById("step-one")
         now.classList.add("hide");
     }
@@ -304,16 +312,32 @@ function goToTwo() {
 }
 
 function goToOne() {
-    // Clear the cast selections so they are logged correctly,
-    // just in case the user goes back to select a different show
-    console.log(castSelections);
-    castSelections = {};
-    console.log(castSelections);
+    // Reset selections
+    resetPerformerSelections()
+
     const two = document.getElementById("step-two");
     const one = document.getElementById("step-one")
 
     two.classList.add("hide")
     one.classList.remove("hide");
+}
+
+function resetPerformerSelections() {
+    // Clear the cast selections so they are logged correctly,
+    // just in case the user goes back to select a different show
+    castSelections = {};
+
+    // Reset the selectors
+    document.querySelectorAll("#character-form .dropdown-box").forEach(dropdown => {
+        const input = dropdown.querySelector(".selected-item input");
+        input.value = "Select a performer";
+
+        const items = dropdown.querySelectorAll(".dropdown-item");
+        items.forEach(item => item.classList.remove("active"));
+
+        const defaultItem = Array.from(items).find(item => item.textContent.trim() === "Select a performer");
+        if (defaultItem) defaultItem.classList.add("active"); 
+    })
 }
 
 document.getElementById("finalize-list").addEventListener("submit", handleSubmit)

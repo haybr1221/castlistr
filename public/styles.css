@@ -125,11 +125,6 @@ main {
     color: black;
 }
 
-#select-step {
-    padding-left: 20px;
-    padding-bottom: 20px;
-}
-
 .hide {
     display: none;
 }
@@ -209,6 +204,10 @@ main {
     border-radius: 20px;
     width: 800px;
     height: 500px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 #create-title {
@@ -216,7 +215,6 @@ main {
     color: var(--purple);
     font-size: 30px;
     text-align: left;
-    padding: 20px;
 }
 
 .step {
@@ -224,7 +222,6 @@ main {
     color: var(--black);
     font-size: 20px;
     text-align: left;
-    padding-left: 20px;
 }
 
 .text {
@@ -233,8 +230,14 @@ main {
 
 .label {
     font-family: 'coolvetica';
-    padding: 15px;
+    padding-right: 10px;
     box-sizing: border-box;
+}
+
+.two-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .dropdown-box {
@@ -335,6 +338,7 @@ main {
     align-items: center;
     flex-wrap: wrap;
     margin-bottom: 0.5rem;
+    padding: 5px;
 }
 
 .character-label {
@@ -343,6 +347,10 @@ main {
 
 .hide {
     display: none;
+}
+
+#finalize-list {
+    padding: 30px;
 }
 
 /* Display show */

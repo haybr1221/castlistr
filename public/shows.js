@@ -85,10 +85,7 @@ function displayCastLists(showId, list, parentDiv) {
     {
         listCount = 0;
     }
-    
-    console.log(showId)
-    console.log("list count:")
-    console.log(listCount)
+
     // Display amount of cast lists
     const castListCount = document.createElement("p");
     castListCount.className = "count";
