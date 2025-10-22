@@ -27,48 +27,6 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.post("/auth/send-otp", async (req, res) => { 
-//     const { email } = req.body;
-
-//     const { data, error } = await supabase.auth.signInWithOtp({
-//         email,
-//         options: {
-//             shouldCreateUser: true,
-//             channel: "email"
-//         }
-//     });
-
-//     if (error) {
-//         console.error("Error sending OTP:", error);
-//         return;
-//     }
-
-//     return res.json({ message: "OTP sent!", data });
-// });
-
-// app.post("/auth/verify-otp", async (req, res) => {
-//     const { email, token } = req.body;
-
-//     const { data, error } = await supabase.auth.verifyOtp({
-//         email,
-//         token,
-//         type: "email"
-//     });
-
-//     if (error) {
-//         console.error("Error verifying OTP:", error);
-//         return;
-//     }
-
-//     return res.json({ 
-//         message: "OTP verified",
-//         access_token: data.session?.access_token,
-//         refresh_token: data.session?.refresh_token,
-//         user: data.user,
-//         data });
-
-// });
-
 app.get("/performer", async (req, res) => {
     const { data, error } = await supabase.from("performer").select("*");
     
@@ -133,7 +91,7 @@ app.get(`/show/:id`, async (req, res) => {
     if (charError) {console.error("Error fetching for characters: ", charError)}
 
     // Get tour info and count
-    const { data: tourData, count: tourCount, error: tourError } = await supabase
+    const { count: tourCount, error: tourError } = await supabase
         .from("tour")
         .select(`*`, { count: 'exact', head: false})
         .eq("show_id", showId);
@@ -151,9 +109,24 @@ app.get(`/show/:id`, async (req, res) => {
     res.json({
         show,
         charCount,
-        tours: { data: tourData, count: tourCount },
+        tourCount,
         castListCount
     });
+})
+
+app.get(`/tour/:id`, async (req, res) => {
+    // Get tour info
+    const showId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("tour")
+        .select(`*`)
+        .eq("show_id", showId)
+        .order("opening", ascending = true)
+
+    if (error) console.error("Error fetching tours: ", error)
+    
+    res.json(data)
 })
 
 app.get("/cast-lists", async (req, res) => {

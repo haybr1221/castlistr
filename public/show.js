@@ -16,7 +16,6 @@ const showId = searchParams.get("id")
 // Get the show info from the database
 const showRes = await fetch(`/show/${showId}`);
 const showData = await showRes.json()
-console.log(showData);
 
 // Update the poster and title from this data
 const posterEl = document.getElementById("poster")
@@ -29,7 +28,11 @@ const castListEl = document.getElementById("cast-list-count");
 if (showData.castListCount)
 {
     // If it is undefined, don't overwrite the base value
-    castListEl.innerHTML = showData.castListCount;
+    if (showData.castListCount == 1)
+        // Display properly
+        castListEl.innerHTML = `${showData.castListCount} Cast List`;
+    else
+        castListEl.innerHTML = `${showData.castListCount} Cast Lists`;
 }
 
 const charEl = document.getElementById("character-count");
@@ -40,18 +43,16 @@ if (showData.charCount)
 }
 
 const tourEl = document.getElementById("tour-count");
-if (showData.tours.count)
+if (showData.tourCount)
 {
     // If it is undefined, don't overwrite the base value
-    tourEl.innerHTML = showData.tours.count;
+    tourEl.innerHTML = showData.tourCount;
 }
 
 // Set up the characters //
 // Fetch the character info
 const charResponse = await fetch(`/show/${showId}/characters`);
 const charData = await charResponse.json();
-console.log("char data")
-console.log(charData);
 
 // Get the list to add to
 const charList = document.getElementById("char-list")
@@ -67,7 +68,64 @@ function addCharacter(element, parent)
     parent.appendChild(charEntry)
 }
 
+// Set up tours // 
+// Fetch the tour info
+const tourResponse = await fetch(`/tour/${showId}`)
+const tourData = await tourResponse.json()
+console.log(tourData)
 
+// Get the the list to add to
+const tourList = document.getElementById("tour-list")
+tourData.forEach(element => {
+    addTour(element, tourList)
+})
+
+function addTour(element, parent)
+{
+    // Create the list item
+    const tourEntry = document.createElement("li");
+    tourEntry.className = "tour-info";
+    parent.appendChild(tourEntry);
+
+    // Create the div for title
+    const tourTitleDiv = document.createElement("div");
+    tourTitleDiv.className = "tour-title";
+    tourEntry.appendChild(tourTitleDiv);
+
+    // Add the title to the title div
+    const tourTitle = document.createElement("p");
+    tourTitle.innerHTML = element.title;
+    tourTitleDiv.appendChild(tourTitle);
+
+    // Create the div for the date
+    const tourDate = document.createElement("div");
+    tourEntry.appendChild(tourDate);
+
+    // Create the label for opening
+    const openingDate = document.createElement("p")
+    openingDate.className = "date-label";
+    openingDate.innerHTML = `Opened: <span class="opening-date" datetime=${element.opening}>${formatDate(element.opening)}</span>`;
+    tourDate.appendChild(openingDate);
+
+    // Check if closing exists, it might be
+    if (element.closing)
+    {
+        const closingDate = document.createElement("p");
+        closingDate.className = "date-label";
+        closingDate.innerHTML = `Closed: <span class="closing-date" datetime=${element.closing}>${formatDate(element.closing)}</span>`;
+        tourDate.appendChild(closingDate);
+    }
+}
+
+function formatDate(date) {
+    const [year, month, day] = date.split("-");
+    const formatedDate = new Date(year, month - 1, day);
+    return formatedDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
+}
 
 // Hide characters/show tour and vice versa
 const charTab = document.getElementById("characters")

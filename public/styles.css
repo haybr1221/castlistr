@@ -592,3 +592,32 @@ ul {
 .hidden {
     display: none;
 }
+
+.tour-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.tour-info:hover, #char-list li:hover {
+    background-color: rgb(222, 221, 221);
+}
+
+.tour-title {
+    display: flex;
+    align-items: center; 
+}
+
+.tour-dates {
+    display: flex;
+    flex-direction: column;
+}
+
+.opening-date, .closing-date {
+    font-weight: normal;
+}
+
+.date-label {
+    font-weight: bold;
+    text-align: right;
+}

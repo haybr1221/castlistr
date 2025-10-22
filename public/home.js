@@ -68,13 +68,8 @@ function formatCharacter(element, parentDiv) {
     // Space it correctly taking into account which values may be null
     const charName = document.createElement("p");
     charName.className = "character";
-    charName.id = `char-${charElement.id}`
-    const full_char_name = `${charElement.title ? charElement.title + ' ' : ''}
-                    ${charElement.first_name ? charElement.first_name + ' ' : ''}
-                    ${charElement.middle_name ? charElement.middle_name + ' ' : ''}
-                    ${charElement.last_name ? charElement.last_name + ' ' : ''}
-                    ${charElement.suffix ? charElement.suffix : ''}`;
-    charName.innerHTML = full_char_name;
+    charName.id = `char-${charElement.id}`;
+    charName.innerHTML = charElement.name;
     charDiv.appendChild(charName);
 
     // Format the element for more ease of use
