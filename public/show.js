@@ -127,6 +127,95 @@ function formatDate(date) {
     })
 }
 
+function openModal() {
+    document.getElementById("overlay").removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+
+    const selectedTab = document.querySelector(".selected-tab")
+
+    if (selectedTab.id === "characters")
+    {
+        // Characters is open
+        document.getElementById("add-character").removeAttribute("hidden");
+    }
+    else
+    {
+        // Tours is open
+        document.getElementById("add-tour").removeAttribute("hidden");
+    }
+}
+
+document.getElementById("new-char").addEventListener("click", openModal);
+document.getElementById("new-tour").addEventListener("click", openModal);
+
+function closeModal() {
+    document.body.style.overflow = "auto";
+    document.getElementById("overlay").setAttribute("hidden", true);
+
+    const selectedTab = document.querySelector(".selected-tab")
+
+    if (selectedTab.id === "characters")
+    {
+        document.getElementById("add-character").setAttribute("hidden", true);
+    }
+    else
+    {
+        document.getElementById("add-tour").setAttribute("hidden", true);
+    }
+}
+
+// Creating new stuff
+const create = async (e, isMultiple) => {
+    // Create just one
+    e.preventDefault();
+    const name = document.getElementById("char-name");
+
+    const { data, error: charError } = await supabase
+        .from("character")
+        .insert([
+            {
+                name: name.value,
+                user_id: user.id
+            }
+        ]).select()
+
+    if (charError) console.error(charError);
+
+    console.log()
+    // Get ID of new character to add to the show table
+    const charId = data[0].id;
+
+    const { error: showCharError } = await supabase
+        .from("show_has_character")
+        .insert([
+            {
+                show_id: showId,
+                char_id: charId,
+                user_id: user.id
+            }
+        ])
+
+    if (showCharError) console.error(showCharError);
+
+    if (isMultiple)
+    {
+        // Display a message so they know the last one went through
+        document.getElementById("success-message").innerHTML = `Success! ${name.value} can now be cast.`
+
+        // Reset the form for the next
+        name.value = "";
+
+        // Exit function
+        return;
+    }
+
+    // Close modal and refresh page
+    closeModal();
+}
+
+document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
+document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))
+
 // Hide characters/show tour and vice versa
 const charTab = document.getElementById("characters")
 const tourTab = document.getElementById("tours")
@@ -135,27 +224,28 @@ const charElement = document.getElementById("character-info");
 
 function toggleShownTab() {
     // Check which is still hidden
-    if (tourElement.className == "hidden")
+    if (tourElement.hidden)
     {
         // Tour is hidden, so remove that class and add it to character-info
-        tourElement.classList.remove("hidden");
+        tourElement.removeAttribute("hidden");
         tourElement.classList.add("info-tab");
         tourTab.classList.add("selected-tab");
         
         // Hide char tab
         charTab.classList.remove("selected-tab");
         charElement.classList.remove("info-tab");
-        charElement.classList.add("hidden");
+        charElement.setAttribute("hidden", true);
     }
     else
     {
         // Char is hidden, so show that instead
-        charElement.classList.remove("hidden");
+        charElement.removeAttribute("hidden");
         charElement.classList.add("info-tab");
         charTab.classList.add("selected-tab");
         
         // Hide tour element
-        tourElement.classList.add("hidden");
+        
+        tourElement.setAttribute("hidden", true);
         tourElement.classList.remove("info-tab");
         tourTab.classList.remove("selected-tab");
     }
