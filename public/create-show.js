@@ -9,49 +9,39 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-const create = async (e) => {
-    // Create just one
+const create = async (e, isMultiple) => {
     e.preventDefault();
     const title = document.getElementById("title-input");
 
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from("show")
         .insert([
             {
                 title: title.value,
                 user_id: user.id
             }
-        ])
+        ]).select()
     
     if (error) throw error;
 
-    // Send them home
-    window.location.href = "./home.html";
+    if (isMultiple)
+    {
+        // Display a message so they know the last one went through
+        document.getElementById("success-message").innerHTML = `Success! ${title.value} can now have lists.`
+
+        // Reset the form for the next
+        title.value = "";
+    }
+
+    console.log(data);
+    const showId = data[0].id;
+
+    console.log(showId)
+
+    // Send them to the newly created show page
+    window.location.href = `./show.html?id=${showId}`;
 }
 
-const createMore = async (e) => {
-    // Create one and then submit
-    e.preventDefault();
 
-    const title = document.getElementById("title-input");
-
-    const { error } = await supabase
-        .from("show")
-        .insert([
-            {
-                title: title.value,
-                user_id: user.id
-            }
-        ])
-
-    if (error) throw error;
-
-    // Display a message so they know the last one went through
-    document.getElementById("success-message").innerHTML = `Success! ${title.value} can now have lists.`
-
-    // Reset the form for the next
-    title.value = "";
-}
-
-document.getElementById("create-btn").addEventListener("click", create);
-document.getElementById("create-create-another").addEventListener("click", createMore)
+document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
+document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))

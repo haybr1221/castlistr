@@ -51,9 +51,27 @@
         <div id="overlay" hidden></div>
 
         <div id="add-character" hidden>
+            <p class="cancel">x</p>
             <form id="char-form">
-                <label class="label" for="char-name" id="name-label">Character Name:</label>
+                <label class="label" for="char-name" id="char-name-label">Character Name:</label>
                 <input type="text" id="char-name" name="char-name" required>
+                <div id="success-message" class="text"></div>
+                <div id="button-box">
+                    <button type="submit" class="button" id="create-btn">Create</button>
+                    <button type="submit" class="button" id="create-create-another">Create & Create Another</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="add-tour" hidden>
+            <p class="cancel">x</p>
+            <form id="tour-form">
+                <label class="label" for="tour-name" id="tour-name-label">Tour Name:</label>
+                <input type="text" id="tour-name" name="tour-name" required>
+                <label class="label" for="opening-date" id="opening-label">Opening Date:</label>
+                <input type="date" id="opening-date" name="opening-date" required>
+                <label class="label" for="closing-date" id="closing-label">Closing Date:</label>
+                <input type="date" id="closing-date" name="closing-date">
                 <div id="success-message" class="text"></div>
                 <div id="button-box">
                     <button type="submit" class="button" id="create-btn">Create</button>

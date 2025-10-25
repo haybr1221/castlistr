@@ -17,11 +17,12 @@ const showId = searchParams.get("id")
 const showRes = await fetch(`/show/${showId}`);
 const showData = await showRes.json()
 
+console.log(showData)
 // Update the poster and title from this data
-const posterEl = document.getElementById("poster")
-posterEl.src = showData.show.poster_url;
 const titleEl = document.querySelector(".show-title")
 titleEl.innerHTML = showData.show.title;
+const posterEl = document.getElementById("poster")
+posterEl.src = showData.show.poster_url;
 
 // Update the counts for cast lists, characters, and tours
 const castListEl = document.getElementById("cast-list-count");
@@ -165,7 +166,7 @@ function closeModal() {
 }
 
 // Creating new stuff
-const create = async (e, isMultiple) => {
+const createChar = async (e, isMultiple) => {
     // Create just one
     e.preventDefault();
     const name = document.getElementById("char-name");
@@ -200,7 +201,7 @@ const create = async (e, isMultiple) => {
     if (isMultiple)
     {
         // Display a message so they know the last one went through
-        document.getElementById("success-message").innerHTML = `Success! ${name.value} can now be cast.`
+        document.querySelector("#char-form #success-message").innerHTML = `Success! ${name.value} can now be used in lists.`
 
         // Reset the form for the next
         name.value = "";
@@ -213,8 +214,67 @@ const create = async (e, isMultiple) => {
     closeModal();
 }
 
-document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
-document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))
+const createTour = async (e, isMultiple) => {
+    e.preventDefault();
+    const name = document.getElementById("tour-name");
+    const opening = document.getElementById("opening-date");
+    const closing = document.getElementById("closing-date");
+
+    // Create an object with everything so far
+    const newTour = {
+        title: name.value,
+        opening: opening.value,
+        show_id: showId,
+        user_id: user.id
+    }
+
+    // Since some tours may still be open, value may be null
+    // Hanlde it accorddingly
+    if (closing.value)
+    {
+        newTour.closing = closing.value;
+    }
+
+    const { error } = await supabase
+        .from("tour")
+        .insert([newTour])
+
+    if (error) console.error(error);
+
+    if (isMultiple)
+    {
+        // Display a message so they know the last one went through
+        document.querySelector("#tour-form #success-message").innerHTML = `Success! ${name.value} has been added to the database.`
+
+        // Reset the form for the next
+        name.value = "";
+
+        // Exit function
+        return;
+    }
+
+    // Close modal and refresh page
+    closeModal();
+}
+
+// Close modal 
+document.querySelectorAll(".cancel").forEach(el => {
+    el.addEventListener("click", closeModal);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+// Buttons for character creation
+document.querySelector("#char-form #button-box #create-btn").addEventListener("click", (e) => createChar(e, false));
+document.querySelector("#char-form #button-box  #create-create-another").addEventListener("click", (e) => createChar(e, true));
+
+// Buttons for tour creation
+document.querySelector("#tour-form #button-box #create-btn").addEventListener("click", (e) => createTour(e, false));
+document.querySelector("#tour-form #button-box  #create-create-another").addEventListener("click", (e) => createTour(e, true));
 
 // Hide characters/show tour and vice versa
 const charTab = document.getElementById("characters")

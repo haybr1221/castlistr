@@ -640,14 +640,34 @@ ul {
     z-index: 9;
 }
 
-#add-character {
+#add-character, #add-tour {
     background-color: white;
     padding: 45px;
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#tour-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cancel {
+    font-family: 'coolvetica';
+    text-align: right;
+}
+
+.cancel:hover {
+    color: red;
+}
+
+#char-form input, #tour-form input {
+    padding: 10px;
+    border: 1.5px solid black;
 }
