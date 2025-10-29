@@ -22,7 +22,15 @@
     <main id="show-main">
         <div id="show-info">
             <div id="basic-info">
-                <img id="poster">
+                <div id="poster-div">
+                    <img id="poster">
+                    <div id="add-poster" hidden>
+                        <input type="file" id="add-poster-input" hidden>
+
+                        <button class="button" id="select-button">Select Image</button>
+                        <button class="button" id="upload-button" hidden>Upload Image</button>
+                    </div>
+                </div>
                 <p class="show-title"></p>
             </div>
             <div id="dynamic-info">

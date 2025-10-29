@@ -164,7 +164,6 @@ async function createPerformerSelector(selectId, charId) {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(showId);
 
     const { data, error } = await supabase
         .from('cast_lists')
