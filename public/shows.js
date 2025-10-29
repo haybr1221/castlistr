@@ -17,15 +17,16 @@ async function fetchShows() {
 }
 
 function formatShow(element, parentDiv, totalCastLists) {
+    // Create the navigation for the show
+    const navLink = document.createElement("a");
+    navLink.href = `show.html?id=${element.id}`;
+    parentDiv.appendChild(navLink);
+
     // Create a div for the show
     const showDiv = document.createElement("div");
     showDiv.className = "show-div";
     showDiv.id = `show-div-${element.id}`
-    parentDiv.appendChild(showDiv)
-
-    const navLink = document.createElement("a");
-    navLink.href = `show.html?id=${element.id}`;
-    showDiv.appendChild(navLink)
+    navLink.appendChild(showDiv)
     
     const poster = document.createElement("img");
     poster.className = "poster"
@@ -33,16 +34,21 @@ function formatShow(element, parentDiv, totalCastLists) {
     if (element.poster_url != null) {
         poster.src = element.poster_url;
     }
-    navLink.appendChild(poster);
+    showDiv.appendChild(poster);
+
+    // Create div for title box
+    const showTitleDiv = document.createElement("div")
+    showTitleDiv.className = "show-summary";
+    showDiv.append(showTitleDiv);
 
     // Create title box
     const showTitle = document.createElement("p");
     showTitle.className = "show-title";
     showTitle.innerHTML = element.title;
-    showDiv.appendChild(showTitle);
+    showTitleDiv.appendChild(showTitle);
 
     // Display cast list count
-    displayCastLists(element.id, totalCastLists, showDiv)
+    displayCastLists(element.id, totalCastLists, showTitleDiv)
 }
 
 async function countCastLists() {

@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-// Get the id from the url
+// Get the ID from the url
 const searchParams = new URLSearchParams(window.location.search);
 const showId = searchParams.get("id")
 
@@ -19,10 +19,83 @@ const showData = await showRes.json()
 
 console.log(showData)
 // Update the poster and title from this data
-const titleEl = document.querySelector(".show-title")
+const titleEl = document.querySelector(".show-title");
 titleEl.innerHTML = showData.show.title;
-const posterEl = document.getElementById("poster")
-posterEl.src = showData.show.poster_url;
+const posterEl = document.getElementById("poster");
+
+if (showData.show.poster_url)
+    // If a poster exists, display that
+    posterEl.src = showData.show.poster_url;
+else
+{
+    let selectedFile;
+    // If it doesn't, display the input field to upload one
+    document.getElementById("add-poster").removeAttribute("hidden");
+    document.getElementById("poster").setAttribute("hidden", true);
+
+    // Get a random filename
+    function generateRandomFilename(originalFile) {
+        const extension = originalFile.name.split('.').pop(); // get file extension
+        const randomString = Math.random().toString(36).substring(2, 10); // 8-char random string
+        return `poster_${randomString}.${extension}`;
+    }
+
+    // Define handle upload function
+    const handleUpload = async (e) => {
+        e.preventDefault();
+
+        // Get a random filename
+        const newFileName = generateRandomFilename(selectedFile);
+        console.log(newFileName);
+
+        const { error } = await supabase
+            .storage
+            .from("posters")
+            .upload(`${newFileName}`, selectedFile)
+
+        if (error) console.error(error);
+
+        const { data: urlData } = supabase
+            .storage
+            .from("posters")
+            .getPublicUrl(newFileName);
+
+        const url = urlData.publicUrl
+        console.log(url)
+
+        const { urlError } = await supabase
+            .from("show")
+            .update({"poster_url": url})
+            .eq("id", showId)
+
+        if (urlError) console.log(urlError);
+
+        console.log("Uploaded!")
+    }
+
+    // Get references
+    const inputButton = document.getElementById("add-poster-input");
+    const uploadButton = document.getElementById("upload-button");
+    const selectButton = document.getElementById("select-button");
+    
+    selectButton.addEventListener("click", () => {
+        inputButton.click();
+    })
+    
+    inputButton.addEventListener("change", () => {
+        selectedFile = inputButton.files[0];
+
+        // Set select to hide and upload to show
+        selectButton.setAttribute("hidden", true);
+        uploadButton.removeAttribute("hidden");
+    });
+
+    uploadButton.addEventListener("click", handleUpload);
+}
+
+// Show characters and tours
+setCharacters();
+setTours();
 
 // Update the counts for cast lists, characters, and tours
 const castListEl = document.getElementById("cast-list-count");
@@ -50,16 +123,22 @@ if (showData.tourCount)
     tourEl.innerHTML = showData.tourCount;
 }
 
-// Set up the characters //
-// Fetch the character info
-const charResponse = await fetch(`/show/${showId}/characters`);
-const charData = await charResponse.json();
+async function setCharacters()
+    // Set up the characters //
+{
+    // Clear the current elements in case of reset
+    document.getElementById("char-list").innerHTML = "";
 
-// Get the list to add to
-const charList = document.getElementById("char-list")
-charData.forEach(element => {
-    addCharacter(element, charList)
-});
+    // Fetch the character info
+    const charResponse = await fetch(`/show/${showId}/characters`);
+    const charData = await charResponse.json();
+
+    // Get the list to add to
+    const charList = document.getElementById("char-list")
+    charData.forEach(element => {
+        addCharacter(element, charList)
+    });
+}
 
 function addCharacter(element, parent)
 {
@@ -69,17 +148,22 @@ function addCharacter(element, parent)
     parent.appendChild(charEntry)
 }
 
+async function setTours()
 // Set up tours // 
-// Fetch the tour info
-const tourResponse = await fetch(`/tour/${showId}`)
-const tourData = await tourResponse.json()
-console.log(tourData)
+{
+    document.getElementById("tour-list").innerHTML = "";
 
-// Get the the list to add to
-const tourList = document.getElementById("tour-list")
-tourData.forEach(element => {
-    addTour(element, tourList)
-})
+    // Fetch the tour info
+    const tourResponse = await fetch(`/tour/${showId}`)
+    const tourData = await tourResponse.json()
+    console.log(tourData)
+
+    // Get the the list to add to
+    const tourList = document.getElementById("tour-list")
+    tourData.forEach(element => {
+        addTour(element, tourList)
+    })
+}
 
 function addTour(element, parent)
 {
@@ -108,7 +192,7 @@ function addTour(element, parent)
     openingDate.innerHTML = `Opened: <span class="opening-date" datetime=${element.opening}>${formatDate(element.opening)}</span>`;
     tourDate.appendChild(openingDate);
 
-    // Check if closing exists, it might be
+    // Check if closing exists, it might be null
     if (element.closing)
     {
         const closingDate = document.createElement("p");
@@ -128,6 +212,9 @@ function formatDate(date) {
     })
 }
 
+document.getElementById("new-char").addEventListener("click", openModal);
+document.getElementById("new-tour").addEventListener("click", openModal);
+
 function openModal() {
     document.getElementById("overlay").removeAttribute("hidden");
     document.body.style.overflow = "hidden";
@@ -145,9 +232,6 @@ function openModal() {
         document.getElementById("add-tour").removeAttribute("hidden");
     }
 }
-
-document.getElementById("new-char").addEventListener("click", openModal);
-document.getElementById("new-tour").addEventListener("click", openModal);
 
 function closeModal() {
     document.body.style.overflow = "auto";
@@ -212,6 +296,7 @@ const createChar = async (e, isMultiple) => {
 
     // Close modal and refresh page
     closeModal();
+    setCharacters();
 }
 
 const createTour = async (e, isMultiple) => {
@@ -255,6 +340,7 @@ const createTour = async (e, isMultiple) => {
 
     // Close modal and refresh page
     closeModal();
+    setTours();
 }
 
 // Close modal 
@@ -311,5 +397,5 @@ function toggleShownTab() {
     }
 }
 
-charTab.addEventListener("click", toggleShownTab)
-tourTab.addEventListener("click", toggleShownTab)
+charTab.addEventListener("click", toggleShownTab);
+tourTab.addEventListener("click", toggleShownTab);
