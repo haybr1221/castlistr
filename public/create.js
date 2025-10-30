@@ -21,6 +21,7 @@ const parent = document.getElementById("show-list");
 // Add each show to be selected
 data.forEach(element => {
     const item = document.createElement("li");
+    item.setAttribute("hidden", true);
     item.classList.add("dropdown-item")
     item.value = element.id;
     item.innerHTML = element.title;
@@ -92,10 +93,9 @@ async function createCharacterSelector(element, characterForm) {
         </div>
         <div class="dropdown-content" id="char-${element.id}-dropdown">
             <div class="search-input">
-                <input type="text" name="" id="">
+                <input type="text" name="" id="" placeholder="Start typing...">
             </div>
             <ul id="char-${element.id}-list">
-                <li class="dropdown-item active">Select a performer</li>
             </ul>
         </div>
     `
@@ -128,6 +128,7 @@ async function createPerformerSelector(selectId, charId) {
 
                 // Create the element
                 const item = document.createElement("li");
+                item.setAttribute("hidden", true);
                 item.classList.add("dropdown-item")
 
                 // Format the full name
@@ -269,10 +270,11 @@ document.addEventListener("keyup", (event) => {
 
     // For each item in this box, either hide or show it
     dropdownItems.forEach(item => {
-        if (item.textContent.toLowerCase().startsWith(filter)) {
-            item.classList.remove("hide");
+        const text = item.textContent.toLowerCase();
+        if (filter === "" || text.includes(filter)) {
+            item.removeAttribute("hidden");
         } else {
-            item.classList.add("hide");
+            item.setAttribute("hidden", true);
         }
     });
 });
@@ -282,13 +284,15 @@ function goToThree() {
     const two = document.getElementById("step-two");
     const three = document.getElementById("step-three")
 
-    two.classList.add("hide");
-    three.classList.remove("hide")
+    two.classList.remove("current-step");
+    two.setAttribute("hidden", true);
+    three.classList.add("current-step");
+    three.removeAttribute("hidden");
 }
 
 function goToTwo() {
     // Check to see if it was one or two that called it
-    if (document.getElementById("step-three").className == "hide") {
+    if (document.getElementById("step-three").hidden) {
         // One called it, since three is still hidden
 
         // Check to be sure they have selected a show, if not, prevent them from proceeding
@@ -299,15 +303,18 @@ function goToTwo() {
             return
         }
         const now = document.getElementById("step-one")
-        now.classList.add("hide");
+        now.classList.remove("current-step");
+        now.setAttribute("hidden", true);
     }
     else {
         const now = document.getElementById("step-three")
-        now.classList.add("hide");
+        now.classList.remove("current-step");
+        now.setAttribute("hidden", true);
     }
     const two = document.getElementById("step-two");
-
-    two.classList.remove("hide")
+    
+    two.classList.add("current-step");
+    two.removeAttribute("hidden")
 }
 
 function goToOne() {
@@ -317,8 +324,10 @@ function goToOne() {
     const two = document.getElementById("step-two");
     const one = document.getElementById("step-one")
 
-    two.classList.add("hide")
-    one.classList.remove("hide");
+    two.setAttribute("hidden", true);
+    two.classList.remove("current-step");
+    one.removeAttribute("hidden");
+    one.classList.add("current-step");
 }
 
 function resetPerformerSelections() {

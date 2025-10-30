@@ -1,3 +1,14 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
+
+// Create client
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const { data: { user } } = await supabase.auth.getUser();
+console.log("Current user: ", user)
+
 async function fetchShows() {
     try {
         const response = await fetch("/show");
@@ -106,8 +117,79 @@ function displayCastLists(showId, list, parentDiv) {
 
 fetchShows();
 
-async function redirectToCreate() {
-    window.location.href = '/create-show.html';
+// Open the create new show modal
+document.getElementById("new-show-button").addEventListener("click", openModal)
+
+function openModal() {
+    document.getElementById("overlay").removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+    document.getElementById("add-show").removeAttribute("hidden");
 }
 
-document.getElementById("new-show-button").addEventListener("click", redirectToCreate)
+function closeModal() {
+    document.body.style.overflow = "auto";
+    document.getElementById("overlay").setAttribute("hidden", true);
+
+    document.getElementById("add-show").setAttribute("hidden", true);
+}
+
+// Creating a new show
+const create = async (e, isMultiple) => {
+    e.preventDefault();
+    const message = document.getElementById("message");
+    const title = document.getElementById("title-input");
+
+    const { data: dupData, error: dupError } = await supabase
+        .from("show")
+        .select("*")
+        .eq("title", title.value)
+
+    if (dupError) console.error(dupError);
+
+    if (dupData.length > 0) {
+        message.innerHTML = "This show likely already exists in the database! If you think this is an error, please contact support.";
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from("show")
+        .insert([
+            {
+                title: title.value,
+                user_id: user.id
+            }
+        ]).select()
+    
+    if (error) throw error;
+
+    if (isMultiple)
+    {
+        // Display a message so they know the last one went through
+        message.innerHTML = `Success! ${title.value} can now have lists.`
+
+        // Reset the form for the next
+        title.value = "";
+    }
+
+    console.log(data);
+    const showId = data[0].id;
+
+    console.log(showId)
+
+    // Send them to the newly created show page
+    window.location.href = `./show.html?id=${showId}`;
+}
+
+document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
+document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))
+
+// Handle closing modal
+document.querySelectorAll(".cancel").forEach(el => {
+    el.addEventListener("click", closeModal);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});

@@ -22,7 +22,7 @@
     <main id="create-main">
         <div id="create-container">
             <h1 id="create-title">Create a new list</h1>
-            <div id="step-one">
+            <div id="step-one" class="current-step">
                 <h2 id="create-step" class="step">Step 1: Choose a show</h2>
                 <div class="search-container">
                     <p class="label" id="show">Show:</p>
@@ -32,10 +32,9 @@
                         </div>
                         <div class="dropdown-content" id="show-dropdown">
                             <div class="search-input">
-                                <input type="text" name="" id="">
+                                <input type="text" name="" id="" placeholder="Start typing...">
                             </div>
                             <ul id="show-list">
-                                <li class="dropdown-item active">Select</li>
                             </ul>
                         </div>
                     </div>
@@ -43,7 +42,7 @@
                 <div id="warning" class="text"></div>
                 <button type="button" class="button" id="step-one-to-two">Next Step</button>
             </div>
-            <div id="step-two" class="hide">
+            <div id="step-two" hidden>
                 <h2 id="select-characters" class="step">Step 2: Choose your characters</h2>
                 <p class="text" id="select-step">Select the actors you want to see in <span id="selected-show-title"></span>!</p>
                 <div id="character-form">
@@ -54,7 +53,7 @@
                     <button type="button" class="button" id="step-two-to-three">Next Step</button>
                 </div>
             </div>
-            <div id="step-three" class="hide">
+            <div id="step-three" hidden>
                 <h2 id="name-list" class="step">Step 3: Name your list</h2>
                 <form id="finalize-list">
                     <label class="label" for="list-name" id="list-title">List Name:</label>

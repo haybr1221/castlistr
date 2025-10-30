@@ -28,7 +28,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/performer", async (req, res) => {
-    const { data, error } = await supabase.from("performer").select("*");
+    const { data, error } = await supabase
+        .from("performer")
+        .select("*")
+        .order("last_name", { ascending: true });
     
     if (error) {
         console.error("Error fetching performers:", error);
@@ -41,7 +44,8 @@ app.get("/performer", async (req, res) => {
 app.get("/show", async (req, res) => {
     const { data, error } = await supabase
         .from("show")
-        .select("*");
+        .select("*")
+        .order("title", { ascending: true });
     
     if (error) {
         console.error("Error fetching shows:", error);

@@ -1,11 +1,24 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
+
+// Create client
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const { data: { user } } = await supabase.auth.getUser();
+console.log("Current user: ", user)
+
 async function fetchPerformers() {
     try {
         const response = await fetch("/performer");
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Fetched performers:", data);
             const tbody = document.getElementById("performer-list");
+
+            // Clear it if there is data there
+            tbody.innerHTML = "";
             data.forEach(element => {
                 const { first_name, middle_name, last_name } = element;
                 const row = document.createElement("tr");
@@ -24,11 +37,92 @@ async function fetchPerformers() {
     }
 }
 
-async function redirectToCreate() {
-    window.location.href = '/create-performer.html';
-}
-
 fetchPerformers();
 
-const newPerf = document.getElementById("new-performer-button")
-newPerf.addEventListener("click", redirectToCreate)
+// Open the create new show modal
+document.getElementById("new-performer-button").addEventListener("click", openModal)
+
+function openModal() {
+    document.getElementById("overlay").removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+    document.getElementById("add-performer").removeAttribute("hidden");
+}
+
+function closeModal() {
+    document.body.style.overflow = "auto";
+    document.getElementById("overlay").setAttribute("hidden", true);
+
+    document.getElementById("add-performer").setAttribute("hidden", true);
+}
+
+// Creating a new show
+const create = async (e, isMultiple) => {
+    e.preventDefault();
+    
+    const message = document.getElementById("message");
+    const firstName = document.getElementById("first-name");
+    const middleName = document.getElementById("middle-name");
+    const lastName = document.getElementById("last-name");
+
+    const { data: dupData, error: dupError } = await supabase
+        .from("performer")
+        .select("*")
+        .eq("first_name", firstName.value)
+        .eq("middle_name", middleName.value)
+        .eq("last_name", lastName.value)
+
+    if (dupError) throw dupError;
+
+    if (dupData.length > 0) {
+        message.innerHTML = "This performer likely already exists in the database! If you think this is an error, please contact support.";
+        return;
+    }
+    
+    const { error } = await supabase
+        .from("performer")
+        .insert([
+            {
+                first_name: firstName.value,
+                middle_name: middleName.value,
+                last_name: lastName.value,
+                user_id: user.id
+            }
+        ])
+    
+    if (error) throw error;
+
+    if (isMultiple)
+    {
+        // Display a message so they know the last one went through
+        document.getElementById("message").innerHTML = `Success! ${firstName.value ? firstName.value + ' ' : ''} ${middleName.value ? middleName.value + ' ' : ''} ${lastName.value ? lastName.value + ' ' : ''} can now be cast.`
+
+        // Reset the form for the next
+        firstName.value = "";
+        middleName.value = "";
+        lastName.value = "";
+
+        return;
+    }
+
+    // Refetch performers and close the modal
+    // TODO: redirect to new performer page
+    fetchPerformers();
+    closeModal();
+
+    // Reset success message in case they open it again
+    document.getElementById("message").innerHTML = "";
+}
+
+document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
+document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))
+
+// Handle closing modal
+document.querySelectorAll(".cancel").forEach(el => {
+    el.addEventListener("click", closeModal);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
