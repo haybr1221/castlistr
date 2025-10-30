@@ -42,16 +42,30 @@ app.get("/performer", async (req, res) => {
 });
 
 app.get("/show", async (req, res) => {
-    const { data, error } = await supabase
+    const page = parseInt(req.query.page) || 1
+    const perPage = 15;
+    const start = (page - 1) * perPage;
+    const end = start + perPage - 1;
+    const search = req.query.search || ""
+
+    let query = supabase
         .from("show")
-        .select("*")
-        .order("title", { ascending: true });
+        .select("*", { count: "exact" })
+        .order("title", { ascending: true })
+
+    if (search) {
+        // If there is a search paramater, use it!
+        query = query.ilike("title", `%${search}%`);
+    }
+    
+    const { data, error, count } = await query.range(start, end);
     
     if (error) {
-        console.error("Error fetching shows:", error);
+        console.error("Error fetching shows:", JSON.stringify(error, null, 2));
         return;
     }
-    return res.json(data);
+
+    return res.json({data, page, totalPages: Math.ceil(count / perPage), totalItems: count});
     
 });
 
