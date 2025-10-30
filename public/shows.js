@@ -9,21 +9,72 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-async function fetchShows() {
+let currentPage = 1;
+let searchQuery = "";
+
+async function fetchShows(page = 1, search = "") {
     try {
-        const response = await fetch("/show");
+        const response = await fetch("/show?page=" + page + "&search=" + search);
 
         if (response.ok) {
-            const data = await response.json();
+            const { data, totalPages } = await response.json();
             const div = document.getElementById("shows");
+            div.innerHTML = "";
             const totalCastLists = await countCastLists()
             data.forEach(element => {
                 formatShow(element, div, totalCastLists)
             });
+            setupPagination(totalPages);
         }
     }
     catch (err) {
         console.error("Error fetching shows:", err);
+    }
+}
+
+function setupPagination(totalPages) {
+    // Previous button
+    if (currentPage > 1) {
+        // Create button for previous, since it isn't page 1
+        const prevButton = document.getElementById("prevButton");
+        prevButton.removeAttribute("hidden");
+
+        // On click, refresh to the next page
+        prevButton.addEventListener("click", () => 
+        {
+            currentPage--;
+            fetchShows(currentPage, searchQuery)
+        });
+    }
+
+    // Create info to display page info
+    const pageIndicator = document.getElementById("page-indicator");
+    pageIndicator.innerHTML = ` Page ${currentPage} of ${totalPages} `;
+
+    if (currentPage < totalPages)
+    {
+        // There are more pages, so we can add a next button
+        const nextButton = document.getElementById("nextButton");
+        nextButton.removeAttribute("hidden")
+
+        // On click, refresh to the next page
+        nextButton.addEventListener("click", () =>
+        {
+            currentPage++;
+            fetchShows(currentPage, searchQuery)
+        });
+    }
+
+    if (currentPage == 1)
+    {
+        const prevButton = document.getElementById("prevButton")
+        prevButton.setAttribute("hidden", true)
+    }
+
+    if (currentPage == totalPages )
+    {
+        const nextButton = document.getElementById("nextButton")
+        nextButton.setAttribute("hidden", true)
     }
 }
 
@@ -115,8 +166,6 @@ function displayCastLists(showId, list, parentDiv) {
     parentDiv.appendChild(castListCount);
 }
 
-fetchShows();
-
 // Open the create new show modal
 document.getElementById("new-show-button").addEventListener("click", openModal)
 
@@ -180,6 +229,20 @@ const create = async (e, isMultiple) => {
     window.location.href = `./show.html?id=${showId}`;
 }
 
+const searchInput = document.getElementById("search-input");
+let searchTimeout;
+
+searchInput.addEventListener("keyup", () => {
+    const query = searchInput.value.trim();
+    searchQuery = query;
+
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        currentPage = 1;
+        fetchShows(currentPage, searchQuery);
+    }, 300);
+});
+
 document.getElementById("create-btn").addEventListener("click", (e) => create(e, false));
 document.getElementById("create-create-another").addEventListener("click", (e) => create(e, true))
 
@@ -193,3 +256,5 @@ document.addEventListener("keydown", (event) => {
         closeModal();
     }
 });
+
+fetchShows();

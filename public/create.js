@@ -19,7 +19,7 @@ console.log(data);
 const parent = document.getElementById("show-list");
 
 // Add each show to be selected
-data.forEach(element => {
+data.data.forEach(element => {
     const item = document.createElement("li");
     item.setAttribute("hidden", true);
     item.classList.add("dropdown-item")
@@ -164,6 +164,7 @@ async function createPerformerSelector(selectId, charId) {
 };
 
 const handleSubmit = async (e) => {
+    console.log("hey")
     e.preventDefault();
 
     const { data, error } = await supabase
