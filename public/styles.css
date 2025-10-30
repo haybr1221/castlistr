@@ -219,11 +219,29 @@ main {
     text-align: left;
 }
 
+.adding-new-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 25px;
+    text-align: left;
+}
+
 .step {
     font-family: 'coolvetica', sans-serif;
     color: var(--black);
     font-size: 20px;
     text-align: left;
+}
+
+.current-step {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#create-step .search-container {
+    width: 50%;
+    background-color: #279AF1;
 }
 
 .text {
@@ -310,10 +328,6 @@ main {
     cursor: pointer;
 }
 
-.dropdown-box .dropdown-content ul li.hide {
-    display: none;
-}
-
 .dropdown-box .dropdown-content ul li:hover {
     background-color: rgb(245 245 245);
 }
@@ -327,9 +341,10 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr;
     max-width: 100%;
+    max-height: 225px;
     gap: 20px;
     padding: 20px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .entry {
@@ -340,19 +355,15 @@ main {
 .search-container {
     display: flex;
     flex-direction: column;
+    gap: 5px;
     background-color: #f8f8f8;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-
 .character-label {
     margin-right: 0.5rem;
-}
-
-.hide {
-    display: none;
 }
 
 #finalize-list {
@@ -679,9 +690,10 @@ ul {
     z-index: 9;
 }
 
-#add-character, #add-tour {
+#add-character, #add-tour, #add-show, #add-performer {
     background-color: white;
     padding: 45px;
+    width: 400px;
     position: fixed;
     z-index: 1000;
     top: 50%;
