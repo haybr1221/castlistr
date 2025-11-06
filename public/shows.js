@@ -1,10 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
-
-// Create client
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from './supabaseclient.js';
 
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
@@ -14,7 +8,7 @@ let searchQuery = "";
 
 async function fetchShows(page = 1, search = "") {
     try {
-        const response = await fetch("/show?page=" + page + "&search=" + search);
+        const response = await fetch("/show-pagination?page=" + page + "&search=" + search);
 
         if (response.ok) {
             const { data, totalPages } = await response.json();
@@ -81,7 +75,7 @@ function setupPagination(totalPages) {
 function formatShow(element, parentDiv, totalCastLists) {
     // Create the navigation for the show
     const navLink = document.createElement("a");
-    navLink.href = `show.html?id=${element.id}`;
+    navLink.href = `shows/${element.slug}`;
     parentDiv.appendChild(navLink);
 
     // Create a div for the show
@@ -183,10 +177,16 @@ function closeModal() {
 }
 
 // Creating a new show
+function makeSlug(title) {
+    // Slug-ify the show titles
+    return title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+}
+
 const create = async (e, isMultiple) => {
     e.preventDefault();
     const message = document.getElementById("message");
     const title = document.getElementById("title-input");
+    const slug = makeSlug(title.value);
 
     const { data: dupData, error: dupError } = await supabase
         .from("show")
@@ -205,7 +205,8 @@ const create = async (e, isMultiple) => {
         .insert([
             {
                 title: title.value,
-                user_id: user.id
+                user_id: user.id,
+                slug: slug
             }
         ]).select()
     
@@ -221,12 +222,10 @@ const create = async (e, isMultiple) => {
     }
 
     console.log(data);
-    const showId = data[0].id;
-
-    console.log(showId)
+    const newShowSlug = data[0].slug;
 
     // Send them to the newly created show page
-    window.location.href = `./show.html?id=${showId}`;
+    window.location.href = `./shows/${newShowSlug}`;
 }
 
 const searchInput = document.getElementById("search-input");

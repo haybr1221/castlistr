@@ -1,10 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
-
-// Create client
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from './supabaseclient.js';
 
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
@@ -13,13 +7,11 @@ console.log("Current user: ", user)
 const response = await fetch("/show");
 const data = await response.json();
 
-console.log(data);
-
 // Create the dropdown parent
 const parent = document.getElementById("show-list");
 
 // Add each show to be selected
-data.data.forEach(element => {
+data.forEach(element => {
     const item = document.createElement("li");
     item.setAttribute("hidden", true);
     item.classList.add("dropdown-item")
@@ -46,8 +38,6 @@ parent.addEventListener("click", async (event) => {
     // Fetch characters from backend
     const charResponse = await fetch(`/show/${showId}/characters`);
     const charData = await charResponse.json();
-
-    // console.log("Characters for show:", charData)
 
     // Set the character form
     const characterForm = document.getElementById("character-form");
@@ -164,7 +154,6 @@ async function createPerformerSelector(selectId, charId) {
 };
 
 const handleSubmit = async (e) => {
-    console.log("hey")
     e.preventDefault();
 
     const { data, error } = await supabase
@@ -281,7 +270,6 @@ document.addEventListener("keyup", (event) => {
 });
 
 function goToThree() {
-    console.log("Getting next tstep")
     const two = document.getElementById("step-two");
     const three = document.getElementById("step-three")
 
@@ -349,7 +337,7 @@ function resetPerformerSelections() {
     })
 }
 
-document.getElementById("finalize-list").addEventListener("submit", handleSubmit)
+document.getElementById("create-list-button").addEventListener("click", handleSubmit)
 document.getElementById("step-one-to-two").addEventListener("click", goToTwo)
 document.getElementById("step-two-to-one").addEventListener("click", goToOne)
 document.getElementById("step-two-to-three").addEventListener("click", goToThree)

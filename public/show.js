@@ -1,23 +1,20 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
-
-// Create client
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from './supabaseclient.js';
 
 const { data: { user } } = await supabase.auth.getUser();
 console.log("Current user: ", user)
 
-// Get the ID from the url
-const searchParams = new URLSearchParams(window.location.search);
-const showId = searchParams.get("id")
+// Get the slug from the url
+const slug = window.location.pathname.split("/").pop();
+
+// Get the showId 
+const fetchId = await fetch(`/show-id/${slug}`);
+const jsonId = await fetchId.json();
+const showId = jsonId.id;
 
 // Get the show info from the database
-const showRes = await fetch(`/show/${showId}`);
+const showRes = await fetch(`/show-info/${slug}`);
 const showData = await showRes.json()
 
-console.log(showData)
 // Update the poster and title from this data
 const titleEl = document.querySelector(".show-title");
 titleEl.innerHTML = showData.show.title;
@@ -31,6 +28,7 @@ else
     let selectedFile;
     // If it doesn't, display the input field to upload one
     document.getElementById("add-poster").removeAttribute("hidden");
+    document.getElementById("add-poster").id = "add-poster-shown"
     document.getElementById("poster").setAttribute("hidden", true);
 
     // Get a random filename
@@ -46,7 +44,6 @@ else
 
         // Get a random filename
         const newFileName = generateRandomFilename(selectedFile);
-        console.log(newFileName);
 
         const { error } = await supabase
             .storage
@@ -61,7 +58,6 @@ else
             .getPublicUrl(newFileName);
 
         const url = urlData.publicUrl
-        console.log(url)
 
         const { urlError } = await supabase
             .from("show")
@@ -69,8 +65,6 @@ else
             .eq("id", showId)
 
         if (urlError) console.log(urlError);
-
-        console.log("Uploaded!")
     }
 
     // Get references
@@ -154,9 +148,8 @@ async function setTours()
     document.getElementById("tour-list").innerHTML = "";
 
     // Fetch the tour info
-    const tourResponse = await fetch(`/tour/${showId}`)
-    const tourData = await tourResponse.json()
-    console.log(tourData)
+    const tourResponse = await fetch(`/tour/${showId}`);
+    const tourData = await tourResponse.json();
 
     // Get the the list to add to
     const tourList = document.getElementById("tour-list")

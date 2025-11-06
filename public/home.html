@@ -22,13 +22,34 @@
         <div class="feed">
             
         </div>
-        <!-- <div id="profile-container">
-            <div id="profile-pic">
-                <div id="profile-pic-holder"></div>
+        <div id="profile-container">
+            <div id="user-info-container">
+                <div id="profile-pic">
+                    <div id="profile-pic-holder"></div>
+                </div>
+                <div id="user-info">
+                    <p id="username">username</p>
+                    <p id="user-list-count">0 Cast Lists</p>
+                </div>
             </div>
-            <p id="username">username</p>
-        </div> -->
+            <div class="user-options">
+                <ul id="user-settings">
+                    <a id="user-profile">
+                        <li>My Profile</li>
+                    </a>
+                    <a id="create-list-link" href="create.html">
+                        <li>Create a New List</li>
+                    </a>
+                    <a id="settings-link" href="#">
+                        <li>Settings</li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+
     </main>
     <script type="module" src="home.js"></script>
+    <script type="module" src="signout.js"></script>
+    <script type="module" src="supabaseclient.js"></script>
 </body>
 </html>

@@ -28,6 +28,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/performer", async (req, res) => {
+    // The base performer call for creating lists
     const { data, error } = await supabase
         .from("performer")
         .select("*")
@@ -41,7 +42,8 @@ app.get("/performer", async (req, res) => {
 
 });
 
-app.get("/show", async (req, res) => {
+app.get("/show-pagination", async (req, res) => {
+    // The show call with pagination for displaying the show page
     const page = parseInt(req.query.page) || 1
     const perPage = 15;
     const start = (page - 1) * perPage;
@@ -69,6 +71,20 @@ app.get("/show", async (req, res) => {
     
 });
 
+app.get("/show", async(req, res) => {
+    // The base call for shows for creating lists
+
+    const { data, error } = await supabase
+        .from("show")
+        .select("*", { count: "exact" })
+        .order("title", { ascending: true })
+
+    if (error) console.error(error);
+
+    res.json(data)
+
+});
+
 app.get(`/show/:id/characters`, async (req, res) => {
     // Get the characters for a specific show
     const showId = req.params.id;
@@ -85,9 +101,14 @@ app.get(`/show/:id/characters`, async (req, res) => {
     res.json(data);
 });
 
-app.get(`/show/:id`, async (req, res) => {
+app.get(`/show/:slug`, async (req, res) => {
+    // Set up the html file for a show
+    res.sendFile(path.resolve("public", "show.html"))
+});
+
+app.get(`/show-info/:slug`, async (req, res) => {
     // Get information from a given show
-    const showId = req.params.id;
+    const slug = req.params.slug;
 
     // Get show info
     const { data: show, error: showError } = await supabase
@@ -95,10 +116,12 @@ app.get(`/show/:id`, async (req, res) => {
         .select(
             `*`
         )
-        .eq("id", showId)
-        .single();
+        .eq("slug", slug)
+        .single()
 
     if (showError) {console.error("Error fetching for show: ", showError)}
+
+    const showId = show.id;
 
     // Get character info and count
     const { count: charCount, error: charError } = await supabase
@@ -211,6 +234,36 @@ app.get(`show`, async (req, res) => {
     res.json(data)
 })
 
-app.get("/*", (req, res) => {
-    res.sendFile(path.resolve("public", "shows.html"))
+app.get("/user-cast-lists/:id", async (req, res) => {
+    // Get the data of a user's cast lists
+    const userId = req.params.id;
+
+    // Get all data to display
+    const { data, error } = await supabase
+        .from("cast_lists")
+        .select(`*`)
+        .eq("user_id", userId);
+
+    if (error) console.error(error);
+
+    res.json(data);
+})
+
+app.get("/show-id/:slug", async (req, res) => {
+    // Get the id from the slug
+    const slug = req.params.slug;
+
+    const { data, error } = await supabase
+        .from("show")
+        .select("id")
+        .eq("slug", slug)
+        .single()
+
+    if (error) console.error(error);
+
+    res.json(data);
+})
+
+app.get("/shows/:slug", (req, res) => {
+    res.sendFile(path.resolve("public", "show.html"))
 })

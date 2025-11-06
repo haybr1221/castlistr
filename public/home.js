@@ -1,17 +1,10 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const supabaseUrl = 'https://zanpecuhaoukjvjkvyxh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbnBlY3VoYW91a2p2amt2eXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3NTQ2NjcsImV4cCI6MjA3NDMzMDY2N30.vEu1tr9yYv-eAl6jB6oKHJmGVa70H-OBcTfGhfvcws0';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from './supabaseclient.js';
 
 const { data: { user } } = await supabase.auth.getUser();
-console.log(supabase.auth.getSession());
 console.log("User recognized:", user);
 
 const lists = await fetch (`/cast-lists`);
 const listsData = await lists.json();
-console.log(listsData);
 
 const feedDiv = document.querySelector(".feed");
 
@@ -83,12 +76,32 @@ function formatCharacter(element, parentDiv) {
     charDiv.appendChild(perfName)
 }
 
-async function signOut() {
-    const { error } = await supabase.auth.signOut()
+// Upddate a user's profile informations
 
-    if (error) {
-        console.error(error);
+async function fetchCastListCounts(id) {
+    // Get cast list counts for this user
+    const response = await fetch(`/user-cast-lists/${id}`);
+
+    if (!response.ok) {
+        console.error("Error fetching cast list counts for user:", id);
+        return;
     }
+
+    return response.json();
+    // console.log(data.data.length);
 }
 
-document.getElementById("sign-out").addEventListener("click", signOut);
+const userCastLists = await fetchCastListCounts(user.id);
+
+// Get the ID for the element we will update
+const castListCount = document.getElementById("user-list-count");
+
+if (userCastLists.length == 1)
+    // Display properly
+    castListCount.innerHTML = `${userCastLists.length} Cast List`;
+else
+    castListCount.innerHTML = `${userCastLists.length} Cast Lists`;
+
+// Create route for user profile
+const profileEl = document.getElementById("user-profile")
+profileEl.href = `./user.html?=${user.id}`
