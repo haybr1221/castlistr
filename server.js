@@ -184,9 +184,8 @@ app.get("/cast-lists", async (req, res) => {
             )`)
         .order("created_at", { ascending: false })
 
-    if (error) {
-        console.error("Error fetching cast lists: ", error)
-    }
+    if (error) console.error("Error fetching cast lists: ", error)
+
     res.json(data);
 })
 
@@ -196,7 +195,14 @@ app.get(`/cast-lists/:id`, async (req, res) => {
 
     const { data, error } = await supabase
         .from("cast_lists")
-        .select(`*`)
+        .select(`
+            *,
+            show ( title ),
+            cast_list_entry (
+                id,
+                character:character_id ( * ),
+                performer:performer_id ( * )
+            )`)
         .eq("user_id", userId)
 
     if (error)
@@ -242,7 +248,8 @@ app.get("/user-cast-lists/:id", async (req, res) => {
     const { data, error } = await supabase
         .from("cast_lists")
         .select(`*`)
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
     if (error) console.error(error);
 
@@ -264,6 +271,35 @@ app.get("/show-id/:slug", async (req, res) => {
     res.json(data);
 })
 
+app.get("/get-profile/:id", async (req, res) => {
+    const userId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", userId)
+        .single()
+
+    if (error) console.error(error);
+
+    res.json(data)
+})
+
+app.get("/profiles", async (req, res) => {
+
+    const { data, error } = await supabase
+        .from("users")
+        .select("*")
+
+    if (error) console.error(error)
+
+    res.json(data)
+})
+
 app.get("/shows/:slug", (req, res) => {
     res.sendFile(path.resolve("public", "show.html"))
+})
+
+app.get("/users/:user", (req, res) => {
+    res.sendFile(path.resolve("public", "user.html"))
 })

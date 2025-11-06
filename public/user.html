@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>user's Profile</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <link rel="icon" type="image/x-icon" href="media/castlistr.PNG">
 </head>
 <body>
@@ -19,10 +19,41 @@
         </nav>
     </header>
     <main id="user-profile">
+        <div id="user-information">
+            <div id="profile-pic">
+                <p></p>
+            </div>
+            <div id="basic-info">
+                <p id="username">username</p>
+                <div id="followers-following">
+                    <p id="followers">0 followers</p>
+                    <p> | </p>
+                    <p id="following">0 following</p>
+                </div>
+                <p id="user-list-count">0 cast lists</p>
+            </div>
+            <div id="button">
+                <div class="button">
+                    button
+                </div>
+            </div>
+        </div>
+        <div id="user-sections">
+            <div id="tabs">
+                <p id="lists" class="selected-tab">Lists</p>
+                <p id="liked">Liked</p>
+            </div>
+            <div id="user-lists" class="shown-lists">
+
+            </div>
+            <div id="user-likes" hidden>
+
+            </div>
+        </div>
 
     </main>
-    <script type="module" src="user.js"></script>
-    <script type="module" src="signout.js"></script>
-    <script type="module" src="supabaseclient.js"></script>
+    <script type="module" src="/user.js"></script>
+    <script type="module" src="/signout.js"></script>
+    <script type="module" src="/supabaseclient.js"></script>
 </body>
 </html>
