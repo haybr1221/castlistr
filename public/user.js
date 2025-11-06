@@ -3,11 +3,11 @@ import { supabase } from './supabaseclient.js';
 const { data: { user } } = await supabase.auth.getUser();
 console.log("User recognized:", user);
 
-const lists = await fetch (`/cast-lists`);
+const lists = await fetch (`/cast-lists/${user.id}`);
 const listsData = await lists.json();
 console.log(listsData)
 
-const feedDiv = document.querySelector(".feed");
+const feedDiv = document.querySelector("#user-lists");
 
 listsData.forEach(element => {
     formatList(element, feedDiv)
@@ -33,14 +33,9 @@ async function formatList(element, feedDiv) {
     listTitle.innerHTML = element.title;
     headerDiv.appendChild(listTitle)
 
-    // Get the username for the creator of this list
-    const userInfo = await fetch(`/get-profile/${element.user_id}`);
-    const userData = await userInfo.json();
-    const username = userData.username;
-
     const header = document.createElement("p");
     header.className = "list-subtitle"
-    header.innerHTML = `${username}'s dream cast for ${element.show.title}`
+    header.innerHTML = `[username]'s dream cast for ${element.show.title}`
     headerDiv.appendChild(header)
 
     // Create a div for the body of the cast list
@@ -82,39 +77,42 @@ function formatCharacter(element, parentDiv) {
     charDiv.appendChild(perfName)
 }
 
-// Update a user's profile information
+// Change the button //
+// If the user matches the current user, the button should be "Edit Profile"
 
-const userInfo = await fetch(`/get-profile/${user.id}`);
-const userData = await userInfo.json();
-const username = userData.username;
 
-const usernameEl = document.getElementById("username");
-usernameEl.innerHTML = username;
+// If the user does not match the current user, the button should be "Follow"
+// If the user does not match the current user and is following the user, the button should be "Unfollow"
 
-async function fetchCastListCounts(id) {
-    // Get cast list counts for this user
-    const response = await fetch(`/user-cast-lists/${id}`);
+// Change what is being shown // 
+const listsLabel = document.getElementById("lists")
+const listsTab = document.getElementById("user-lists")
+const likedLabel = document.getElementById("liked")
+const likedTab = document.getElementById("user-likes");
 
-    if (!response.ok) {
-        console.error("Error fetching cast list counts for user:", id);
-        return;
+function toggleShownTab()
+{
+    if (likedTab.hidden)
+    {
+        // Liked is hidden, so unhide it
+        listsLabel.classList.remove("selected-tab");
+        listsTab.setAttribute("hidden", true);
+        listsTab.classList.remove("shown-lists")
+        likedLabel.classList.add("selected-tab");
+        likedTab.removeAttribute("hidden")
+        likedTab.classList.add("shown-lists")
     }
-
-    return response.json();
-    // console.log(data.data.length);
+    else
+    {
+        // Lists is hidden, so unhide it
+        likedLabel.classList.remove("selected-tab");
+        likedTab.classList.remove("shown-lists")
+        likedTab.setAttribute("hidden", true);
+        listsLabel.classList.add("selected-tab");
+        listsTab.removeAttribute("hidden")
+        listsTab.classList.add("shown-lists")
+    }
 }
 
-const userCastLists = await fetchCastListCounts(user.id);
-
-// Get the ID for the element we will update
-const castListCount = document.getElementById("user-list-count");
-
-if (userCastLists.length == 1)
-    // Display properly
-    castListCount.innerHTML = `${userCastLists.length} Cast List`;
-else
-    castListCount.innerHTML = `${userCastLists.length} Cast Lists`;
-
-// Create route for user profile
-const profileEl = document.getElementById("user-profile")
-profileEl.href = `users/${username}`
+listsLabel.addEventListener("click", toggleShownTab);
+likedLabel.addEventListener("click", toggleShownTab);
