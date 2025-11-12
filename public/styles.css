@@ -873,3 +873,19 @@ ul {
     flex-direction: column;
     gap: 15px;
 }
+
+/* edit profile */
+#edit-profile {
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+#edit-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 30px;
+    text-align: left;
+}

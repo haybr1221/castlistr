@@ -275,7 +275,7 @@ app.get("/get-profile/:id", async (req, res) => {
     const userId = req.params.id;
 
     const { data, error } = await supabase
-        .from("users")
+        .from("profile")
         .select("*")
         .eq("id", userId)
         .single()
@@ -296,10 +296,28 @@ app.get("/profiles", async (req, res) => {
     res.json(data)
 })
 
+app.get("/user-id/:username", async (req, res) => {
+    const username = req.params.username;
+
+    const { data, error } = await supabase
+        .from("profile")
+        .select('id')
+        .eq("username", username)
+        .single()
+
+    if (error) console.error(error)
+
+    res.json(data)
+})
+
 app.get("/shows/:slug", (req, res) => {
     res.sendFile(path.resolve("public", "show.html"))
 })
 
 app.get("/users/:user", (req, res) => {
     res.sendFile(path.resolve("public", "user.html"))
+})
+
+app.get("/users/:user/edit-profile", (req, res) => {
+    res.sendFile(path.resolve("public", "edit-profile.html"))
 })

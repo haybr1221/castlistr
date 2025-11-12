@@ -3,15 +3,27 @@ import { supabase } from './supabaseclient.js';
 const { data: { user } } = await supabase.auth.getUser();
 console.log("User recognized:", user);
 
-const lists = await fetch (`/cast-lists/${user.id}`);
-const listsData = await lists.json();
-console.log(listsData)
+const username = window.location.pathname.split("/").pop();
+
+// Add username to the respective field
+document.getElementById("username").innerHTML = username;
+
+// Get the user id for this user's profile
+const userFetch = await fetch(`/user-id/${username}`)
+const userData = await userFetch.json();
+const userId = userData.id;
 
 const feedDiv = document.querySelector("#user-lists");
 
-listsData.forEach(element => {
-    formatList(element, feedDiv)
-});
+async function formatLists() {
+    const lists = await fetch (`/cast-lists/${userId}`);
+    const listsData = await lists.json();
+
+    listsData.forEach(element => {
+        formatList(element, feedDiv)
+    });
+    
+}
 
 async function formatList(element, feedDiv) {
     /* FORMAT EACH LIST NICELY */
@@ -35,7 +47,7 @@ async function formatList(element, feedDiv) {
 
     const header = document.createElement("p");
     header.className = "list-subtitle"
-    header.innerHTML = `[username]'s dream cast for ${element.show.title}`
+    header.innerHTML = `${username}'s dream cast for ${element.show.title}`
     headerDiv.appendChild(header)
 
     // Create a div for the body of the cast list
@@ -77,11 +89,21 @@ function formatCharacter(element, parentDiv) {
     charDiv.appendChild(perfName)
 }
 
+formatLists()
+
 // Change the button //
+const button = document.getElementById("button")
+
 // If the user matches the current user, the button should be "Edit Profile"
+// userId is defined before, and user.id is defined when the client is initialized.
+if (userId == user.id)
+{
+    // They match, so display "Edit Profile" and redirect to the respective page
+    button.innerHTML = "Edit Profile"
+    button.href = `/users/${username}/edit-profile`
+}
 
-
-// If the user does not match the current user, the button should be "Follow"
+// If the user does not match the current user, and is not following the user, the button should be "Follow"
 // If the user does not match the current user and is following the user, the button should be "Unfollow"
 
 // Change what is being shown // 
