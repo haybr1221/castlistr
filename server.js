@@ -296,12 +296,12 @@ app.get("/profiles", async (req, res) => {
     res.json(data)
 })
 
-app.get("/user-id/:username", async (req, res) => {
+app.get("/get-user/:username", async (req, res) => {
     const username = req.params.username;
 
     const { data, error } = await supabase
         .from("profile")
-        .select('id')
+        .select('*')
         .eq("username", username)
         .single()
 

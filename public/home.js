@@ -21,27 +21,41 @@ async function formatList(element, feedDiv) {
     parentDiv.id = `cast-list-${element.id}`;
     parentDiv.className = "cast-list";
     feedDiv.appendChild(parentDiv);
-    
-    // Create a div for the header
+
     const headerDiv = document.createElement("div");
     headerDiv.className = "list-header";
     parentDiv.appendChild(headerDiv);
+
+    // Create the avatar for this user
+    const avatarImg = document.createElement("img");
+    avatarImg.className = "list-avatar"
+    headerDiv.appendChild(avatarImg)
+
+    // Create a div for the title and user list
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "title-div"
+    headerDiv.appendChild(titleDiv)
 
     // Create the list title
     const listTitle = document.createElement("p");
     listTitle.className = "list-title";
     listTitle.innerHTML = element.title;
-    headerDiv.appendChild(listTitle)
+    titleDiv.appendChild(listTitle)
 
     // Get the username for the creator of this list
     const userInfo = await fetch(`/get-profile/${element.user_id}`);
     const userData = await userInfo.json();
     const username = userData.username;
 
+    if (userData.avatar_url)
+    {
+        avatarImg.src = userData.avatar_url;
+    }
+
     const header = document.createElement("p");
     header.className = "list-subtitle"
-    header.innerHTML = `${username}'s dream cast for ${element.show.title}`
-    headerDiv.appendChild(header)
+    header.innerHTML = `${username}'s cast for ${element.show.title}`
+    titleDiv.appendChild(header)
 
     // Create a div for the body of the cast list
     const bodyDiv = document.createElement("div");
@@ -87,6 +101,12 @@ function formatCharacter(element, parentDiv) {
 const userInfo = await fetch(`/get-profile/${user.id}`);
 const userData = await userInfo.json();
 const username = userData.username;
+
+// Add their profile picture, if they have it
+if (userData.avatar_url)
+{
+    document.getElementById("user-avatar").src = userData.avatar_url;
+}
 
 const usernameEl = document.getElementById("username");
 usernameEl.innerHTML = username;

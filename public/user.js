@@ -8,10 +8,17 @@ const username = window.location.pathname.split("/").pop();
 // Add username to the respective field
 document.getElementById("username").innerHTML = username;
 
-// Get the user id for this user's profile
-const userFetch = await fetch(`/user-id/${username}`)
+// Get the user information for this user's profile
+const userFetch = await fetch(`/get-user/${username}`)
 const userData = await userFetch.json();
+console.log(userData)
 const userId = userData.id;
+
+// Add their profile picture, if they have it
+if (userData.avatar_url)
+{
+    document.getElementByClassName("avatar").src = userData.avatar_url;
+}
 
 const feedDiv = document.querySelector("#user-lists");
 
@@ -47,7 +54,7 @@ async function formatList(element, feedDiv) {
 
     const header = document.createElement("p");
     header.className = "list-subtitle"
-    header.innerHTML = `${username}'s dream cast for ${element.show.title}`
+    header.innerHTML = `${username}'s cast for ${element.show.title}`
     headerDiv.appendChild(header)
 
     // Create a div for the body of the cast list
