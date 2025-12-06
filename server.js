@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 
 const path = require("path");
 const { create } = require("domain");
+const { count } = require("console");
 
 // Serve static files from "public" folder
 app.use(express.static(path.join(__dirname, "public")));
@@ -31,7 +32,7 @@ app.get("/performer", async (req, res) => {
     // The base performer call for creating lists
     const { data, error } = await supabase
         .from("performer")
-        .select("*")
+        .select("id, full_name")
         .order("last_name", { ascending: true });
     
     if (error) {
@@ -72,13 +73,42 @@ app.get("/show-pagination", async (req, res) => {
 });
 
 app.get("/show", async(req, res) => {
-    // The base call for shows for creating lists
+    // The base call for shows
 
-    const { data, error } = await supabase
+    const { data: showData, error: showError } = await supabase
         .from("show")
         .select("*", { count: "exact" })
         .order("title", { ascending: true })
+    
+    if (showError) console.error(showError);
 
+        // Get cast list count
+    const { data: castLists, error: castListError } = await supabase
+        .rpc("get_list_counts")
+
+    if (castListError) console.error(castListError);
+
+    const countsByShowId = {}
+    for (const row of castLists)
+        countsByShowId[row.show_id] = row.list_count
+
+    const showWithCounts = showData.map((show) => ({
+        ... show,
+        cast_list_count: countsByShowId[show.id] || 0
+    }))
+
+    res.json(showWithCounts)
+
+});
+
+app.get("/show-titles", async(req, res) => {
+    // The call for shows 
+
+    const { data, error } = await supabase
+        .from("show")
+        .select("id, title")
+        .order("title", { ascending: true })
+    
     if (error) console.error(error);
 
     res.json(data)
@@ -123,19 +153,22 @@ app.get(`/show-info/:slug`, async (req, res) => {
 
     const showId = show.id;
 
-    // Get character info and count
-    const { count: charCount, error: charError } = await supabase
-        .from("show_has_character")
-        .select(`show_id`, { count: 'exact', head: false})
-        .eq("show_id", showId);
+    // Get character info
+    const { data: charData, error: charError } = await supabase
+        .from("character")
+        .select(`
+            *,
+            show_has_character!inner (show_id, char_id)`)
+        .eq("show_has_character.show_id", showId);
 
     if (charError) {console.error("Error fetching for characters: ", charError)}
 
-    // Get tour info and count
-    const { count: tourCount, error: tourError } = await supabase
+    // Get tour info
+    const { data: tourData, error: tourError } = await supabase
         .from("tour")
-        .select(`*`, { count: 'exact', head: false})
-        .eq("show_id", showId);
+        .select(`*`)
+        .eq("show_id", showId)
+        .order("opening", ascending = true)
 
     if (tourError) {console.error("Error fetching for tours: ", tourCount)}
 
@@ -149,8 +182,8 @@ app.get(`/show-info/:slug`, async (req, res) => {
 
     res.json({
         show,
-        charCount,
-        tourCount,
+        charData,
+        tourData,
         castListCount
     });
 })
@@ -180,7 +213,7 @@ app.get("/cast-lists", async (req, res) => {
             cast_list_entry (
                 id,
                 character:character_id ( * ),
-                performer:performer_id ( first_name, middle_name, last_name, id )
+                performer:performer_id ( full_name, id )
             )`)
         .order("created_at", { ascending: false })
 

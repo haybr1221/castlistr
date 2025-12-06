@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'coolvetica';
-    src: url(/fonts/coolvetica.ttf) format('truetype');
+    src: url("/fonts/coolvetica rg.otf") format('opentype');
 }
 
 @font-face {
@@ -34,7 +34,7 @@ body {
     text-decoration: none;
 }
 
-.button {
+button {
     background-color: var(--purple);
     font-family: 'coolvetica', sans-serif;
     color: white;
@@ -58,7 +58,7 @@ body {
     color: white;
 }
 
-.button:hover {
+button:hover {
     background-color: #511d5f;
     cursor: pointer;
 }
@@ -88,12 +88,14 @@ header {
 /* INDEX PAGE CONTENT */
 
 main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding-top: 100px;
     min-height: calc(100vh - 100px);
+}
+
+#centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #main-container {
@@ -127,6 +129,10 @@ main {
     color: black;
 }
 
+#form-error {
+    color: red;
+}
+
 .hide {
     display: none;
 }
@@ -157,6 +163,8 @@ main {
 
 #home-page {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;;
     gap: 20px;
     height: 600px;
@@ -297,83 +305,6 @@ main {
     justify-content: space-between;
 }
 
-.dropdown-box {
-    width: 200px;
-    position: relative;
-}
-
-.dropdown-box input {
-    width: 100%;
-    border: 1px solid pink;
-    outline: none;
-    border-radius: 5px;
-    padding: 3px 10px;
-    color: rgb(78, 78, 78);
-}
-
-.selected-item {
-    max-width: 200px;
-}
-
-.dropdown-box .selected-item {
-    position: relative;
-}
-
-.dropdown-box .selected-item::after {
-    content: "";
-    width: 3px;
-    height: 3px;
-    border: 2px solid;
-    border-color: transparent pink pink transparent;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-70%) rotate(45deg);
-}
-
-.dropdown-box .selected-item, .dropdown-box .selected-item input {
-    cursor: pointer;
-}
-
-.dropdown-box .dropdown-content {
-    box-shadow: 0px 5px 15px black 15%;
-    border-radius: 5px;
-    max-height: 200px;
-    overflow: auto;
-    display: none;
-    position: absolute;
-    z-index: 100;
-    background-color: white;
-}
-
-.dropdown-box.active .dropdown-content {
-    display: block;
-}
-
-.dropdown-box .dropdown-content .search-input {
-    padding: 5px;
-}
-
-.dropdown-box .dropdown-content ul {
-    list-style: none;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.dropdown-box .dropdown-content ul li {
-    font-size: 0.8rem;
-    padding: 2px 5px;
-    cursor: pointer;
-}
-
-.dropdown-box .dropdown-content ul li:hover {
-    background-color: rgb(245 245 245);
-}
-
-.dropdown-box .dropdown-content ul li .active {
-    background-color: rgb(213, 242, 246);
-    color: rgb(0, 0, 191)
-}
-
 #character-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -413,10 +344,10 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    background-color: white;
     width: 80%;
+    background-color: white;
     border-radius: 25px;
+    margin: 0 auto;
 }
 
 #show-search {
@@ -503,7 +434,7 @@ a {
     width: 250px;
 }
 
-#add-poster-shown, #add-pfp {
+#add-poster, #add-pfp {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -542,23 +473,10 @@ a {
 
 /* Display performers */
 
-table {
-    max-width: 500px;
-    background-color: white;
-    padding: 50px;
-    border-radius: 10px;
-}
-
-thead {
-    background-color: rgb(202, 202, 202);
-}
-
-tbody {
-    width: 100%;
-}
-
-th {
-    width: 300px;
+#performer-page {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* New performer */
@@ -589,7 +507,7 @@ th {
     width: 640px;
 }
 
-.cast-list {
+.cast-list-card {
     max-height: 600px;
     padding: 20px;
     background-color: white;
@@ -598,13 +516,17 @@ th {
 
 .list-header {
     font-family: 'coolvetica', sans-serif;
-    background-color: white;
     width: 600px;
     padding: 10px;
     border-bottom: 0.5px solid black;
     display: flex;
     flex-direction: row;
     gap: 10px;
+}
+
+.list-header:hover {
+    background-color: lightgray;
+    cursor: pointer;
 }
 
 .title-div {
@@ -649,6 +571,8 @@ th {
     justify-content: flex-start;
     align-items: flex-start;
     width: 600px;
+    max-height: 100%;
+    overflow: scroll
 }
 
 /* show info pages */
@@ -711,13 +635,14 @@ th {
     padding: 20px;
     font-weight: bold;
     font-family: 'coolvetica';
+    cursor: pointer;
 }
 
 #tabs p:hover {
     background-color: rgb(222, 222, 222);
 }
 
-.selected-tab {
+.active-tab {
     background-color: white;
 }
 
@@ -828,6 +753,7 @@ ul {
 #user-profile {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
 }
 
@@ -863,7 +789,7 @@ ul {
     margin-top: -20px;
 }
 
-.shown-lists {
+.profile-lists {
     display: flex;
     flex-direction: column;
     gap: 50px;
