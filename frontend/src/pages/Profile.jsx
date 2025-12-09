@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
 import DisplayCastLists from '../components/DisplayCastList.jsx'
 
@@ -19,9 +20,8 @@ function ProfilePage() {
 
     const { user } = useCurrentUser()
 
+    // First fetch the ID for this user
     useEffect(() => {
-        // First fetch the ID for this user
-
         fetch(`http://localhost:3000/get-user/${username}`)
         .then((response => response.json()))
         .then((data) => {
@@ -34,26 +34,24 @@ function ProfilePage() {
     }, [])
 
     useEffect(() => {
-        if (!userId) return 
+        if (!profileId) return 
 
         setUserListsLoading(true)
         setUserListsError(null)
 
         // Fetch the cast lists for this user
-        fetch(`http://localhost:3000/cast-lists/${userId}`)
+        fetch(`http://localhost:3000/cast-lists/${profileId}`)
         .then((response => response.json()))
         .then((data) => {
             setUserLists(data)
             setUserListsLoading(false)
         })
-    }, [userId])
+    }, [profileId])
+
+    const isOwnProfile = user && user.id == profileId
 
     console.log(userLists)
 
-    if (user.id == profileId) {
-        // This is the user's profile, set button to edit profile
-        setProfileButton("editProfile")
-    }
     // else if (user.id == )
 
     // TODO: fetch liked lists
@@ -73,7 +71,9 @@ function ProfilePage() {
                     <p id="user-list-count">0 Cast Lists</p>
                 </div>
                 <div id="button-div">
-                    <button>button</button>
+                    {isOwnProfile ? (
+                        <Link to={`/users/${username}/edit-profile`}><button className="button">Edit Profile</button></Link>) : 
+                        (<button>Follow</button> )}
                 </div>
             </div>
             <div id="user-sections">

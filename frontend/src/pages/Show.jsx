@@ -132,8 +132,8 @@ function ShowPage() {
                 <div id="show-info">
                     <div id="basic-info">
                         <div id="poster-div">
-                            {posterLoading && (
-                                <p className="text">Loading..</p>
+                            { posterLoading && (
+                                <p className="text">Loading...</p>
                             )}
                             { poster && (
                                 <img src={poster} alt={`Poster for ${title}`}/>

@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import DisplayCastList from '../components/DisplayCastList.jsx'
 import { useCurrentUser } from '../config/currentUser.js'
+import { useNavigate } from 'react-router-dom'
 
 function HomePage() {
     const [castLists, setCastLists] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
+    const navigate = useNavigate()
 
     const { user, profile, isLoading: userLoading, error: userError } = useCurrentUser()
     

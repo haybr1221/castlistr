@@ -10,6 +10,7 @@ import ShowPage from './pages/Show.jsx'
 import PerformersPage from './pages/Performers.jsx'
 import CreatePage from './pages/Create.jsx'
 import ProfilePage from './pages/Profile.jsx'
+import EditProfilePage from './pages/EditProfile.jsx'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/performers" element={<PerformersPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/users/:username" element={<ProfilePage />} />
+        <Route path="/users/:username/edit-profile" element={<EditProfilePage />} />
       </Routes>
     </div>
   )
