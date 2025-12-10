@@ -575,6 +575,27 @@ a {
     overflow: scroll
 }
 
+.like-button i {
+    color: #aaa;
+}
+
+.like-button.liked i {
+  color: red; /* filled/liked state */
+}
+
+.fa-heart {
+    font-size: 15px;
+}
+
+.cast-list-footer {
+    width: 600px;
+    padding-top: 10px;
+    border-top: 0.5px solid black;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 /* show info pages */
 #show-main {
     display: flex;

@@ -343,14 +343,73 @@ app.get("/get-user/:username", async (req, res) => {
     res.json(data)
 })
 
-app.get("/shows/:slug", (req, res) => {
-    res.sendFile(path.resolve("public", "show.html"))
+app.get("/get-likes/:user/:list", async (req, res) => {
+    const userId = req.params.user;
+    const listId = req.params.list;
+
+    try {
+        const { data, error } = await supabase
+        .from("user_likes")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("cast_list_id", listId)
+
+        if (error) {
+        console.error("Error checking like:", error)
+        return res.status(500).json(false)
+        }
+
+        // data is an array; liked if there is at least one row
+        const isLiked = Array.isArray(data) && data.length > 0
+        return res.json(isLiked)
+    } catch (err) {
+        console.error("Unexpected error checking like:", err)
+        return res.status(500).json(false)
+    }
 })
 
-app.get("/users/:user", (req, res) => {
-    res.sendFile(path.resolve("public", "user.html"))
-})
+app.get("/liked-lists/:user", async (req, res) =>
+{
+    const userId = req.params.user;
+    try {
+        // 1) Find liked cast_list IDs
+        const { data: likeRows, error: likesError } = await supabase
+        .from("user_likes")
+        .select("cast_list_id")
+        .eq("user_id", userId)
 
-app.get("/users/:user/edit-profile", (req, res) => {
-    res.sendFile(path.resolve("public", "edit-profile.html"))
+        if (likesError) {
+        console.error("Error fetching liked ids:", likesError)
+        return res.status(500).json([])
+        }
+
+        const ids = likeRows.map((row) => row.cast_list_id)
+        if (ids.length === 0) {
+        return res.json([]) // no liked lists
+        }
+
+        // 2) Fetch full cast list records matching those IDs
+        const { data: lists, error: listsError } = await supabase
+        .from("cast_lists")
+        .select(`
+            *,
+            show ( title ),
+            cast_list_entry (
+            id,
+            character:character_id ( * ),
+            performer:performer_id ( full_name, id )
+            )
+        `)
+        .in("id", ids)
+
+        if (listsError) {
+        console.error("Error fetching liked lists:", listsError)
+        return res.status(500).json([])
+        }
+
+        return res.json(lists)
+    } catch (err) {
+        console.error("Unexpected error fetching liked lists:", err)
+        return res.status(500).json([])
+    }
 })

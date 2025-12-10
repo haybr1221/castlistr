@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useCurrentUser } from '../config/currentUser.js'
+import { supabase } from '../config/supabaseclient.js';
 
 function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
     const [avatarUrl, setAvatarUrl] = useState(null)
     const [error, setError] = useState(null)
+    const [isLiked, setIsLiked] = useState(null)
+
+    const { user } = useCurrentUser()
 
     useEffect(() => {
         if (!castList.user_id) return
@@ -41,8 +46,58 @@ function DisplayCastList({ castList }) {
         return () => {
             isCancelled = true
         }
+
     }, [castList.user_id])
 
+    useEffect(() => {
+        if (!user) return
+
+        let isCancelled = false
+
+        async function loadLiked() {
+            const response = await fetch(`/get-likes/${user.id}/${castList.id}`)
+            const isLiked = await response.json()
+            if (!isCancelled) setIsLiked(isLiked)
+        }
+
+        loadLiked()
+
+        return () => { isCancelled = true }
+    }, [user, castList.id])
+
+    async function handleToggleLike() {
+        if (!isLiked)
+        {
+            console.log("liking")
+            // It is not liked yet, so add it to the table
+            const { error } = await supabase
+                .from("user_likes")
+                .insert({
+                    user_id: user.id,
+                    cast_list_id: castList.id
+                })
+
+            if (error) throw error
+
+            // We know it is now liked
+            setIsLiked(true)
+        }
+        else
+        {
+            console.log("unliking")
+            // It is already liked, so delete from the table
+            const { error } = await supabase
+                .from("user_likes")
+                .delete()
+                .eq("user_id", user.id)
+                .eq("cast_list_id", castList.id)
+
+            if (error) throw error
+
+            // We know it is now unliked
+            setIsLiked(false)
+        }
+    }
     return (
         <div className="cast-list-card">
             <Link to={username ? `/users/${username}` : '#'} className="profile-link">
@@ -77,7 +132,7 @@ function DisplayCastList({ castList }) {
             </div>
             {/* Footer with interaction buttons */}
             <div className="cast-list-footer">
-                <i className="fa fa-heart" />
+                <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={handleToggleLike} />
             </div>
         </div>
     )

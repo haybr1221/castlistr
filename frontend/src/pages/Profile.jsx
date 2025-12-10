@@ -13,9 +13,9 @@ function ProfilePage() {
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
     const [profileButton, setProfileButton] = useState(null)
-    // const [likedLists, setLikedLists] = useState([])
-    // const [likedListsLoading, setLikedListsLoading] = useState(null)
-    // const [likedListsError, setLikedListsError] = useState(null)
+    const [likedLists, setLikedLists] = useState([])
+    const [likedListsLoading, setLikedListsLoading] = useState(null)
+    const [likedListsError, setLikedListsError] = useState(null)
     const [currentTab, setCurrentTab] = useState("lists")
 
     const { user } = useCurrentUser()
@@ -48,17 +48,32 @@ function ProfilePage() {
         })
     }, [profileId])
 
+    useEffect(() => {
+        if (!profileId) return 
+
+        setLikedListsLoading(true)
+        setLikedListsError(null)
+
+        // Fetch the liked casts lists for this user
+        fetch(`http://localhost:3000/liked-lists/${profileId}`)
+        .then((response => response.json()))
+        .then((data) => {
+            console.log("Liked lists response:", data)
+            setLikedLists(data)
+            setLikedListsLoading(false)
+        })
+        .catch((err) => {
+            console.error("Error fetching liked lists:", err)
+            setLikedListsError(err)
+            setLikedListsLoading(false)
+        })
+
+        
+    }, [profileId])
+
     const isOwnProfile = user && user.id == profileId
 
-    console.log(userLists)
-
     // else if (user.id == )
-
-    // TODO: fetch liked lists
-    // useEffect(() => {
-    //     setLikedListsLoading(true)
-    //     setLikedListsError(null)
-    // })
 
     return (
         <main id="user-profile">
@@ -94,13 +109,23 @@ function ProfilePage() {
                 </div>
                 { currentTab == 'lists' && !userListsLoading && (
                     <div className="profile-lists">
+                    {userLists.length === 0 && !userListsError && (
+                    <p>No lists yet.</p>
+                        )}
                     {userLists.map((list) => (
                         <DisplayCastLists key={list.id} castList={list} />
                     ))}
                     </div>
                 )}
-                { currentTab == 'liked' && (
-                    <div className="profile-lists">liked lists</div>
+                { currentTab == 'liked' && !likedListsLoading && (
+                    <div className="profile-lists">
+                        {likedLists.length === 0 && !likedListsError && (
+                            <p>No liked lists yet.</p>
+                        )}
+                        {likedLists.map((list) => (
+                        <DisplayCastLists key={list.id} castList={list} />
+                        ))}
+                    </div>
                 )}
             </div>
         </main>
