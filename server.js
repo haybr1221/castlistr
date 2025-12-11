@@ -344,6 +344,7 @@ app.get("/get-user/:username", async (req, res) => {
 })
 
 app.get("/get-likes/:user/:list", async (req, res) => {
+    // Check if this user has liked this list
     const userId = req.params.user;
     const listId = req.params.list;
 
@@ -355,8 +356,8 @@ app.get("/get-likes/:user/:list", async (req, res) => {
         .eq("cast_list_id", listId)
 
         if (error) {
-        console.error("Error checking like:", error)
-        return res.status(500).json(false)
+            console.error("Error checking like:", error)
+            return res.status(500).json(false)
         }
 
         // data is an array; liked if there is at least one row
@@ -370,6 +371,7 @@ app.get("/get-likes/:user/:list", async (req, res) => {
 
 app.get("/liked-lists/:user", async (req, res) =>
 {
+    // Get all liked lists for this user
     const userId = req.params.user;
     try {
         // 1) Find liked cast_list IDs
@@ -411,5 +413,31 @@ app.get("/liked-lists/:user", async (req, res) =>
     } catch (err) {
         console.error("Unexpected error fetching liked lists:", err)
         return res.status(500).json([])
+    }
+})
+
+app.get("/is-following/:currUser/:profId", async (req, res) => {
+    // Check if the current user is following this user
+    const currUser = req.params.currUser;
+    const profId = req.params.profId;
+
+    try {
+        const { data, error } = await supabase
+            .from("follow")
+            .select("id")
+            .eq("follower", currUser)
+            .eq("following", profId)
+    
+        if (error) {
+            console.error("Error checking following: ", error)
+            return res.status(500).json(false)
+        }
+    
+        const isFollowing = Array.isArray(data) && data.length > 0
+        return res.json(isFollowing)
+    }
+    catch (err) {
+        console.error("Unexpected error checking following:", err)
+        return res.status(500).json(false)
     }
 })

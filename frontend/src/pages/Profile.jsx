@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
 import DisplayCastLists from '../components/DisplayCastList.jsx'
+import { supabase } from '../config/supabaseclient.js'
 
 function ProfilePage() {
     const { username } = useParams()
@@ -12,7 +13,7 @@ function ProfilePage() {
     const [userLists, setUserLists] = useState([])
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
-    const [profileButton, setProfileButton] = useState(null)
+    const [isFollowing, setIsFollowing] = useState(null)
     const [likedLists, setLikedLists] = useState([])
     const [likedListsLoading, setLikedListsLoading] = useState(null)
     const [likedListsError, setLikedListsError] = useState(null)
@@ -33,6 +34,7 @@ function ProfilePage() {
         })
     }, [])
 
+    // Fetch the user's cast lists
     useEffect(() => {
         if (!profileId) return 
 
@@ -48,6 +50,7 @@ function ProfilePage() {
         })
     }, [profileId])
 
+    // Fetch the user's liked lists
     useEffect(() => {
         if (!profileId) return 
 
@@ -58,7 +61,6 @@ function ProfilePage() {
         fetch(`http://localhost:3000/liked-lists/${profileId}`)
         .then((response => response.json()))
         .then((data) => {
-            console.log("Liked lists response:", data)
             setLikedLists(data)
             setLikedListsLoading(false)
         })
@@ -71,7 +73,63 @@ function ProfilePage() {
         
     }, [profileId])
 
+    useEffect(() => {
+        if (!user) return
+
+        let isCancelled = false
+        console.log(user.id)
+        console.log(profileId)
+
+        async function loadFollowed() {
+            const response = await fetch(`http://localhost:3000/is-following/${user.id}/${profileId}`)
+            const isFollowing = await response.json()
+            console.log(isFollowing)
+            if (!isCancelled) setIsFollowing(isFollowing)
+        }
+
+        loadFollowed()
+
+        return () => { isCancelled = true }
+
+    }, [user, profileId])
+
+    async function toggleFollow() {
+        if (!isFollowing)
+        {
+            // User is not following yet, so add it to the table
+            const { error } = await supabase
+                .from("follow")
+                .insert({
+                    following: profileId,
+                    follower: user.id
+                })
+
+            if (error) throw error
+
+            // We know they are now following this user
+            setIsFollowing(true)
+        }
+        else {
+            // User is following, so delete it to the table
+            
+            const { error } = await supabase
+                .from("following")
+                .delete()
+                .eq("following_id", profileId)
+                .eq("follower_id", user.id)
+
+            if (error) throw error
+
+            // We know they are no longer following this user
+            setIsFollowing(false)
+        }
+
+
+    }
+
     const isOwnProfile = user && user.id == profileId
+
+    if (isOwnProfile) setProfileButton("edit")
 
     // else if (user.id == )
 
@@ -86,9 +144,15 @@ function ProfilePage() {
                     <p id="user-list-count">0 Cast Lists</p>
                 </div>
                 <div id="button-div">
-                    {isOwnProfile ? (
-                        <Link to={`/users/${username}/edit-profile`}><button className="button">Edit Profile</button></Link>) : 
-                        (<button>Follow</button> )}
+                    {isOwnProfile && (
+                        <Link to={`/users/${username}/edit-profile`}><button>Edit Profile</button></Link>
+                    )}
+                    {!isOwnProfile && !isFollowing && (
+                        <button onClick={toggleFollow}>Follow</button>
+                    )}
+                    {!isOwnProfile && isFollowing  && (
+                        <button onClick={toggleFollow}>Unfollow</button>
+                    )}
                 </div>
             </div>
             <div id="user-sections">

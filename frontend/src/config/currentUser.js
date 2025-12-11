@@ -17,7 +17,6 @@ export function useCurrentUser() {
 
                 // Fetch user via supabase auth
                 const { data, error: authError } = await supabase.auth.getUser()
-                console.log("auth.getUser result:", data, authError)
                 if (authError) throw authError
 
                 const supaUser = data?.user || null
@@ -41,7 +40,6 @@ export function useCurrentUser() {
                 }
 
                 const profileData = await res.json()
-                console.log(profileData)
                 if (!isCancelled) {
                     setProfile(profileData)
                 }

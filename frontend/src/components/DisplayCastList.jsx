@@ -2,13 +2,16 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../config/currentUser.js'
 import { supabase } from '../config/supabaseclient.js';
+import ListOptionsModal from './ListOptionsModal.jsx';
 
 function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
     const [avatarUrl, setAvatarUrl] = useState(null)
+    const [creatorId, setCreatorId] = useState(null)
     const [error, setError] = useState(null)
     const [isLiked, setIsLiked] = useState(null)
+    const [listModal, setListModal] = useState(false)
 
     const { user } = useCurrentUser()
 
@@ -31,6 +34,7 @@ function DisplayCastList({ castList }) {
                 {
                     setUsername(data.username)
                     setAvatarUrl(data.avatar_url)
+                    setCreatorId(data.id)
                 }
             }
             catch (err) {
@@ -55,8 +59,9 @@ function DisplayCastList({ castList }) {
         let isCancelled = false
 
         async function loadLiked() {
-            const response = await fetch(`/get-likes/${user.id}/${castList.id}`)
+            const response = await fetch(`http://localhost:3000/get-likes/${user.id}/${castList.id}`)
             const isLiked = await response.json()
+            console.log
             if (!isCancelled) setIsLiked(isLiked)
         }
 
@@ -65,10 +70,9 @@ function DisplayCastList({ castList }) {
         return () => { isCancelled = true }
     }, [user, castList.id])
 
-    async function handleToggleLike() {
+    async function toggleLike() {
         if (!isLiked)
         {
-            console.log("liking")
             // It is not liked yet, so add it to the table
             const { error } = await supabase
                 .from("user_likes")
@@ -84,7 +88,6 @@ function DisplayCastList({ castList }) {
         }
         else
         {
-            console.log("unliking")
             // It is already liked, so delete from the table
             const { error } = await supabase
                 .from("user_likes")
@@ -113,8 +116,16 @@ function DisplayCastList({ castList }) {
                             {`${username}'s cast for ${showTitle}`}
                         </p>
                     </div>
+                    <i className="fa-solid fa-ellipsis" role="button" onClick={listModal ? () => setListModal(false) : () => setListModal(true)}></i>
                 </div>
             </Link>
+
+            {listModal && (
+                <>
+                    <div id="list-overlay"></div>
+                    <ListOptionsModal currUserId={user.id} listId={castList.id} creatorId={creatorId}/>
+                </>
+            )}
 
             <div className="cast-list-body">
                 {castList.cast_list_entry?.map((entry) => {
@@ -132,7 +143,7 @@ function DisplayCastList({ castList }) {
             </div>
             {/* Footer with interaction buttons */}
             <div className="cast-list-footer">
-                <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={handleToggleLike} />
+                <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={toggleLike} />
             </div>
         </div>
     )
