@@ -11,6 +11,7 @@ import PerformersPage from './pages/Performers.jsx'
 import CreatePage from './pages/Create.jsx'
 import ProfilePage from './pages/Profile.jsx'
 import EditProfilePage from './pages/EditProfile.jsx'
+import CastListPage from './pages/CastList.jsx'
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/create" element={<CreatePage />} />
         <Route path="/users/:username" element={<ProfilePage />} />
         <Route path="/users/:username/edit-profile" element={<EditProfilePage />} />
+        <Route path="/cast-lists/:id" element={<CastListPage />} />
       </Routes>
     </div>
   )

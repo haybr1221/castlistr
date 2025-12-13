@@ -289,6 +289,28 @@ app.get("/user-cast-lists/:id", async (req, res) => {
     res.json(data);
 })
 
+app.get("/get-list/:id", async (req, res) => {
+    // Get the information for a specific cast list
+    const listId = req.params.id;
+
+    const { data, error } = await supabase
+        .from("cast_lists")
+        .select(`
+            *,
+            show ( title ),
+            cast_list_entry (
+                id,
+                character:character_id ( * ),
+                performer:performer_id ( full_name, id )
+            )`)
+        .eq("id", listId)
+        .single()
+
+    if (error) throw error
+
+    res.json(data)
+})
+
 app.get("/show-id/:slug", async (req, res) => {
     // Get the id from the slug
     const slug = req.params.slug;

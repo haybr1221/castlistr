@@ -127,20 +127,21 @@ function DisplayCastList({ castList }) {
                 </>
             )}
 
-            <div className="cast-list-body">
-                {castList.cast_list_entry?.map((entry) => {
-                    const charName = entry.character.name
-                    const perfName = entry.performer.full_name
-
-                    return (
-                        <div className="charDiv" key={entry.id}>
-                            <p className="character">{charName}</p>
-                            <p className="performer">{perfName}</p>
-                        </div>
-                    )
-                })}
-
-            </div>
+            <Link to={`/cast-lists/${castList.id}`}>
+                <div className="cast-list-body">
+                    {castList.cast_list_entry?.map((entry) => {
+                        const charName = entry.character.name
+                        const perfName = entry.performer.full_name
+                        
+                        return (
+                            <div className="charDiv" key={entry.id}>
+                                <p className="character">{charName}</p>
+                                <p className="performer">{perfName}</p>
+                            </div>
+                        )
+                    })}
+                </div>
+            </Link>
             {/* Footer with interaction buttons */}
             <div className="cast-list-footer">
                 <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={toggleLike} />

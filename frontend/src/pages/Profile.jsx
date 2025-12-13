@@ -129,8 +129,6 @@ function ProfilePage() {
 
     const isOwnProfile = user && user.id == profileId
 
-    if (isOwnProfile) setProfileButton("edit")
-
     // else if (user.id == )
 
     return (
