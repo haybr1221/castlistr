@@ -13,8 +13,28 @@ function CreatePage() {
     const [performers, setPerformers] = useState([])
     const [selections, setSelections] = useState({})
     const [listTitle, setListTitle] = useState('')
+    const navigate = useNavigate()
 
     const { user } = useCurrentUser()
+
+    // useEffect(() => {
+    //     if (userLoading) return
+
+    //     if (!user) {
+    //         // send to signin or index
+    //         navigate("/signin")
+    //         return
+    //         }
+
+    //     if (!profile?.username) {
+    //         // send to edit profile
+    //         navigate("/edit-profile")
+    //         }
+    //     }, [userLoading, user, profile, navigate])
+
+    // if (userLoading || !user || !profile?.username) {
+    //     return null 
+    // }
 
     function handleSelectionChange(charId, perfId) {
         // Once a selection is detected, set it 
@@ -63,7 +83,8 @@ function CreatePage() {
 
         if (entryError) throw entryError
 
-        console.log("cast list created yippe!")
+        // Send the user to view this cast list
+        navigate(`/cast-lists/${castListId}`) 
     }
 
     // Fetch show titles

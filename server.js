@@ -297,7 +297,7 @@ app.get("/get-list/:id", async (req, res) => {
         .from("cast_lists")
         .select(`
             *,
-            show ( title ),
+            show ( title, id ),
             cast_list_entry (
                 id,
                 character:character_id ( * ),

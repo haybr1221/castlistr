@@ -18,8 +18,9 @@ function ProfilePage() {
     const [likedListsLoading, setLikedListsLoading] = useState(null)
     const [likedListsError, setLikedListsError] = useState(null)
     const [currentTab, setCurrentTab] = useState("lists")
+    const [avatarUrl, setAvatarUrl] = useState(null)
 
-    const { user } = useCurrentUser()
+    const { user, profile } = useCurrentUser()
 
     // First fetch the ID for this user
     useEffect(() => {
@@ -27,12 +28,14 @@ function ProfilePage() {
         .then((response => response.json()))
         .then((data) => {
             setProfileId(data.id)
+            setAvatarUrl(data.avatar_url)
         })
         .catch((err) => {
             console.error("Error fetching user: ", err)
             setUserIdError(err)
         })
     }, [])
+
 
     // Fetch the user's cast lists
     useEffect(() => {
@@ -69,7 +72,6 @@ function ProfilePage() {
             setLikedListsError(err)
             setLikedListsLoading(false)
         })
-
         
     }, [profileId])
 
@@ -129,17 +131,15 @@ function ProfilePage() {
 
     const isOwnProfile = user && user.id == profileId
 
-    // else if (user.id == )
-
     return (
         <main id="user-profile">
             <div id="user-information">
                 <div id="profile-pic">
-                    <img className="avatar" />
+                    <img src={avatarUrl} className="avatar" />
                 </div>
                 <div id="basic-info">
                     <p id="username">{username}</p>
-                    <p id="user-list-count">0 Cast Lists</p>
+                    <p id="user-list-count">{userLists.length} {userLists.length === 1 ? "Cast List" : "Cast Lists"}</p>
                 </div>
                 <div id="button-div">
                     {isOwnProfile && (

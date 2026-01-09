@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../config/supabaseclient'
+import { Link } from 'react-router-dom'
 
 function ListOptionsModal({ onClose, currUserId, listId, creatorId }) {
     // List options modal
@@ -23,7 +24,7 @@ function ListOptionsModal({ onClose, currUserId, listId, creatorId }) {
         <div className="list-options text">
             { currUserId == creatorId && (
                 <>
-                    <p>Edit List</p>
+                    <Link to={`/cast-lists/${listId}/edit`}>Edit List</Link>
                     <p onClick={deleteList}>Delete List</p>
                 </>
             )}

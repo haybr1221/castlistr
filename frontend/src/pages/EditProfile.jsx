@@ -6,44 +6,24 @@ import UploadAvatar from "../components/UploadAvatar"
 import { supabase } from "../config/supabaseclient.js"
 
 function EditProfilePage() {
-    const { username } = useParams()
-    const { user, isLoading } = useCurrentUser()
+    const { user, profile, isLoading } = useCurrentUser()
     const navigate = useNavigate()
 
-    const [profileId, setProfileId] = useState("")
     const [newUsername, setNewUsername] = useState("")
     const [error, setError] = useState(null)
     const [saveAvatar, setSaveAvatar] = useState(false)
 
-    // First fetch the ID for this user
-    useEffect(() => {
-        fetch(`http://localhost:3000/get-user/${username}`)
-        .then((response => response.json()))
-        .then((data) => {
-            setProfileId(data.id)
-        })
-        .catch((err) => {
-            console.error("Error fetching user: ", err)
-            setError(err)
-            navigate("/home")
-        })
-    }, [username, navigate])
-
-    // Make sure this user is supposed to be here
+    // Set everything
     useEffect(() => {
         if (isLoading) return
 
-        // In case the user is not logged in, send them to the index
+        // In case the user is not logged in, send them to do that
         if (!user) {
-            navigate("/index")
+            navigate("/signin")
             return
         }
 
-        // If both IDs don't match, send to the public profile
-        if (profileId && user.id != profileId) {
-            navigate(`/users/${username}`)
-        }
-    }, [isLoading, user, profileId, username, navigate])
+    }, [isLoading, user, navigate])
 
     // Don't show anything unless it's done loading
     if (isLoading || !user || !profileId || user.id != profileId)
@@ -70,7 +50,7 @@ function EditProfilePage() {
 
         if (usernameError) throw usernameError
 
-        console.log("Success!")
+        navigate(`/users/${newUsername}`)
     }
 
     return (

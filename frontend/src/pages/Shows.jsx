@@ -11,6 +11,11 @@ function ShowsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
     const [modalVisible, setModalVisible] = useState(false)
+
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [searchTerm, setSearchTerm] = useState("")
+    
     const navigate = useNavigate()
     
     const { user } = useCurrentUser()
@@ -19,18 +24,26 @@ function ShowsPage() {
         setIsLoading(true)
         setError(null)
 
-        fetch('http://localhost:3000/show')
-        .then(response => response.json())
-        .then((data) => {
-            setShows(data)
-            setIsLoading(false)
+        const params = new URLSearchParams({
+            page: String(page),
         })
-        .catch((error) => {
-            console.error("Error fetching shows: ", error)
-            setError(error)
-            setIsLoading(false)
-        })
-    }, [])
+        if (searchTerm) {
+            params.set("search", searchTerm)
+        }
+
+        fetch(`http://localhost:3000/show-pagination?${params.toString()}`)
+            .then((response) => response.json())
+            .then((result) => {
+                setShows(result.data)
+                setTotalPages(result.totalPages)
+                setIsLoading(false)
+            })
+            .catch((err) => {
+                console.error("Error fetching shows: ", err)
+                setError(err)
+                setIsLoading(false)
+            })
+    }, [page, searchTerm])
 
     // TODO: add abilitiy to add poster when creating
 
@@ -66,7 +79,15 @@ function ShowsPage() {
                 <h1 id="title">Shows</h1>
                 <div id="show-wrap">
                     <div id="show-search">
-                        <input type="text" placeholder="Search for a show..." />
+                        <input 
+                            type="text" 
+                            placeholder="Search for a show..." 
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setPage(1)
+                                setSearchTerm(e.target.value)}
+                            }
+                        />
                         <button onClick={() => setModalVisible(true)}>Add New Show</button>
                     </div>
                     <div id="shows">
@@ -77,6 +98,22 @@ function ShowsPage() {
                             </p>
                         )}
                         {!isLoading && !error && <DisplayShows shows={shows}/>}
+
+                        <div className="pagination">
+                            <button
+                                type="button"
+                                disabled={page <= 1}
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            >Previous</button>
+                            <span>
+                                Page {page} of {totalPages}
+                            </span>
+                            <button
+                                type="button"
+                                disabled={page >= totalPages}
+                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                            >Next</button>
+                        </div>
                     </div>
                         
                     {modalVisible && (

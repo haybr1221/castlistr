@@ -8,14 +8,19 @@ function HomePage() {
     const [castLists, setCastLists] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
-    const navigate = useNavigate()
+    const [userListCount, setUserListCount] = useState(null)
 
-    const { user, profile, isLoading: userLoading, error: userError } = useCurrentUser()
+    const { user, profile, isLoading: userLoading } = useCurrentUser()
+
+    console.log(profile)
+
+    const isLoggedIn = !!user
+    const hasUsername = !!profile?.username
+    const isProfileComplete = isLoggedIn && hasUsername 
     
     useEffect(() => {
         setIsLoading(true)
         setError(null)
-        
 
         fetch('http://localhost:3000/cast-lists')
         .then((response => response.json()))
@@ -29,6 +34,19 @@ function HomePage() {
             setIsLoading(false)
         })
     }, [])
+
+    useEffect(() => {
+        if (!profile) return 
+
+        // Fetch the cast lists for this user
+        fetch(`http://localhost:3000/cast-lists/${profile.id}`)
+        .then((response => response.json()))
+        .then((data) => {
+            // Add the count
+            setUserListCount(data.length)
+        })
+
+    }, [profile])
 
     return (
         <main id="home-page">
@@ -47,34 +65,42 @@ function HomePage() {
                 )}
             </div>
 
-            <div id="profile-container">
-                <div id="user-info-container">
-                    <div id="profile-pic">
-                        {/* <img src="" alt="" className="avatar" id="user-avatar" /> */}
+            {isLoggedIn && (
+                <div id="profile-container">
+                    <div id="user-info-container">
+                        <div id="profile-pic">
+                            {!userLoading && (                            
+                                <img 
+                                    src={profile.avatar_url} 
+                                    // alt={`Profile picture for ${username}`}
+                                    className="avatar"
+                                />
+                            )}
+                        </div>
+                        <div id="user-info">
+                            {!userLoading && (
+                                <p id="username">{profile.username}</p>
+                            )}
+                            <p id="user-list-count">{userListCount} {userListCount === 1 ? "Cast List" : "Cast Lists"}</p>
+                        </div>
                     </div>
-                    <div id="user-info">
-                        {!userLoading && (
-                            <p id="username">{profile.username}</p>
+                    <div className="user-options">
+                    <ul id="user-settings">
+                        {profile && (
+                            <Link to={`/users/${profile.username}`}>
+                            <li>My Profile</li>
+                            </Link>
                         )}
-                        <p id="user-list-count">0 Cast Lists</p>
+                        <Link to="/create">
+                            <li>Create a New List</li>
+                        </Link>
+                        <a href="#">
+                        <li>Settings</li>
+                        </a>
+                    </ul>
                     </div>
                 </div>
-                <div className="user-options">
-                <ul id="user-settings">
-                    {profile && (
-                        <Link to={`/users/${profile.username}`}>
-                        <li>My Profile</li>
-                        </Link>
-                    )}
-                    <Link to="/create">
-                        <li>Create a New List</li>
-                    </Link>
-                    <a href="#">
-                    <li>Settings</li>
-                    </a>
-                </ul>
-                </div>
-            </div>
+            )}
         </main>
     )
 }

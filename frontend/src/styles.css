@@ -219,7 +219,6 @@ main {
 }
 
 #profile-pic-holder {
-    background-color: red;
     width: 70px;
     height: 70px;
 }
@@ -401,7 +400,7 @@ main {
 }
 
 .show-div {
-    width: 325px;
+    width: 320px;
     height: 150px;
     display: flex;
     flex-direction: row;
@@ -802,7 +801,6 @@ ul {
 #user-information #profile-pic {
     height: 100px;
     width: 100px;
-    background-color: red;
     display: block;
 }
 
