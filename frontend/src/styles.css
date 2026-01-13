@@ -428,7 +428,7 @@ a {
     text-decoration: none;
 }
 
-#poster-div {
+#poster-div, #headshot-div {
     height: 350px;
     width: 250px;
 }
@@ -606,21 +606,21 @@ a {
     gap: 10px;
 }
 
-/* show info pages */
-#show-main {
+/* show/performer info pages */
+#show-main, #perf-main {
     display: flex;
     flex-direction: row;
     gap: 50px;
 }
 
-#show-info {
+#show-info, #perf-info {
     height: 600px;
     width: 300px;
     background-color: white;
     border-radius: 25px;
 }
 
-#show-info img {
+#show-info img, #perf-info img {
     height: 350px;
 }
 
@@ -651,6 +651,16 @@ a {
     width: 450px;
     justify-content: center;
     align-items: center;
+}
+
+#perf-basic-info {
+    display: flex;
+    flex-direction: column;
+    font-family: 'lexend', sans-serif;
+    justify-content: center;
+    align-items: left;
+    gap: 20px;
+    padding: 20px;
 }
 
 #tabs {

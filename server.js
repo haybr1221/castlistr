@@ -32,7 +32,7 @@ app.get("/performer", async (req, res) => {
     // The base performer call for creating lists
     const { data, error } = await supabase
         .from("performer")
-        .select("id, full_name")
+        .select("id, full_name, slug")
         .order("last_name", { ascending: true });
     
     if (error) {
@@ -349,6 +349,40 @@ app.get("/profiles", async (req, res) => {
     if (error) console.error(error)
 
     res.json(data)
+})
+
+app.get("/performer/by-slug/:slug", async (req, res) => {
+    const slug = req.params.slug;
+
+    const { data, error } = await supabase
+        .from("performer")
+        .select("*")
+        .eq("slug", slug)
+        .single()
+
+    if (error) console.error(error)
+
+    res.json(data)
+})
+
+app.get("/roles/:id", async (req, res) => {
+    // Get the roles for a specific performer
+    const id = req.params.id;
+
+    const { data, error } = await supabase
+        .from("performer_has_character")
+        .select(`
+            *,
+            character ( name ),
+            tour (
+                *,
+                show:show_id ( * )
+            )`)
+        .eq("performer_id", id)
+
+    if (error) console.error("Error fetching roles: ", error)
+
+    res.json(data);
 })
 
 app.get("/get-user/:username", async (req, res) => {

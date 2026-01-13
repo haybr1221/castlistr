@@ -25,9 +25,10 @@ function ShowPage() {
     const [showId, setShowId] = useState()
     const [castListCount, setCastListCount] = useState(0)
     const [currentTab, setCurrentTab] = useState('characters')
+    const [userLoading, setUserLoading] = useState()
     const navigate = useNavigate()
 
-    const { user } = useCurrentUser()
+    const { user, profile } = useCurrentUser()
 
     useEffect(() => {
         if (userLoading) return
@@ -42,7 +43,7 @@ function ShowPage() {
             // send to edit profile
             navigate("/edit-profile")
             }
-        }, [userLoading, user, profile, navigate])
+    }, [userLoading, user, profile, navigate])
 
     if (userLoading || !user || !profile?.username) {
         return null 
