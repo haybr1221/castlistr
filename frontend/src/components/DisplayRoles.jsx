@@ -3,13 +3,19 @@ function DisplayRole({rolesList}) {
         <ul id="role-list">
             {rolesList.map((role) => {
                 return (
-                    <li key={role.id}>
-                        {role.character.name}
-                        {role.cover_status}
-                        {role.arrived}
-                        {role.left}
-                        {role.tour.title}
-                        {role.tour.show.title}
+                    <li className="role-box">
+                        <p className="role-show-title">{role.tour.show.title}</p>
+                        <div className="role-info">
+                            <p>{role.character.name} <span className="cover-status">({role.cover_status})</span> <br></br>
+                            {role.tour.title}
+                            </p>
+                            <div className="role-dates">
+                                <p><span className="date-label">Arrived: </span>{role.arrived}</p>
+                                {role.left && (
+                                <p><span className="date-label">Left: </span>{role.left}</p>
+                                )}
+                            </div>
+                        </div>
                     </li>
                 )
             })}

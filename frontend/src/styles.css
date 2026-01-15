@@ -433,7 +433,7 @@ a {
     width: 250px;
 }
 
-#add-poster, #add-pfp {
+#add-poster, #add-pfp, #add-headshot {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -714,13 +714,13 @@ ul {
     display: none;
 }
 
-.tour-info {
+.tour-info, .role-info {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
 }
 
-.tour-info:hover, #char-list li:hover {
+.tour-info:hover, .role-box:hover, #char-list li:hover {
     background-color: rgb(222, 221, 221);
 }
 
@@ -729,13 +729,20 @@ ul {
     align-items: center; 
 }
 
-.tour-dates {
+.tour-dates, .role-dates {
     display: flex;
     flex-direction: column;
+    font-weight: normal;
 }
 
-.opening-date, .closing-date {
-    font-weight: normal;
+.role-show-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.cover-status {
+    color: rgb(101, 101, 101);
 }
 
 .date-label {

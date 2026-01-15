@@ -13,41 +13,42 @@ function ShowPage() {
     // Character
     const [charLoading, setCharLoading] = useState(true)
     const [charError, setCharError] = useState(null)
-    const [characters, setCharacters] = useState([])
     const [charModalVisible, setCharModalVisible] = useState(false)
-    const [tours, setTours] = useState([])
     const [tourLoading, setTourLoading] = useState(true)
     const [tourError, setTourError] = useState(null)
     const [tourModalVisible, setTourModalVisible] = useState(false)
-    const [poster, setPoster] = useState(null)
     const [posterLoading, setPosterLoading] = useState(true)
-    const [title, setTitle] = useState()
-    const [showId, setShowId] = useState()
-    const [castListCount, setCastListCount] = useState(0)
     const [currentTab, setCurrentTab] = useState('characters')
-    const [userLoading, setUserLoading] = useState()
+    const [showData, setShowData] = useState({
+        characters: [],
+        tours: [],
+        poster: "",
+        title: "",
+        showId: null
+    })
+    // const [userLoading, setUserLoading] = useState(true)
     const navigate = useNavigate()
 
     const { user, profile } = useCurrentUser()
 
-    useEffect(() => {
-        if (userLoading) return
+    // useEffect(() => {
+    //     if (userLoading) return
 
-        if (!user) {
-            // send to signin or index
-            navigate("/signin")
-            return
-            }
+    //     if (!user) {
+    //         // send to signin or index
+    //         navigate("/signin")
+    //         return
+    //     }
 
-        if (!profile?.username) {
-            // send to edit profile
-            navigate("/edit-profile")
-            }
-    }, [userLoading, user, profile, navigate])
+    //     if (!profile?.username) {
+    //         // send to edit profile
+    //         navigate("/edit-profile")
+    //     }
+    // }, [userLoading, user, profile, navigate])
 
-    if (userLoading || !user || !profile?.username) {
-        return null 
-    }
+    // if (userLoading || !user || !profile?.username) {
+    //     return null 
+    // }
 
     useEffect(() => {
         // Fetch data
@@ -57,15 +58,17 @@ function ShowPage() {
         fetch(`http://localhost:3000/show-info/${slug}`)
         .then(response => response.json())
         .then((data) => {
-            setCharacters(data.charData)
-            setCharLoading(false)
-            setTours(data.tourData)
+            setShowData({
+                characters: (data.charData),
+                tours: (data.tourData),
+                poster: (data.show.poster_url),
+                title: (data.show.title),
+                castListCount: (data.castListCount),
+                showId: (data.show.id)
+            })
             setTourLoading(false)
-            setPoster(data.show.poster_url)
+            setCharLoading(false)
             setPosterLoading(false)
-            setTitle(data.show.title)
-            setCastListCount(data.castListCount)
-            setShowId(data.show.id)
         })
         .catch((error) => {
             console.error("Error fetching show info: ", error)
@@ -105,7 +108,10 @@ function ShowPage() {
 
         if (showCharError) throw showCharError
 
-        setCharacters(prev => [...prev, data[0]])
+        setShowData(prev => ({ 
+            ...prev, 
+            characters: [...prev.characters, data[0]]})
+        )
 
         if (!isMultiple) {
             // If it isn't multiple, return
@@ -134,7 +140,10 @@ function ShowPage() {
 
         if (error) throw error
         
-        setTours(prev => [...prev, data[0]])
+        setShowData(prev => ({ 
+            ...prev, 
+            tours: [...prev.tours, data[0]]})
+        )
 
         if (!isMultiple) {
             // If it isn't multiple, return
@@ -144,7 +153,10 @@ function ShowPage() {
     }
 
     async function handleUpload(newUrl) {
-        setPoster(newUrl)
+        setShowData(prev => ({ 
+            ...prev, 
+            poster: newUrl })
+        )
     }
 
     return (
@@ -156,21 +168,21 @@ function ShowPage() {
                             { posterLoading && (
                                 <p className="text">Loading...</p>
                             )}
-                            { poster && (
-                                <img src={poster} alt={`Poster for ${title}`}/>
+                            { showData.poster && (
+                                <img src={showData.poster} alt={`Poster for ${showData.title}`}/>
                             )}
-                            { !poster && !posterLoading && (
-                                <UploadPoster showId={showId} onUploaded={handleUpload}></UploadPoster>
+                            { !showData.poster && !posterLoading && (
+                                <UploadPoster showId={showData.showId} onUploaded={handleUpload}></UploadPoster>
                             )}
                         </div>
                     </div>
                     <div id="dynamic-info">
                         {/* Cast Lists */}
-                        <p className="dynamic-info">{castListCount} {castListCount == 1 ? "Cast List": "Cast Lists" }</p>
+                        <p className="dynamic-info">{showData.castListCount} {showData.castListCount == 1 ? "Cast List": "Cast Lists" }</p>
                         {/* Characters */}
-                        <p>{characters.length} {characters.length == 1 ? "Character": "Characters"}</p>
+                        <p>{showData.characters.length} {showData.characters.length == 1 ? "Character": "Characters"}</p>
                         {/* Tours */}
-                        <p>{tours.length} {tours.length == 1 ? "Tour": "Tours"}</p>
+                        <p>{showData.tours.length} {showData.tours.length == 1 ? "Tour": "Tours"}</p>
                     </div>
                 </div>
                 <div id="interesting-info">
@@ -197,7 +209,7 @@ function ShowPage() {
                             {charError && (
                                 <p>Error loading: {charError.message}</p>
                             )}
-                            {!charLoading && !charError && <DisplayCharacters charList={characters}/>}
+                            {!charLoading && !charError && <DisplayCharacters charList={showData.characters}/>}
                         </div>
                     )}
                     {currentTab == 'tours' && (
@@ -208,7 +220,7 @@ function ShowPage() {
                                 {tourError && (
                                     <p>Error loading: {tourError.message}</p>
                                 )}
-                                {!tourLoading && !tourError && <DisplayTours tourList={tours}/>}
+                                {!tourLoading && !tourError && <DisplayTours tourList={showData.tours}/>}
                         </div>
                     )}
                 </div>
