@@ -172,11 +172,13 @@ function ShowPage() {
                                 <img src={showData.poster} alt={`Poster for ${showData.title}`}/>
                             )}
                             { !showData.poster && !posterLoading && (
-                                <UploadPoster showId={showData.showId} onUploaded={handleUpload}></UploadPoster>
+                                <UploadPoster showId={showData.showId} onUploaded={handleUpload} />
                             )}
                         </div>
                     </div>
                     <div id="dynamic-info">
+                        {/* show title */}
+                        <p className="show-title">{showData.title}</p>
                         {/* Cast Lists */}
                         <p className="dynamic-info">{showData.castListCount} {showData.castListCount == 1 ? "Cast List": "Cast Lists" }</p>
                         {/* Characters */}

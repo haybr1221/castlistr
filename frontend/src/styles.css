@@ -460,7 +460,7 @@ a {
     transition: transform 0.3s;
 }
 
-.show-title {
+.show-title, .perf-name {
     font-family: 'lexend', sans-serif;
     font-weight: bold;
 }
@@ -659,6 +659,7 @@ a {
     font-family: 'lexend', sans-serif;
     justify-content: center;
     align-items: left;
+    text-align: center;
     gap: 20px;
     padding: 20px;
 }

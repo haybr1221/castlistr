@@ -47,7 +47,7 @@ function UploadHeadshots({ perfId, onUploaded}) {
                 .getPublicUrl(newFileName)
             
             if (urlError) throw urlError
-
+            
             const url = urlData.publicUrl
 
             // Add the URL to the public table

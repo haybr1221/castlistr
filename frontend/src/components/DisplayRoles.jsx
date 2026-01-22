@@ -3,7 +3,7 @@ function DisplayRole({rolesList}) {
         <ul id="role-list">
             {rolesList.map((role) => {
                 return (
-                    <li className="role-box">
+                    <li className="role-box" key={role.id}>
                         <p className="role-show-title">{role.tour.show.title}</p>
                         <div className="role-info">
                             <p>{role.character.name} <span className="cover-status">({role.cover_status})</span> <br></br>
