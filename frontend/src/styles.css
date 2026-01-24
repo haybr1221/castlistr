@@ -761,7 +761,7 @@ ul {
     z-index: 9;
 }
 
-#add-character, #add-tour, #add-show, #add-performer {
+#add-modal {
     background-color: white;
     padding: 45px;
     width: 400px;

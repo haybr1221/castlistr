@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../config/supabaseclient.js'
+import { useCurrentUser } from '../config/currentUser.js'
 import Select from "react-select"
 import CharPerfSelector from '../components/CharPerfSelector.jsx' 
-import { useCurrentUser } from '../config/currentUser.js'
+import ShowDropdown from '../components/ShowDropdown.jsx'
 
 function CreatePage() {
     const [step, setStep] = useState('selectShow')
-    const [shows, setShows] = useState([])
     const [selectedShow, setSelectedShow] = useState()
     const [characters, setCharacters] = useState([])
     const [performers, setPerformers] = useState([])
@@ -87,22 +87,6 @@ function CreatePage() {
         navigate(`/cast-lists/${castListId}`) 
     }
 
-    // Fetch show titles
-    useEffect(() => {
-        fetch('http://localhost:3000/show-titles')
-        .then((response => response.json()))
-        .then((data) => {
-            const options = data.map((show) => ({
-                value: show.id,
-                label: show.title
-            }))
-            setShows(options)
-        })
-        .catch((err) => {
-            console.error("Error fetching cast lists: ", err)
-        })
-    }, [])
-
     useEffect(() => {
         fetch('http://localhost:3000/performer')
         .then((response => response.json()))
@@ -112,18 +96,16 @@ function CreatePage() {
     }, [])
 
     useEffect(() => {
-        const showId = selectedShow?.value
-
         // In case the show is changed
         setSelections({})
 
-        if (!showId) {
+        if (!selectedShow) {
             setCharacters([])
             setSelections({})
             return
         }
 
-        fetch(`http://localhost:3000/show/${showId}/characters`)
+        fetch(`http://localhost:3000/show/${selectedShow?.value}/characters`)
         .then((response => response.json()))
         .then((data) => {
             setCharacters(data)
@@ -138,10 +120,9 @@ function CreatePage() {
                 { step === 'selectShow' && (
                     <div>
                         <h2 className="step">Step 1: Choose a Show</h2>
-                        <Select 
-                            options={shows}
+                        <ShowDropdown 
                             value={selectedShow}
-                            onChange={(option) => setSelectedShow(option)}
+                            onChange={setSelectedShow}
                         />
                         <button type="button" onClick={() => setStep("selectChar")}>Next Step</button>
                     </div>

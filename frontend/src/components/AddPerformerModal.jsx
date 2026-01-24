@@ -33,7 +33,7 @@ function AddPerformerModal({ onClose, onCreate }) {
     }
 
     return (
-        <div id="add-performer">
+        <div id="add-modal">
             <p className="cancel" onClick={onClose}>x</p>
             <h1 className="adding-new-title">Create a Performer</h1>
             <form onSubmit={handleSubmit}>

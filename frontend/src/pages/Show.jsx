@@ -93,15 +93,13 @@ function ShowPage() {
 
         if (error) throw error
         
-        console.log("Data: ", data)
         const newCharId = data[0].id
-        console.log("newCharId: ", newCharId)
         
         // Insert into show_has_character
         const { error: showCharError } = await supabase
             .from("show_has_character")
             .insert({
-                show_id: showId,
+                show_id: showData.showId,
                 char_id: newCharId,
                 user_id: user.id
             })
@@ -125,7 +123,7 @@ function ShowPage() {
         const newTour = {
             title: info[0],
             opening: info[1],
-            show_id: showId,
+            show_id: showData.showId,
             user_id: user.id
         }
 

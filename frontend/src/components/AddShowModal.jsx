@@ -34,7 +34,7 @@ function AddShowModal({ onClose, onCreate }) {
     }
 
     return(
-        <div id="add-show">
+        <div id="add-modal">
             <p className="cancel" onClick={onClose}>X</p>
             <h1 className="adding-new-title">Create a Show</h1>
             <form onSubmit={handleSubmit}>

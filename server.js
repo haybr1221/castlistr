@@ -385,6 +385,27 @@ app.get("/roles/:id", async (req, res) => {
     res.json(data);
 })
 
+app.get("/roles/single/:id", async (req, res) => {
+    const id = req.params.id
+
+    const { data, error } = await supabase
+        .from("performer_has_character")
+        .select(`
+            *,
+            character ( name ),
+            tour (
+                *,
+                show:show_id ( * )
+            )
+        `)
+        .eq("id", id)
+        .single()
+
+    if (error) console.error(error)
+
+    res.json(data)
+})
+
 app.get("/get-user/:username", async (req, res) => {
     const username = req.params.username;
 
