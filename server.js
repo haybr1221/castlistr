@@ -214,7 +214,8 @@ app.get("/cast-lists", async (req, res) => {
                 id,
                 character:character_id ( * ),
                 performer:performer_id ( full_name, id )
-            )`)
+            ),
+            user_comments ( * )`)
         .order("created_at", { ascending: false })
 
     if (error) console.error("Error fetching cast lists: ", error)

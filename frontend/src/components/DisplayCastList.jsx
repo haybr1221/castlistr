@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../config/currentUser.js'
 import { supabase } from '../config/supabaseclient.js';
 import ListOptionsModal from './ListOptionsModal.jsx';
+import DisplayComment  from './DisplayComment.jsx';
 
 function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
@@ -12,8 +13,12 @@ function DisplayCastList({ castList }) {
     const [error, setError] = useState(null)
     const [isLiked, setIsLiked] = useState(null)
     const [listModal, setListModal] = useState(false)
-
-    const { user } = useCurrentUser()
+    const [isCommenting, setIsCommenting] = useState(false)
+    const [newComment, setNewComment] = useState('')
+    const [listComments, setListComments] = useState(castList.user_comments)
+    
+    const { user, profile } = useCurrentUser()
+    const commentsRef = useRef(null)
 
     useEffect(() => {
         if (!castList.user_id) return
@@ -70,6 +75,11 @@ function DisplayCastList({ castList }) {
         return () => { isCancelled = true }
     }, [user, castList.id])
 
+    useEffect(() => { 
+        if (commentsRef.current) 
+            { commentsRef.current.scrollTop = commentsRef.current.scrollHeight; } 
+    }, [listComments]);
+
     async function toggleLike() {
         if (!isLiked)
         {
@@ -101,6 +111,26 @@ function DisplayCastList({ castList }) {
             setIsLiked(false)
         }
     }
+
+    async function handleSubmit() {
+        // submit the comment into supabase
+
+        const { data, error } = await supabase
+            .from("user_comments")
+            .insert({
+                user_id: user.id,
+                cast_list_id: castList.id,
+                text: newComment
+            })
+            .select()
+
+        if (error) throw error;
+
+        setListComments(prev => [...prev, data[0]]) 
+
+        setNewComment('')
+    }
+
     return (
         <div className="cast-list-card">
             <Link to={username ? `/users/${username}` : '#'} className="profile-link">
@@ -145,7 +175,31 @@ function DisplayCastList({ castList }) {
             {/* Footer with interaction buttons */}
             <div className="cast-list-footer">
                 <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={toggleLike} />
+                <i className={isCommenting ? "fa-solid fa-comment" : "fa-regular fa-comment"} onClick={() => isCommenting ? setIsCommenting(false) : setIsCommenting(true)}></i>
             </div>
+            {isCommenting && (
+                <>
+                    <div className="prev-comments" ref={commentsRef}>
+                        {listComments && listComments.map((comment) =>
+                            <DisplayComment comment={comment}>
+                            </DisplayComment>
+                        )}
+                    </div>
+
+                    <div className="list-comment">
+                        <img src={profile.avatar_url} className="commenting-avatar"></img>
+                        <input 
+                            name="new-comment"
+                            type="text"
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)}
+                            required
+                            placeholder="Type a comment here..."
+                            />
+                        <button type="button" onClick={handleSubmit}>Submit</button>
+                    </div>
+                </>
+            )}
         </div>
     )
 }

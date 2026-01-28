@@ -58,7 +58,7 @@ function HomePage() {
                 )}
 
                 {!isLoading && !error && (
-                <> {castLists.map((list) => (
+                <> {castLists && castLists.map((list) => (
                     <DisplayCastList key={list.id} castList={list} />
                     ))}
                 </>

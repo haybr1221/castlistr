@@ -51,12 +51,12 @@ function PerformerPage() {
 
         if (error) throw error
 
-        // data.id is the new role ID 
-        const newRoleId = data.id 
+        // // data.id is the new role ID 
+        // const newRoleId = data.id 
         
-        const fullRole = await fetch(`http://localhost:3000/roles/single/${newRoleId}`).then(res => res.json())
+        // const fullRole = await fetch(`http://localhost:3000/roles/single/${newRoleId}`).then(res => res.json())
         
-        setRoles(prev => [...prev, fullRole])
+        // setRoles(prev => [...prev, fullRole])
 
         if (!isMultiple) {
             setRoleModalVisible(false)
