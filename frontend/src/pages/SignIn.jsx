@@ -44,16 +44,32 @@ function SignInPage() {
         }
     }
 
+    async function handleGoogleSignIn() {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + '/home'
+            }
+        })
+
+        if (error) setError(error.message)
+    }
+
     return (
         <main id="centering">
             <div id="main-container">
                 <h1 id="title">castlistr</h1>
 
                 { step === 'email' && (
-                    <form onSubmit={handleSendOtp} className="display-container">
-                        <input id="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
-                        <button type="submit" className="button">Send Code</button>
-                    </form>
+                    <>
+                        <button type="button" onClick={handleGoogleSignIn} className="button">
+                            Sign in with Google
+                        </button>
+                        <form onSubmit={handleSendOtp} className="display-container">
+                            <input id="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
+                            <button type="submit" className="button">Send Code</button>
+                        </form>
+                    </>
                 )}
 
                 { step === 'otp' && (

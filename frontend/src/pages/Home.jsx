@@ -69,16 +69,16 @@ function HomePage() {
                 <div id="profile-container">
                     <div id="user-info-container">
                         <div id="profile-pic">
-                            {!userLoading && (                            
+                            {!userLoading &&  profile?.avatar_url &&(                            
                                 <img 
                                     src={profile.avatar_url} 
-                                    // alt={`Profile picture for ${username}`}
+                                    alt={`Profile picture for ${profile.username}`}
                                     className="avatar"
                                 />
                             )}
                         </div>
                         <div id="user-info">
-                            {!userLoading && (
+                            {!userLoading && profile?.username && (
                                 <p id="username">{profile.username}</p>
                             )}
                             <p id="user-list-count">{userListCount} {userListCount === 1 ? "Cast List" : "Cast Lists"}</p>
