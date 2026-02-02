@@ -1,6 +1,8 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 import SignOutButton from './components/SignOut.jsx'
+import { useCurrentUser } from './config/currentUser.js'
+import { useNavigate } from 'react-router-dom'
 // import pages
 import IndexPage from './pages/Index.jsx'
 import SignInPage from './pages/SignIn.jsx'
@@ -16,6 +18,9 @@ import EditCastListPage from './pages/EditCastList.jsx'
 import PerformerPage from './pages/Performer.jsx'
 
 function App() {
+  const { user } = useCurrentUser()
+  const navigate = useNavigate()
+
   return (
     <div>
       <header>
@@ -25,7 +30,8 @@ function App() {
           <Link to="/shows" className="nav-bar">Shows</Link>
           <Link to="/performers" className="nav-bar">Performers</Link>
           <Link to="/create" className="nav-bar">Create</Link>
-          <SignOutButton />
+          { user ? (<SignOutButton />) : 
+            <button className="button" onClick={navigate("/signin")}>Sign In</button>}
         </nav>
       </header>
 

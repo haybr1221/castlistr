@@ -196,7 +196,7 @@ function DisplayCastList({ castList }) {
                             required
                             placeholder="Type a comment here..."
                             />
-                        <button type="button" onClick={handleSubmit}>Submit</button>
+                        <button type="button" onClick={handleSubmit} className="button">Submit</button>
                     </div>
                 </>
             )}

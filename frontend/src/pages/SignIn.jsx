@@ -62,11 +62,19 @@ function SignInPage() {
 
                 { step === 'email' && (
                     <>
-                        <button type="button" onClick={handleGoogleSignIn} className="button">
-                            Sign in with Google
+                        <button type="button" onClick={handleGoogleSignIn} className="google-btn">
+                            <div className="google-icon-wrapper">
+                                <img
+                                className="google-icon"
+                                src="https://developers.google.com/identity/images/g-logo.png"
+                                alt="Google logo"
+                                />
+                            </div>
+                                <p className="btn-text">Sign in with Google</p>
                         </button>
+                        <div id="or-divider"><span>or</span></div>
                         <form onSubmit={handleSendOtp} className="display-container">
-                            <input id="email" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
+                            <input id="email" type="email" placeholder="Email for a one-time passcode" value={email} onChange={e => setEmail(e.target.value)}/>
                             <button type="submit" className="button">Send Code</button>
                         </form>
                     </>

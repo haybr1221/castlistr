@@ -88,7 +88,7 @@ function ShowsPage() {
                                 setSearchTerm(e.target.value)}
                             }
                         />
-                        <button onClick={() => setModalVisible(true)}>Add New Show</button>
+                        <button onClick={() => setModalVisible(true)} className="button">Add New Show</button>
                     </div>
                     <div id="shows">
                         {isLoading && <p>Loading shows..</p>}
@@ -104,6 +104,7 @@ function ShowsPage() {
                                 type="button"
                                 disabled={page <= 1}
                                 onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                className="button"
                             >Previous</button>
                             <span>
                                 Page {page} of {totalPages}
@@ -112,6 +113,7 @@ function ShowsPage() {
                                 type="button"
                                 disabled={page >= totalPages}
                                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                className="button"
                             >Next</button>
                         </div>
                     </div>

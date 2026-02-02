@@ -65,7 +65,7 @@ function EditProfilePage() {
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                 />
-                <button onClick={handleUsernameChange}>Update</button>
+                <button onClick={handleUsernameChange} className="button">Update</button>
                 <p className="label">
                     Change profile picture:
                 </p>

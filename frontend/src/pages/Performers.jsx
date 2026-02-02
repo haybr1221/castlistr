@@ -66,7 +66,7 @@ function PerformersPage() {
         <main id="centering">
             <div id="performer-page">
                 <h1 id="title">Performers</h1>
-                <button onClick={() => setModalVisible(true)}>Add New Performer</button>
+                <button onClick={() => setModalVisible(true)} className="button">Add New Performer</button>
                 <ul className="text" id="performer-list">
                     {isLoading && <p>Loading performers...</p>}
                     {error && (

@@ -11,12 +11,15 @@ function HomePage() {
     const [userListCount, setUserListCount] = useState(null)
 
     const { user, profile, isLoading: userLoading } = useCurrentUser()
+    const navigate = useNavigate();
 
     console.log(profile)
 
     const isLoggedIn = !!user
     const hasUsername = !!profile?.username
     const isProfileComplete = isLoggedIn && hasUsername 
+
+    if (!isProfileComplete) navigate("/users/profile")
     
     useEffect(() => {
         setIsLoading(true)

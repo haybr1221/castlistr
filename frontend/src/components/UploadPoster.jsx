@@ -74,10 +74,10 @@ function UploadPoster({ showId, onUploaded}) {
             <input type="file" hidden ref={imageInputRef} onChange={handleImageChange}/>
 
             {!selectedFile && (
-                <button onClick={() => imageInputRef.current?.click()}>Select Image</button>
+                <button onClick={() => imageInputRef.current?.click()} className="button">Select Image</button>
             )}
             {selectedFile && (
-                <button onClick={handlePosterUpload}>Upload Image</button>
+                <button onClick={handlePosterUpload} className="button">Upload Image</button>
             )}
             {isUploading && (
                 <p className="text">Uploading...</p>

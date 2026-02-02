@@ -131,7 +131,7 @@ function EditCastListPage() {
                 />
         </main>
 
-        <button type="button" onClick={handleSubmit}>Save Changes</button>
+        <button type="button" onClick={handleSubmit} className="button">Save Changes</button>
         </>
     )
 }

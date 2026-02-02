@@ -124,7 +124,7 @@ function CreatePage() {
                             value={selectedShow}
                             onChange={setSelectedShow}
                         />
-                        <button type="button" onClick={() => setStep("selectChar")}>Next Step</button>
+                        <button type="button" onClick={() => setStep("selectChar")} className="button">Next Step</button>
                     </div>
                 )}
 
@@ -138,8 +138,8 @@ function CreatePage() {
                             onSelectionChange={handleSelectionChange}
                         />
                         <div className="two-buttons">
-                            <button type="button" onClick={() => setStep("selectShow")}>Previous Step</button>
-                            <button type="button" onClick={() => setStep("selectTitle")}>Next Step</button>
+                            <button type="button" onClick={() => setStep("selectShow")} className="button">Previous Step</button>
+                            <button type="button" onClick={() => setStep("selectTitle")} className="button">Next Step</button>
                         </div>
                     </div>
                 )}
@@ -157,8 +157,8 @@ function CreatePage() {
                             placeholder="My Cast List"
                         />
                         <div className="two-buttons">
-                            <button type="button" onClick={() => setStep("selectChar")}>Previous Step</button>
-                            <button type="button" onClick={handleSubmit}>Create List</button>
+                            <button type="button" onClick={() => setStep("selectChar")} className="button">Previous Step</button>
+                            <button type="button" onClick={handleSubmit} className="button">Create List</button>
                         </div>
                     </div>
                 )}

@@ -143,13 +143,13 @@ function ProfilePage() {
                 </div>
                 <div id="button-div">
                     {isOwnProfile && (
-                        <Link to={`/users/${username}/edit-profile`}><button>Edit Profile</button></Link>
+                        <Link to={`/users/${username}/edit-profile`}><button className="button">Edit Profile</button></Link>
                     )}
                     {!isOwnProfile && !isFollowing && (
-                        <button onClick={toggleFollow}>Follow</button>
+                        <button onClick={toggleFollow} className="button">Follow</button>
                     )}
                     {!isOwnProfile && isFollowing  && (
-                        <button onClick={toggleFollow}>Unfollow</button>
+                        <button onClick={toggleFollow} className="button">Unfollow</button>
                     )}
                 </div>
             </div>

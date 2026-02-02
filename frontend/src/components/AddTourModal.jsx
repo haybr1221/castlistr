@@ -69,8 +69,8 @@ function AddTourModal({ onCloseTour, onCreateTour }) {
                 {formError && <div id="form-error" className="text">{formError}</div>}
                 {multipleMsg && <div className="text">{multipleMsg}</div>}
                 <div id="button-box">
-                    <button type="submit" name="create">Create</button>
-                    <button type="submit" name="createAnother">Create &amp; Create Another</button>
+                    <button type="submit" name="create" className="button">Create</button>
+                    <button type="submit" name="createAnother" className="button">Create &amp; Create Another</button>
                 </div>
             </form>
         </div>
