@@ -430,8 +430,7 @@ a {
 
 #poster-div, #headshot-div {
     height: 350px;
-    width: 250px;
-}
+    width: 250px;}
 
 #add-poster, #add-pfp, #add-headshot {
     height: 100%;
@@ -558,12 +557,17 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 5px;
     padding: 20px;
     width: 200px;
-    height: 100px;
+    height: 100%;
     font-family: 'lexend', sans-serif;
     text-align: center;
     font-size: 15px;
+}
+
+.headshot-url {
+    height: 150px;
 }
 
 .character {

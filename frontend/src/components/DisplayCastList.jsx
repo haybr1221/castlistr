@@ -66,7 +66,6 @@ function DisplayCastList({ castList }) {
         async function loadLiked() {
             const response = await fetch(`http://localhost:3000/get-likes/${user.id}/${castList.id}`)
             const isLiked = await response.json()
-            console.log
             if (!isCancelled) setIsLiked(isLiked)
         }
 
@@ -166,6 +165,7 @@ function DisplayCastList({ castList }) {
                         return (
                             <div className="charDiv" key={entry.id}>
                                 <p className="character">{charName}</p>
+                                {entry.performer.headshot_url && (<img src={entry.performer.headshot_url} className="headshot-url"></img>)}
                                 <p className="performer">{perfName}</p>
                             </div>
                         )

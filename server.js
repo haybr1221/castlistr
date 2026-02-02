@@ -213,7 +213,7 @@ app.get("/cast-lists", async (req, res) => {
             cast_list_entry (
                 id,
                 character:character_id ( * ),
-                performer:performer_id ( full_name, id )
+                performer:performer_id ( full_name, id, headshot_url )
             ),
             user_comments ( * )`)
         .order("created_at", { ascending: false })
@@ -302,7 +302,7 @@ app.get("/get-list/:id", async (req, res) => {
             cast_list_entry (
                 id,
                 character:character_id ( * ),
-                performer:performer_id ( full_name, id )
+                performer:performer_id ( full_name, id, headshot_url )
             )`)
         .eq("id", listId)
         .single()
