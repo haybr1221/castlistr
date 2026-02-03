@@ -17,9 +17,12 @@ function HomePage() {
 
     const isLoggedIn = !!user
     const hasUsername = !!profile?.username
-    const isProfileComplete = isLoggedIn && hasUsername 
+    const isProfileComplete = isLoggedIn && hasUsername
+    
+    // useEffect(() => {
+    //     if (!isProfileComplete) navigate("/users/edit-profile")
+    // }, [isProfileComplete])
 
-    if (!isProfileComplete) navigate("/users/profile")
     
     useEffect(() => {
         setIsLoading(true)

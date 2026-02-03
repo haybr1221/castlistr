@@ -51,6 +51,23 @@ function ShowsPage() {
 
         const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
 
+        // Check if this show exists
+
+        // Check if this performer exists
+        const { data: existingData, error: existingError } = await supabase
+            .from("show")
+            .select("title")
+            .eq("title", title)
+            .limit(1)
+
+        if (existingError) throw existingError
+
+        if (existingData && existingData.length > 0)
+        {
+            return { ok: false, error: `"${title}" is already in the database.` }
+        }
+
+
         const { data, error } = await supabase
             .from("show")
             .insert([

@@ -23,7 +23,10 @@ function CastListPage() {
 
     }, [id])
 
-    console.log(castList)
+    useEffect(() => { 
+        document.title = `${castList} - castlistr`; }, 
+        []
+    ), [castList];
 
     if (!castList) {
         return <p>Loading cast list...</p>

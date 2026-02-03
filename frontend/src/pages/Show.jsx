@@ -86,7 +86,7 @@ function ShowPage() {
         const { data: existingData, error: existingError } = await supabase 
             .from("show_has_character")
             .select(`id,
-                character:character_id ( id, name) `)
+                character:char_id ( id, name) `)
             .eq("show_id", showData.showId)
             .eq("character.name", name)
             .limit(1)

@@ -303,6 +303,8 @@ app.get("/get-list/:id", async (req, res) => {
                 id,
                 character:character_id ( * ),
                 performer:performer_id ( full_name, id, headshot_url )
+            ),
+            profile:user_id ( username )
             )`)
         .eq("id", listId)
         .single()

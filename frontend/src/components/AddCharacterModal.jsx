@@ -25,6 +25,7 @@ function AddCharacterModal({ onCloseChar, onCreateChar }) {
         
         if (!result.ok) { 
             setFormError(result.error) 
+            setCharName('')
             return 
         }
 

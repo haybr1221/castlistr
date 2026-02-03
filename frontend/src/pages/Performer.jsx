@@ -14,7 +14,7 @@ function PerformerPage() {
     const [ rolesLoading, setRolesLoading ] = useState(null)
     const [ rolesError, setRolesError ] = useState(null)
     const [ roleModalVisible, setRoleModalVisible ] = useState(false)
-    const [headshotLoading, setHeadshotLoading] = useState(true)
+    const [ headshotLoading, setHeadshotLoading ] = useState(true)
 
     const { user } = useCurrentUser()
 
@@ -34,8 +34,14 @@ function PerformerPage() {
     }, [slug])
     
     async function handleCreate(roleInfo, isMultiple) {
+        // const { data: existingData, error: existingError } = await supabase
+        //     .from("performer_has_character")
+        //     .select(`id,
+        //         performer:performer_id (id, full_name),
+        //         character:char_id (id, name)`)
+        //     .eq("performer.full_name", performer.full_name)
+        
         // Insert into performer_has_char
-
         const { data, error } = await supabase
             .from("performer_has_character")
             .insert({

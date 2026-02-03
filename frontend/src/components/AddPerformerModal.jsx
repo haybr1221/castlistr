@@ -5,14 +5,12 @@ function AddPerformerModal({ onClose, onCreate }) {
     const [formError, setFormError] = useState(null)
     const [multipleMsg, setMultipleMsg] = useState('')
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
         // Reset messages
         setFormError(null)
         setMultipleMsg('')
-
-        // TODO: check if already in the database
 
         if (!perfName) {
             // Make sure perfName exists
@@ -22,7 +20,13 @@ function AddPerformerModal({ onClose, onCreate }) {
 
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
-        onCreate(perfName, isMultiple)
+        const result = await onCreate(perfName, isMultiple)
+
+        if (!result.ok) {
+            setFormError(result.error)
+            setPerfName('')
+            return
+        }
 
         if (!isMultiple)
             onClose()

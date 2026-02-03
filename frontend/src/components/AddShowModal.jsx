@@ -6,7 +6,7 @@ function AddShowModal({ onClose, onCreate }) {
     const [formError, setFormError] = useState(null)
     const [multipleMsg, setMultipleMsg] = useState('')
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
         // Reset messages
@@ -22,7 +22,14 @@ function AddShowModal({ onClose, onCreate }) {
 
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
-        onCreate(newShow, isMultiple)
+        const result = await onCreate(newShow, isMultiple)
+
+        if (!result.ok)
+        {
+            setFormError(result.error)
+            setNewShow('')
+            return
+        }
         
         if (!isMultiple) {
             onClose()

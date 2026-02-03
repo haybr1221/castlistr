@@ -39,6 +39,22 @@ function PerformersPage() {
         const lastName = nameSplit[nameSplit.length - 1]
         const middleName = nameSplit.slice(1, -1).join(" ")
 
+        // Check if this performer exists
+        const { data: existingData, error: existingError } = await supabase
+            .from("performer")
+            .select("full_name")
+            .eq("full_name", name)
+            .limit(1)
+
+        if (existingError) throw existingError
+
+        if (existingData && existingData.length > 0)
+        {
+            return { ok: false, error: `"${name}" is already in the database.` }
+        }
+
+        // Insert
+
         const { data, error } = await supabase
             .from("performer")
             .insert([{
