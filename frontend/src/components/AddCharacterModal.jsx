@@ -6,7 +6,7 @@ function AddCharacterModal({ onCloseChar, onCreateChar }) {
     const [formError, setFormError] = useState(null)
     const [multipleMsg, setMultipleMsg] = useState('')
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
         // Reset messages
@@ -21,7 +21,12 @@ function AddCharacterModal({ onCloseChar, onCreateChar }) {
 
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
-        onCreateChar(charName, isMultiple)
+        const result = await onCreateChar(charName, isMultiple) 
+        
+        if (!result.ok) { 
+            setFormError(result.error) 
+            return 
+        }
 
         if (!isMultiple) {
             // Only adding one, so close the modal

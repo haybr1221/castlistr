@@ -82,6 +82,22 @@ function ShowPage() {
 
     async function handleCreateChar(name, isMultiple) {
 
+        // Check if this character exists already
+        const { data: existingData, error: existingError } = await supabase 
+            .from("show_has_character")
+            .select(`id,
+                character:character_id ( id, name) `)
+            .eq("show_id", showData.showId)
+            .eq("character.name", name)
+            .limit(1)
+
+        if (existingError) throw existingError
+
+        if (existingData && existingData.length > 0 )
+        {
+            return { ok: false, error: `"${name}" is already in this show.` }
+        }
+
         // Insert into characters
         const { data, error } = await supabase
             .from("character")
