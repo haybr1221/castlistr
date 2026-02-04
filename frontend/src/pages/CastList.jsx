@@ -24,9 +24,11 @@ function CastListPage() {
     }, [id])
 
     useEffect(() => { 
-        document.title = `${castList} - castlistr`; }, 
-        []
-    ), [castList];
+        if (!castList) return
+
+        document.title = `${castList.profile.username}'s cast list for ${castList.show.title} - castlistr`; 
+    
+    }, [castList])
 
     if (!castList) {
         return <p>Loading cast list...</p>

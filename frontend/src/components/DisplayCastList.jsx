@@ -132,8 +132,8 @@ function DisplayCastList({ castList }) {
 
     return (
         <div className="cast-list-card">
-            <Link to={username ? `/users/${username}` : '#'} className="profile-link">
-                <div className="list-header">
+            <div className="list-header">
+                <Link to={username ? `/users/${username}` : '#'} className="profile-link">
                     <img
                         src={avatarUrl}
                         alt={`Profile picture for ${username}`}
@@ -145,9 +145,9 @@ function DisplayCastList({ castList }) {
                             {`${username}'s cast for ${showTitle}`}
                         </p>
                     </div>
-                    <i className="fa-solid fa-ellipsis" role="button" onClick={listModal ? () => setListModal(false) : () => setListModal(true)}></i>
-                </div>
-            </Link>
+                </Link>
+                <i className="fa-solid fa-ellipsis" role="button" onClick={listModal ? () => setListModal(false) : () => setListModal(true)}></i>
+            </div>
 
             {listModal && (
                 <>

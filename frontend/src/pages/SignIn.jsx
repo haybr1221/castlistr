@@ -9,6 +9,10 @@ function SignInPage() {
     const [error, setError] = useState('')
     const navigate = useNavigate()
 
+    useEffect(() => { 
+        document.title = `Sign In - castlistr`; 
+    }, [])
+
     async function handleSendOtp(e) {
         e.preventDefault()
         setError(null)

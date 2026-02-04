@@ -13,6 +13,10 @@ function PerformersPage() {
 
     const { user } = useCurrentUser()
 
+    useEffect(() => { 
+        document.title = `Performers - castlistr`; 
+    }, [])
+
     useEffect(() => {
         setIsLoading(true)
         setError(null)

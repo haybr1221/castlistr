@@ -20,6 +20,10 @@ function ShowsPage() {
     
     const { user } = useCurrentUser()
 
+    useEffect(() => { 
+        document.title = `Shows - castlistr`; 
+    }, [])
+
     useEffect(() => {
         setIsLoading(true)
         setError(null)

@@ -23,6 +23,10 @@ function HomePage() {
     //     if (!isProfileComplete) navigate("/users/edit-profile")
     // }, [isProfileComplete])
 
+
+    useEffect(() => { 
+        document.title = `castlistr`; 
+    }, [])
     
     useEffect(() => {
         setIsLoading(true)

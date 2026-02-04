@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { supabase } from '../config/supabaseclient'
 import { Link } from 'react-router-dom'
 
@@ -24,14 +23,14 @@ function ListOptionsModal({ onClose, currUserId, listId, creatorId }) {
         <div className="list-options text">
             { currUserId == creatorId && (
                 <>
-                    <Link to={`/cast-lists/${listId}/edit`}>Edit List</Link>
-                    <p onClick={deleteList}>Delete List</p>
+                    <Link to={`/cast-lists/${listId}/edit`} className="option">Edit List</Link>
+                    <p onClick={deleteList} className="option">Delete List</p>
                 </>
             )}
-            <p className="red-text">Report List</p>
+            <p className="red-text option">Report List</p>
             { currUserId != creatorId && (
                 <>
-                    <p className="red-text">Block User</p>
+                    <p className="red-text option">Block User</p>
                 </>
             )}
         </div>

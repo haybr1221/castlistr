@@ -17,6 +17,11 @@ function CreatePage() {
 
     const { user } = useCurrentUser()
 
+    useEffect(() => { 
+        document.title = `Create a List - castlistr`; 
+    
+    }, [])
+
     // useEffect(() => {
     //     if (userLoading) return
 

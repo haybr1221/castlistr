@@ -32,6 +32,10 @@ function PerformerPage() {
             console.error("Error fetching performer: ", error)
         })
     }, [slug])
+
+    useEffect(() => { 
+        document.title = `${performer.full_name} - castlistr`; 
+    }, [performer])
     
     async function handleCreate(roleInfo, isMultiple) {
         // const { data: existingData, error: existingError } = await supabase

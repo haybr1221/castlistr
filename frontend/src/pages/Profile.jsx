@@ -22,6 +22,10 @@ function ProfilePage() {
 
     const { user, profile } = useCurrentUser()
 
+    useEffect(() => { 
+        document.title = `${username}'s Profile - castlistr`; 
+    }, [])
+
     // First fetch the ID for this user
     useEffect(() => {
         fetch(`http://localhost:3000/get-user/${username}`)
@@ -143,7 +147,7 @@ function ProfilePage() {
                 </div>
                 <div id="button-div">
                     {isOwnProfile && (
-                        <Link to={`/users/${username}/edit-profile`}><button className="button">Edit Profile</button></Link>
+                        <Link to={`/users/edit-profile`}><button className="button">Edit Profile</button></Link>
                     )}
                     {!isOwnProfile && !isFollowing && (
                         <button onClick={toggleFollow} className="button">Follow</button>

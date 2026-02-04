@@ -13,6 +13,10 @@ function EditProfilePage() {
     const [error, setError] = useState(null)
     const [saveAvatar, setSaveAvatar] = useState(false)
 
+    useEffect(() => { 
+        document.title = `Edit Profile - castlistr`; 
+    }, [])
+
     // Set everything
     useEffect(() => {
         if (isLoading) return
@@ -26,7 +30,7 @@ function EditProfilePage() {
     }, [isLoading, user, navigate])
 
     // Don't show anything unless it's done loading
-    if (isLoading || !user || !profileId || user.id != profileId)
+    if (isLoading || !user || !profile.id || user.id != profile.id)
     {
         return null
     }

@@ -80,6 +80,10 @@ function ShowPage() {
         })
     }, [slug])
 
+    useEffect(() => { 
+        document.title = `${showData.title} - castlistr`; 
+    }, [showData])
+
     async function handleCreateChar(name, isMultiple) {
 
         // Check if this character exists already
