@@ -104,9 +104,9 @@ function HomePage() {
                         <Link to="/create">
                             <li>Create a New List</li>
                         </Link>
-                        <a href="#">
-                        <li>Settings</li>
-                        </a>
+                        <Link to="/users/edit-profile">
+                            <li>Settings</li>
+                        </Link>
                     </ul>
                     </div>
                 </div>

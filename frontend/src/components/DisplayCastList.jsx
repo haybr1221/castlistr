@@ -163,7 +163,7 @@ function DisplayCastList({ castList }) {
                         const perfName = entry.performer.full_name
                         
                         return (
-                            <div className="charDiv" key={entry.id}>
+                            <div className="char-div" key={entry.id}>
                                 <p className="character">{charName}</p>
                                 {entry.performer.headshot_url && (<img src={entry.performer.headshot_url} className="headshot-url"></img>)}
                                 <p className="performer">{perfName}</p>

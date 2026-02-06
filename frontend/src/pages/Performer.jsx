@@ -74,8 +74,9 @@ function PerformerPage() {
         }
     }
 
+    console.log(performer)
     useEffect(() => {
-        if (!performer) return
+        if (!performer.id) return
         // Fetch roles for this performer
         setRolesLoading(true)
 
@@ -91,7 +92,7 @@ function PerformerPage() {
             console.error("Error fetching roles: ", error)
             setRolesError(error)
         })
-    }, [performer])
+    }, [performer.id])
 
 
     async function handleUpload(newUrl) {
@@ -121,8 +122,8 @@ function PerformerPage() {
                     </div>
                     <div id="perf-basic-info">
                         <p className="perf-name">{performer.full_name}</p>
-                        <p>Most Recent Show: Legally Blonde (Broadway)</p>
-                        <p>Used in 0 cast lists</p>
+                        {/* <p>Most Recent Show: Legally Blonde (Broadway)</p> */}
+                        <p>Used in {performer.castListCount} {performer.castListCount == 1 ? "Cast List": "Cast Lists" }</p>
                     </div>
                 </div>
                 <div id="interesting-info">

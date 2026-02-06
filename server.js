@@ -178,7 +178,7 @@ app.get(`/show-info/:slug`, async (req, res) => {
         .select(`id`, {count: 'exact', head: true})
         .eq("show_id", showId);
     
-    if (castListError) {console.error("Error fetching for show: ", castListError)}
+    if (castListError) {console.error("Error fetching for castListCount: ", castListError)}
 
     res.json({
         show,
@@ -304,7 +304,7 @@ app.get("/get-list/:id", async (req, res) => {
                 character:character_id ( * ),
                 performer:performer_id ( full_name, id, headshot_url )
             ),
-            profile:user_id ( username )
+            profile:user_id ( username, avatar_url )
             )`)
         .eq("id", listId)
         .single()
@@ -357,15 +357,28 @@ app.get("/profiles", async (req, res) => {
 app.get("/performer/by-slug/:slug", async (req, res) => {
     const slug = req.params.slug;
 
-    const { data, error } = await supabase
+    const { data: performer, error } = await supabase
         .from("performer")
         .select("*")
         .eq("slug", slug)
         .single()
 
+    if (error) throw error
+
+    // Get cast list count for this performer
+    const { count: castListCount, error: castListError } = await supabase
+        .from("cast_list_entry")
+        .select("cast_list_id", { count: "exact", head: true, distinct: true })
+        .eq("performer_id", performer.id);
+    
+    if (castListError) {console.error("Error fetching for castListCount: ", castListError)}
+
     if (error) console.error(error)
 
-    res.json(data)
+    res.json({
+        ...performer,
+        castListCount
+    })
 })
 
 app.get("/roles/:id", async (req, res) => {
