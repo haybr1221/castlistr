@@ -38,7 +38,7 @@ function ShowsPage() {
         fetch(`http://localhost:3000/show-pagination?${params.toString()}`)
             .then((response) => response.json())
             .then((result) => {
-                setShows(result.data)
+                setShows(result.showWithCounts)
                 setTotalPages(result.totalPages)
                 setIsLoading(false)
             })
@@ -49,9 +49,8 @@ function ShowsPage() {
             })
     }, [page, searchTerm])
 
-    // TODO: add abilitiy to add poster when creating
-
     async function handleCreate(title, isMultiple) {
+        // TODO: add abilitiy to add poster when creating
 
         const slug = title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
 
@@ -111,7 +110,7 @@ function ShowsPage() {
                         />
                         <button onClick={() => setModalVisible(true)} className="button">Add New Show</button>
                     </div>
-                    <div id="shows">
+                    <div>
                         {isLoading && <p>Loading shows..</p>}
                         {error && (
                             <p style={{ color: 'red'}}>
@@ -120,23 +119,26 @@ function ShowsPage() {
                         )}
                         {!isLoading && !error && <DisplayShows shows={shows}/>}
 
-                        <div className="pagination">
-                            <button
-                                type="button"
-                                disabled={page <= 1}
-                                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                className="button"
-                            >Previous</button>
-                            <span>
-                                Page {page} of {totalPages}
-                            </span>
-                            <button
-                                type="button"
-                                disabled={page >= totalPages}
-                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                className="button"
-                            >Next</button>
-                        </div>
+                    </div>
+
+                    <div className="pagination">
+                        <button
+                            type="button"
+                            disabled={page <= 1}
+                            onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            className="button"
+                            style={{ visibility: page === 1 ? "hidden" : "visible" }}
+                        >Previous</button>
+                        <span>
+                            Page {page} of {totalPages}
+                        </span>
+                        <button
+                            type="button"
+                            disabled={page == totalPages}
+                            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                            className="button"
+                            style={{ visibility: page === totalPages ? "hidden" : "visible" }}
+                        >Next</button>
                     </div>
                         
                     {modalVisible && (

@@ -84,6 +84,7 @@ function HomePage() {
                                     src={profile.avatar_url} 
                                     alt={`Profile picture for ${profile.username}`}
                                     className="avatar"
+                                    referrerPolicy="no-referrer"
                                 />
                             )}
                         </div>

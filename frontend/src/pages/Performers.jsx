@@ -11,6 +11,12 @@ function PerformersPage() {
     const [error, setError] = useState(null)
     const [modalVisible, setModalVisible] = useState(false)
 
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const navigate = useNavigate()
+
     const { user } = useCurrentUser()
 
     useEffect(() => { 
@@ -21,18 +27,27 @@ function PerformersPage() {
         setIsLoading(true)
         setError(null)
 
-        fetch('http://localhost:3000/performer')
-        .then(response => response.json())
-        .then((data) => {
-            setPerformers(data)
-            setIsLoading(false)
+        const params = new URLSearchParams({
+            page: String(page)
         })
-        .catch((error) => {
-            console.error("Error fetching performers: ", error)
-            setError(error)
-            setIsLoading(false)
-        })
-    }, [])
+
+        if (searchTerm) {
+            params.set("search", searchTerm)
+        }
+
+        fetch(`http://localhost:3000/performer-pagination?${params.toString()}`)
+            .then(response => response.json())
+            .then((result) => {
+                setPerformers(result.perfWithCounts)
+                setTotalPages(result.totalPages)
+                setIsLoading(false)
+            })
+            .catch((error) => {
+                console.error("Error fetching performers: ", error)
+                setError(error)
+                setIsLoading(false)
+            })
+    }, [page, searchTerm])
 
     async function handleCreate(name, isMultiple) {
 
@@ -81,13 +96,24 @@ function PerformersPage() {
             return
         }
     }
-
+    
     return (
         <main id="centering">
             <div id="performer-page">
                 <h1 id="title">Performers</h1>
-                <button onClick={() => setModalVisible(true)} className="button">Add New Performer</button>
-                <ul className="text" id="performer-list">
+                <div id="performers">
+                    <div id="perf-search">
+                        <input
+                            type="text"
+                            placeholder="Search for a performer..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setPage(1)
+                                setSearchTerm(e.target.value)
+                            }}
+                        />
+                        <button onClick={() => setModalVisible(true)} className="button">Add New Performer</button>
+                    </div>
                     {isLoading && <p>Loading performers...</p>}
                     {error && (
                         <p style={{ color: 'red'}}>
@@ -95,7 +121,25 @@ function PerformersPage() {
                         </p>
                     )}
                     {!isLoading && !error && <DisplayPerformers performers={performers}/>}
-                </ul>
+
+                    <div className="pagination">
+                        <button
+                            type="button"
+                            disabled={page <= 1}
+                            onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            className="button"
+                        >Previous</button>
+                        <span>
+                            Page {page} of {totalPages}
+                        </span>
+                        <button
+                            type="button"
+                            disabled={page >= totalPages}
+                            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                            className="button"
+                        >Next</button>
+                    </div>
+                </div>
 
                 {modalVisible && (
                     <>

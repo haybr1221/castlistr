@@ -6,6 +6,7 @@ export function useCurrentUser() {
     const [profile, setProfile] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [needsProfileSetup, setNeedsProfileSetup] = useState(false)
 
     useEffect(() => {
         let isCancelled = false
@@ -14,6 +15,7 @@ export function useCurrentUser() {
             try {
                 setIsLoading(true)
                 setError(null)
+                setNeedsProfileSetup(false)
 
                 // Fetch user via supabase auth
                 const { data, error: authError } = await supabase.auth.getUser()
@@ -35,13 +37,16 @@ export function useCurrentUser() {
                 // Fetch profile info for this user
                 const res = await fetch(`http://localhost:3000/get-profile/${supaUser.id}`)
 
-                if (!res.ok) {
-                    throw new Error("Failed to load profile.")
-                }
-
                 const profileData = await res.json()
+                
                 if (!isCancelled) {
-                    setProfile(profileData)
+                    // Profile doesn't exist or has no username
+                    if (!profileData || !profileData.id || !profileData.username) {
+                        setNeedsProfileSetup(true)
+                        setProfile(profileData || null)
+                    } else {
+                        setProfile(profileData)
+                    }
                 }
             }
             catch (err) {
@@ -64,5 +69,5 @@ export function useCurrentUser() {
         }
     }, [])
 
-    return { user, profile, isLoading, error }
+    return { user, profile, isLoading, error, needsProfileSetup }
 }

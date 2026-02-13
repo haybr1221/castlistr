@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 import SignOutButton from './components/SignOut.jsx'
 import SignInButton from './components/SignIn.jsx'
+import RequireProfile from './components/RequireProfile.jsx'
 import { useCurrentUser } from './config/currentUser.js'
 // import pages
 import IndexPage from './pages/Index.jsx'
@@ -37,17 +38,21 @@ function App() {
       <Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="/signin" element={<SignInPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<RequireProfile><HomePage /></RequireProfile>} />
         <Route path="/shows" element={<ShowsPage />} />
         <Route path="/shows/:slug" element={<ShowPage />} />
         <Route path="/performers" element={<PerformersPage />} />
-        <Route path="/create" element={<CreatePage />} />
+        <Route path="/create" element={<RequireProfile><CreatePage /></RequireProfile>} />
         <Route path="/users/:username" element={<ProfilePage />} />
         <Route path="/users/edit-profile" element={<EditProfilePage />} />
         <Route path="/cast-lists/:id" element={<CastListPage />} />
-        <Route path="/cast-lists/:id/edit" element={<EditCastListPage />} />
+        <Route path="/cast-lists/:id/edit" element={<RequireProfile><EditCastListPage /></RequireProfile>} />
         <Route path="/performers/:slug" element={<PerformerPage />}/>
       </Routes>
+
+      <footer>
+        
+      </footer>
     </div>
   )
 }

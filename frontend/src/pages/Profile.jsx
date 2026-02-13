@@ -139,7 +139,8 @@ function ProfilePage() {
         <main id="user-profile">
             <div id="user-information">
                 <div id="profile-pic">
-                    <img src={avatarUrl} className="avatar" />
+                    <img src={avatarUrl} className="avatar"
+                    referrerPolicy="no-referrer" />
                 </div>
                 <div id="basic-info">
                     <p id="username">{username}</p>

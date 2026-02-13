@@ -19,27 +19,7 @@ function CreatePage() {
 
     useEffect(() => { 
         document.title = `Create a List - castlistr`; 
-    
     }, [])
-
-    // useEffect(() => {
-    //     if (userLoading) return
-
-    //     if (!user) {
-    //         // send to signin or index
-    //         navigate("/signin")
-    //         return
-    //         }
-
-    //     if (!profile?.username) {
-    //         // send to edit profile
-    //         navigate("/edit-profile")
-    //         }
-    //     }, [userLoading, user, profile, navigate])
-
-    // if (userLoading || !user || !profile?.username) {
-    //     return null 
-    // }
 
     function handleSelectionChange(charId, perfId) {
         // Once a selection is detected, set it 
@@ -123,7 +103,7 @@ function CreatePage() {
                 <h1 id="create-title">Create a New Cast List</h1>
 
                 { step === 'selectShow' && (
-                    <div>
+                    <div className="current-step">
                         <h2 className="step">Step 1: Choose a Show</h2>
                         <ShowDropdown 
                             value={selectedShow}
@@ -134,7 +114,7 @@ function CreatePage() {
                 )}
 
                 { step === 'selectChar' && (
-                    <div>
+                    <div className="current-step">
                         <h2 className="step">Step 2: Choose Your Performers</h2>
                         <CharPerfSelector 
                             characters={characters}
@@ -150,7 +130,7 @@ function CreatePage() {
                 )}
 
                 { step === 'selectTitle' && (
-                    <div>
+                    <div className="current-step">
                         <h2 className="step">Step 3: Name Your List</h2>
                         <label htmlFor="list-name" className="label">List Name:</label>
                         <input 
