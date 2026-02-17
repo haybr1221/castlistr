@@ -26,29 +26,10 @@ function ShowPage() {
         title: "",
         showId: null
     })
-    // const [userLoading, setUserLoading] = useState(true)
+
     const navigate = useNavigate()
 
     const { user, profile } = useCurrentUser()
-
-    // useEffect(() => {
-    //     if (userLoading) return
-
-    //     if (!user) {
-    //         // send to signin or index
-    //         navigate("/signin")
-    //         return
-    //     }
-
-    //     if (!profile?.username) {
-    //         // send to edit profile
-    //         navigate("/edit-profile")
-    //     }
-    // }, [userLoading, user, profile, navigate])
-
-    // if (userLoading || !user || !profile?.username) {
-    //     return null 
-    // }
 
     useEffect(() => {
         // Fetch data

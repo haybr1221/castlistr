@@ -92,7 +92,7 @@ function PerformersPage() {
 
         if (!isMultiple) {
             setModalVisible(false)
-            // TODO: navigate(`${slug}`)
+            navigate(`/performers/${slug}`)
             return
         }
     }

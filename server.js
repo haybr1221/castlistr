@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 /**
  * GET /performer
  * Returns performer information (id, full name, slug)
- * USED BY: Create.jsx
+ * USED BY: Create, EditCastList
  */
 app.get("/performer", async (req, res) => {
     const { data, error } = await supabase
@@ -50,7 +50,7 @@ app.get("/performer", async (req, res) => {
 /**
  * GET /performer-pagination
  * Returns performer information in pages
- * USED BY: Performers.jsx
+ * USED BY: Performers
  */
 app.get("/performer-pagination", async (req, res) => {
     const page = parseInt(req.query.page) || 1
@@ -83,7 +83,7 @@ app.get("/performer-pagination", async (req, res) => {
     if (castListError) {
         console.error("Error fetching counts for performers: ", castListError);
         return res.status(500).json({error: "Failed to fetch cast list counts for performers."})
-    };
+    }
 
     const countsByPerfId = {}
     for (const row of castLists) {
@@ -105,7 +105,7 @@ app.get("/performer-pagination", async (req, res) => {
 /**
  * GET /show-pagination
  * Returns show information in pages
- * USED BY: Shows.jsx
+ * USED BY: Shows
  */
 app.get("/show-pagination", async (req, res) => {
     const page = parseInt(req.query.page) || 1
@@ -158,32 +158,11 @@ app.get("/show-pagination", async (req, res) => {
 });
 
 /**
- * GET /show
- * Returns show information
- * USED BY: ?
- */
-app.get("/show", async(req, res) => {
-    const { data, error } = await supabase
-        .from("show")
-        .select("*", { count: "exact" })
-        .order("title", { ascending: true })
-    
-    if (error) {
-        console.error("Error fetching shows: ", error);
-        return res.status(500).json({error: "Failed to fetch shows."})
-    };
-
-    res.json(data)
-});
-
-/**
  * GET /show-titles
  * Returns show titles in pages
- * USED BY: Create.jsx
+ * USED BY: ShowDropdown
  */
 app.get("/show-titles", async(req, res) => {
-    // The call for shows 
-
     const { data, error } = await supabase
         .from("show")
         .select("id, title")
@@ -192,7 +171,7 @@ app.get("/show-titles", async(req, res) => {
     if (error) {
         console.error("Error fetching show titles: ", error);
         return res.status(500).json({error: "Failed to fetch show titles."})
-    };;
+    }
 
     res.json(data)
 });
@@ -200,7 +179,7 @@ app.get("/show-titles", async(req, res) => {
 /**
  * GET /show/:id/characters
  * Returns characters for a given show
- * USED BY: Create.jsx
+ * USED BY: AddRoleModal, Create, EditCastList
  */
 app.get(`/show/:id/characters`, async (req, res) => {
     const showId = req.params.id;
@@ -215,7 +194,7 @@ app.get(`/show/:id/characters`, async (req, res) => {
     if (error) {
         console.error("Error fetching shows: ", error);
         return res.status(500).json({error: "Failed to fetch shows."})
-    };
+    }
 
     res.json(data);
 });
@@ -223,7 +202,7 @@ app.get(`/show/:id/characters`, async (req, res) => {
 /**
  * GET /show-info/:slug
  * Returns show info for a specific show
- * USED BY: Show.jsx
+ * USED BY: Show
  */
 app.get(`/show-info/:slug`, async (req, res) => {
     const slug = req.params.slug;
@@ -239,7 +218,7 @@ app.get(`/show-info/:slug`, async (req, res) => {
     if (showError) {
         console.error("Error fetching information for show: ", showError);
         return res.status(500).json({error: "Failed to fetch for show."})
-    };
+    }
 
     // Get character info for this show
     const { data: charData, error: charError } = await supabase
@@ -252,7 +231,7 @@ app.get(`/show-info/:slug`, async (req, res) => {
     if (charError) {
         console.error("Error fetching character information: ", charError);
         return res.status(500).json({error: "Failed to fetch character information."})
-    };
+    }
 
     // Get tour info for this show
     const { data: tourData, error: tourError } = await supabase
@@ -262,9 +241,9 @@ app.get(`/show-info/:slug`, async (req, res) => {
         .order("opening", ascending = true)
 
     if (tourError){
-        console.error("Error fetching character information: ", tourError);
+        console.error("Error fetching tour information: ", tourError);
         return res.status(500).json({error: "Failed to fetch tour information."})
-    };
+    }
 
     // Get the count for cast lists this show has
     const { count: castListCount, error: castListError } = await supabase
@@ -273,9 +252,9 @@ app.get(`/show-info/:slug`, async (req, res) => {
         .eq("show_id", show.id);
     
     if (castListError) {
-        console.error("Error fetching character information: ", castListError);
-        return res.status(500).json({error: "Failed to fetch cast list information."})
-    };
+        console.error("Error fetching cast list count: ", castListError);
+        return res.status(500).json({error: "Failed to fetch cast list count."})
+    }
 
     res.json({
         show,
@@ -288,7 +267,7 @@ app.get(`/show-info/:slug`, async (req, res) => {
 /**
  * GET /tour/:id
  * Returns information on a given tour
- * USED BY: Show.jsx
+ * USED BY: AddRoleModal
  */
 app.get(`/tour/:id`, async (req, res) => {
     const showId = req.params.id;
@@ -300,9 +279,9 @@ app.get(`/tour/:id`, async (req, res) => {
         .order("opening", ascending = true)
 
     if (error) {
-        console.error("Error fetching character information: ", error);
-        return res.status(500).json({error: "Failed to fetch cast list information."})
-    };
+        console.error("Error fetching tour information: ", error);
+        return res.status(500).json({error: "Failed to fetch tour information."})
+    }
 
     res.json(data)
 })
@@ -310,7 +289,7 @@ app.get(`/tour/:id`, async (req, res) => {
 /**
  * GET /cast-lists
  * Returns cast lists
- * USED BY: Home.jsx
+ * USED BY: Home
  */
 app.get("/cast-lists", async (req, res) => {
     const { data, error } = await supabase
@@ -327,16 +306,20 @@ app.get("/cast-lists", async (req, res) => {
         .order("created_at", { ascending: false })
 
     if (error) {
-        console.error("Error fetching character information: ", error);
+        console.error("Error fetching cast lists: ", error);
         return res.status(500).json({error: "Failed to fetch cast list information."})
-    };
+    }
 
     res.json(data);
 })
 
-app.get(`/cast-lists/:id`, async (req, res) => {
-    // Get cast lists for a specific user
-    const userId = req.params.id;
+/**
+ * GET /cast-lists/:userId
+ * Returns information about a specific cast list
+ * USED BY: Home, Profile
+ */
+app.get(`/cast-lists/:userId`, async (req, res) => {
+    const userId = req.params.userId;
 
     const { data, error } = await supabase
         .from("cast_lists")
@@ -350,57 +333,19 @@ app.get(`/cast-lists/:id`, async (req, res) => {
             )`)
         .eq("user_id", userId)
 
-    if (error)
-        console.error("Error fetching cast lists for USER_ID: ", userId, " - ", error);
-    res.json(data);
-})
-
-app.get(`cast-lists/:id/cast-list-entry`, async (req, res) => {
-    // Get entries for a given cast list
-    const castListId = req.params.id;
-
-    const { data, error } = await supabase
-        .from("cast_list_entry")
-        .select(`*`)
-        .eq("cast_list_id", castListId)
-
-    if (error)
-        console.error("Error fetching cast list entries for CAST_LIST_ID: ", castListId, " - ")
-
-    res.json(data)
-})
-
-app.get(`show`, async (req, res) => {
-    // Get show title
-    const showId = req.params.id;
-
-    const { data, error } = await supabase
-        .from("show")
-        .select(`*`)
-        .eq("id", showId)
-    
-    if (error)
-        console.error("Error fetching show title: ", error)
-
-    res.json(data)
-})
-
-app.get("/user-cast-lists/:id", async (req, res) => {
-    // Get the data of a user's cast lists
-    const userId = req.params.id;
-
-    // Get all data to display
-    const { data, error } = await supabase
-        .from("cast_lists")
-        .select(`*`)
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
-
-    if (error) console.error(error);
+    if (error) {
+        console.error("Error fetching character information: ", error);
+        return res.status(500).json({error: "Failed to fetch cast list information."})
+    }
 
     res.json(data);
 })
 
+/**
+ * GET /get-list/:id
+ * Returns every information for a specific cast list
+ * USED BY: CastList, EditCastList
+ */
 app.get("/get-list/:id", async (req, res) => {
     // Get the information for a specific cast list
     const listId = req.params.id;
@@ -420,26 +365,19 @@ app.get("/get-list/:id", async (req, res) => {
         .eq("id", listId)
         .single()
 
-    if (error) throw error
+    if (error) {
+        console.error("Error fetching cast list information for ", listId, " - ", error)
+        return res.status(500).json({error: "Failed to fetch cast list."})
+    }
 
     res.json(data)
 })
 
-app.get("/show-id/:slug", async (req, res) => {
-    // Get the id from the slug
-    const slug = req.params.slug;
-
-    const { data, error } = await supabase
-        .from("show")
-        .select("id")
-        .eq("slug", slug)
-        .single()
-
-    if (error) console.error(error);
-
-    res.json(data);
-})
-
+/**
+ * GET /get-profile/:id
+ * Returns a user's profile from their ID
+ * USED BY: DisplayCastList, DisplayComment
+ */
 app.get("/get-profile/:id", async (req, res) => {
     const userId = req.params.id;
 
@@ -449,22 +387,19 @@ app.get("/get-profile/:id", async (req, res) => {
         .eq("id", userId)
         .single()
 
-    if (error) console.error(error);
+    if (error) {
+        console.error("Error fetching profile for ", userId, " - ", error)
+        return res.status(500).json({error: "Failed to fetch profile."})
+    }
 
     res.json(data)
 })
 
-app.get("/profiles", async (req, res) => {
-
-    const { data, error } = await supabase
-        .from("users")
-        .select("*")
-
-    if (error) console.error(error)
-
-    res.json(data)
-})
-
+/**
+ * GET /performer/by-slug/:slug
+ * Returns performer information by slug
+ * USED BY: Performer
+ */
 app.get("/performer/by-slug/:slug", async (req, res) => {
     const slug = req.params.slug;
 
@@ -473,8 +408,11 @@ app.get("/performer/by-slug/:slug", async (req, res) => {
         .select("*")
         .eq("slug", slug)
         .single()
-
-    if (error) throw error
+    
+    if (error) {
+        console.error("Error fetching performer information: ", error)
+        return res.status(500).json({error: "Failed to fetch performer information."})
+    }
 
     // Get cast list count for this performer
     const { count: castListCount, error: castListError } = await supabase
@@ -482,9 +420,10 @@ app.get("/performer/by-slug/:slug", async (req, res) => {
         .select("cast_list_id", { count: "exact", head: true, distinct: true })
         .eq("performer_id", performer.id);
     
-    if (castListError) {console.error("Error fetching for castListCount: ", castListError)}
-
-    if (error) console.error(error)
+    if (castListError) {
+        console.error("Error fetching for castListCount: ", castListError)
+        return res.status(500).json({error: "Failed to fetch castListCount."})
+    }
 
     res.json({
         ...performer,
@@ -492,8 +431,12 @@ app.get("/performer/by-slug/:slug", async (req, res) => {
     })
 })
 
+/**
+ * GET /roles/:id
+ * Returns roles for a given performer
+ * USED BY: Performer
+ */
 app.get("/roles/:id", async (req, res) => {
-    // Get the roles for a specific performer
     const id = req.params.id;
 
     const { data, error } = await supabase
@@ -507,11 +450,19 @@ app.get("/roles/:id", async (req, res) => {
             )`)
         .eq("performer_id", id)
 
-    if (error) console.error("Error fetching roles: ", error)
+    if (error) {
+        console.error("Error fetching roles for ", id, " : ", error)
+        return res.status(500).json({error: "Failed to fetch castListCount."})
+    }
 
     res.json(data);
 })
 
+/**
+ * GET /roles/single/id
+ * Returns a single role for a performer
+ * USED BY: Performer
+ */
 app.get("/roles/single/:id", async (req, res) => {
     const id = req.params.id
 
@@ -528,11 +479,19 @@ app.get("/roles/single/:id", async (req, res) => {
         .eq("id", id)
         .single()
 
-    if (error) console.error(error)
+    if (error) {
+        console.error("Error fetching role for ", id, " : ", error)
+        return res.status(500).json({error: "Failed to fetch role."})
+    }
 
     res.json(data)
 })
 
+/**
+ * GET /get-user/:username
+ * Returns a user from a given username
+ * USED BY: Profile
+ */
 app.get("/get-user/:username", async (req, res) => {
     const username = req.params.username;
 
@@ -542,60 +501,68 @@ app.get("/get-user/:username", async (req, res) => {
         .eq("username", username)
         .single()
 
-    if (error) console.error(error)
+    if (error) {
+        console.error("Error fetching user: ", error)
+        return res.status(500).json({error: "Failed to fetch user."})
+    }
 
     res.json(data)
 })
 
+/**
+ * GET /get-likes/:user/:list
+ * Returns if a user has liked a given list
+ * USED BY: DisplayCastList
+ */
 app.get("/get-likes/:user/:list", async (req, res) => {
-    // Check if this user has liked this list
     const userId = req.params.user;
     const listId = req.params.list;
 
-    try {
-        const { data, error } = await supabase
+    const { data, error } = await supabase
         .from("user_likes")
         .select("id")
         .eq("user_id", userId)
         .eq("cast_list_id", listId)
 
-        if (error) {
-            console.error("Error checking like:", error)
-            return res.status(500).json(false)
-        }
-
-        // data is an array; liked if there is at least one row
-        const isLiked = Array.isArray(data) && data.length > 0
-        return res.json(isLiked)
-    } catch (err) {
-        console.error("Unexpected error checking like:", err)
-        return res.status(500).json(false)
+    if (error) {
+        console.error("Error checking like:", error)
+        return res.status(500).json(false, { error: "Failed to fetch user likes." })
     }
+
+    // since data returns an array, if it is more than one, it is true
+    const isLiked = Array.isArray(data) && data.length > 0
+
+    return res.json(isLiked)
 })
 
-app.get("/liked-lists/:user", async (req, res) =>
-{
-    // Get all liked lists for this user
+/**
+ * GET /liked-lists/:user
+ * Returns a given user's liked lists
+ * USED BY: Profile
+ */
+app.get("/liked-lists/:user", async (req, res) => {
     const userId = req.params.user;
-    try {
-        // 1) Find liked cast_list IDs
-        const { data: likeRows, error: likesError } = await supabase
+
+    // First, get the cast list IDs from user_likes
+    const { data: likedRows, error: likedError } = await supabase
         .from("user_likes")
         .select("cast_list_id")
         .eq("user_id", userId)
 
-        if (likesError) {
-        console.error("Error fetching liked ids:", likesError)
-        return res.status(500).json([])
-        }
+    if (likedError) {
+        console.error("Error fetching liked IDs:", likedError)
+        return res.status(500).json([],{ error: "Failed to fetch liked IDs."})
+    }
 
-        const ids = likeRows.map((row) => row.cast_list_id)
-        if (ids.length === 0) {
+    // Next, map likedRows to a new object for simplicity
+    const ids = likedRows.map((row) => row.cast_list_id)
+
+    if (ids.length === 0) {
         return res.json([]) // no liked lists
-        }
+    }
 
-        // 2) Fetch full cast list records matching those IDs
-        const { data: lists, error: listsError } = await supabase
+    // Then, fetch full cast list data for those lists in ids
+    const { data: lists, error: listsError } = await supabase
         .from("cast_lists")
         .select(`
             *,
@@ -608,40 +575,34 @@ app.get("/liked-lists/:user", async (req, res) =>
         `)
         .in("id", ids)
 
-        if (listsError) {
+    if (listsError) {
         console.error("Error fetching liked lists:", listsError)
-        return res.status(500).json([])
-        }
-
-        return res.json(lists)
-    } catch (err) {
-        console.error("Unexpected error fetching liked lists:", err)
-        return res.status(500).json([])
+        return res.status(500).json([], { error: "Failed to fetch liked lists." })
     }
+
+    return res.json(lists)
 })
 
+/**
+ * GET /is-following/:currUser/:profId
+ * Returns if the current user is following the profile they are viewing
+ * USED BY: Profile
+ */
 app.get("/is-following/:currUser/:profId", async (req, res) => {
-    // Check if the current user is following this user
     const currUser = req.params.currUser;
     const profId = req.params.profId;
 
-    try {
-        const { data, error } = await supabase
-            .from("follow")
-            .select("id")
-            .eq("follower", currUser)
-            .eq("following", profId)
+    const { data, error } = await supabase
+        .from("follow")
+        .select("id")
+        .eq("follower", currUser)
+        .eq("following", profId)
     
-        if (error) {
-            console.error("Error checking following: ", error)
-            return res.status(500).json(false)
-        }
+    if (error) {
+        console.error("Error checking following: ", error)
+        return res.status(500).json(false, { error: "Failed to fetch is-following."})
+    }
     
-        const isFollowing = Array.isArray(data) && data.length > 0
-        return res.json(isFollowing)
-    }
-    catch (err) {
-        console.error("Unexpected error checking following:", err)
-        return res.status(500).json(false)
-    }
+    const isFollowing = Array.isArray(data) && data.length > 0
+    return res.json(isFollowing)
 })

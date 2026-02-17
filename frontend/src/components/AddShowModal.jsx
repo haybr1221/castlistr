@@ -12,8 +12,6 @@ function AddShowModal({ onClose, onCreate }) {
         // Reset messages
         setFormError(null)
         setMultipleMsg('')
-
-        // TODO: check if this already exists in the database
         
         if (!newShow) {
             setFormError("There must be a title.")
