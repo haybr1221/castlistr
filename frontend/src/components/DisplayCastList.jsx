@@ -1,3 +1,5 @@
+/* Display a cast list */
+
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../config/currentUser.js'

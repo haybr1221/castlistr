@@ -1,3 +1,5 @@
+/* Add a role to a performer */
+
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import ShowDropdown from '../components/ShowDropdown.jsx'
@@ -16,44 +18,56 @@ function AddRoleModal({ onClose, onCreate }) {
     const [formError, setFormError] = useState(null)
     const [multipleMsg, setMultipleMsg] = useState("")
 
-    function handleSubmit(e) {
-        console.log("uou called?")
+    async function handleSubmit(e) {
         e.preventDefault()
 
-        // Reset messages
+        // reset messages
         setFormError(null)
         setMultipleMsg('')
 
         if (!roleInfo.charId) {
+            // this is required!
             setFormError("A character is required.")
             return
         }
 
         if (!roleInfo.tourId) {
+            // this is required!
             setFormError("A tour is required.")
             return
         }
 
         if (!roleInfo.cover_status) {
+            // this is required!
             setFormError("A cover status is required.")
             return
         }
 
         if (!roleInfo.arrivedDate) {
+            // this is required!
             setFormError("An arrival date is required.")
             return
         }
 
+        // check if user is expecting to add more than one
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
-        onCreate(roleInfo, isMultiple)
 
-        if (!isMultiple) {
-            onClose()
-        } else {
-            setMultipleMsg(`Success! This role has been added.`)
+        // use the parent to add to the database
+        const result = await onCreate(roleInfo, isMultiple)
+
+        // in case anything goes wrong
+        if (!result.ok) {
+            setFormError(result.error) // display the error
+            setRoleInfo({}) // reset fields
+            return
         }
 
-        setRoleInfo({})
+        if (!isMultiple) onClose() // only one, so close it
+        else {
+            setMultipleMsg(`Success! This role has been added.`) // give the user the OK to add another
+        }
+
+        setRoleInfo({}) // reset fields
     }
 
     useEffect(() => {
@@ -126,6 +140,7 @@ function AddRoleModal({ onClose, onCreate }) {
                     </>
                 )}
                 { roleInfo.charId && roleInfo.tourId && (
+                    // once a character and tour are selected, input other info
                     <>
                         <label htmlFor="" className="label">Cover status: </label>
                         <select
@@ -161,6 +176,7 @@ function AddRoleModal({ onClose, onCreate }) {
                     </>
                 )}
                 {formError && <div id="form-error" className="text">{formError}</div>}
+                {multipleMsg && <div className="text">{multipleMsg}</div>}
                 <div id="button-box">
                     <button type="submit" name="create" className="button">Create</button>
                     <button type="submit" name="createAnother" className="button">Create &amp; Create Another</button>

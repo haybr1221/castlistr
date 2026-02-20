@@ -121,6 +121,9 @@ function CreatePage() {
                             performers={performers}
                             selections={selections}
                             onSelectionChange={handleSelectionChange}
+                            showId={selectedShow.value}
+                            setCharacters={setCharacters}
+                            setPerformers={setPerformers}
                         />
                         <div className="two-buttons">
                             <button type="button" onClick={() => setStep("selectShow")} className="button">Previous Step</button>

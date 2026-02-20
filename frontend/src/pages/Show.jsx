@@ -29,7 +29,7 @@ function ShowPage() {
 
     const navigate = useNavigate()
 
-    const { user, profile } = useCurrentUser()
+    const { user } = useCurrentUser()
 
     useEffect(() => {
         // Fetch data
@@ -120,7 +120,6 @@ function ShowPage() {
     }
 
     async function handleCreateTour(info, isMultiple) {
-
         const newTour = {
             title: info[0],
             opening: info[1],

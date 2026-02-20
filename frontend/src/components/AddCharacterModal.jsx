@@ -1,7 +1,7 @@
+/* Add a new character to a show */
 import { useState } from 'react'
 
 function AddCharacterModal({ onCloseChar, onCreateChar }) {
-    // Adding a new character to a show
     const [charName, setCharName] = useState('')
     const [formError, setFormError] = useState(null)
     const [multipleMsg, setMultipleMsg] = useState('')
@@ -9,36 +9,36 @@ function AddCharacterModal({ onCloseChar, onCreateChar }) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        // Reset messages
+        // reset messages
         setFormError(null)
         setMultipleMsg('')
 
-        // Check if charName is null
         if (!charName) {
+            // this is required!
             setFormError("The character must have a name.")
             return
         }
 
+        // do we need to do this again?
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
+        // use the parent to add to database
         const result = await onCreateChar(charName, isMultiple) 
         
+        // If something went wrong, log it
         if (!result.ok) { 
-            setFormError(result.error) 
-            setCharName('')
+            setFormError(result.error) // display the error
+            setCharName('') // reset charName
             return 
         }
 
-        if (!isMultiple) {
-            // Only adding one, so close the modal
-            onCloseChar()
-        }
+        if (!isMultiple) onCloseChar() // only one, so close it
         else {
-            setMultipleMsg(`Success! ${charName} can be used cast.`)
+            // Make sure the user knows it is ready to add another
+            setMultipleMsg(`Success! ${charName} can be used cast.`) // give the user the OK to add another
         }
 
-        // Reset the character name
-        setCharName('')
+        setCharName('') // reset charName
     }
 
     return(

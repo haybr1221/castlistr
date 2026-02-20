@@ -1,3 +1,5 @@
+/* Add a performer */
+
 import { useState } from 'react'
 
 function AddPerformerModal({ onClose, onCreate }) {
@@ -8,32 +10,33 @@ function AddPerformerModal({ onClose, onCreate }) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        // Reset messages
+        // reset messages
         setFormError(null)
         setMultipleMsg('')
 
         if (!perfName) {
-            // Make sure perfName exists
+            // this is required!
             setFormError("Performers must have a name.")
             return
         }
 
+        // do we need to do this again?
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
+        // use the parent to add to database
         const result = await onCreate(perfName, isMultiple)
 
         if (!result.ok) {
-            setFormError(result.error)
-            setPerfName('')
+            setFormError(result.error) // display the error
+            setPerfName('') // reset perfName
             return
         }
 
-        if (!isMultiple)
-            onClose()
+        if (!isMultiple) onClose() // only one, so close it
         else
-            setMultipleMsg(`Success! ${perfName} can now have cast lists.`)
+            setMultipleMsg(`Success! ${perfName} can now have cast lists.`) // give the user the OK to add another
 
-        setPerfName('')
+        setPerfName('') // reset perfName
     }
 
     return (

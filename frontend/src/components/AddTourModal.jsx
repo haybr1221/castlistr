@@ -1,3 +1,5 @@
+/* Add a tour to a show */
+
 import { useState } from 'react'
 
 function AddTourModal({ onCloseTour, onCreateTour }) {

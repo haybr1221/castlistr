@@ -1,3 +1,5 @@
+/* Add a show */
+
 import { useState } from 'react'
 
 function AddShowModal({ onClose, onCreate }) {
@@ -9,15 +11,17 @@ function AddShowModal({ onClose, onCreate }) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        // Reset messages
+        // reset messages
         setFormError(null)
         setMultipleMsg('')
         
         if (!newShow) {
+            // this is required!
             setFormError("There must be a title.")
             return
         }
 
+        // do we need to do this again?
         const isMultiple = e.nativeEvent.submitter?.name === "createAnother"
 
         const result = await onCreate(newShow, isMultiple)
