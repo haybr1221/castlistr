@@ -44,7 +44,7 @@ function AddPerformerModal({ onClose, onCreate }) {
             <p className="cancel" onClick={onClose}>x</p>
             <h1 className="adding-new-title">Create a Performer</h1>
             <form onSubmit={handleSubmit}>
-                <label className="label" htmlFor="perfName">Title:</label>
+                <label className="label" htmlFor="perfName">Full Name:</label>
                 <input
                     type="text"
                     name="perfName"

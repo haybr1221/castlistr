@@ -9,7 +9,7 @@ function UploadPoster({ showId, onUploaded}) {
 
     function generateRandomName(original) {
         const extension = original.name.split('.').pop(); // get file extension
-        const randomString = Math.random().toString(36).substring(2, 10); // 8-char random string
+        const randomString = Math.random().toString(36).substring(2, 10); // generate random title
         return `poster_${randomString}.${extension}`
     }
 
@@ -41,7 +41,7 @@ function UploadPoster({ showId, onUploaded}) {
             if (uploadError) throw uploadError
 
             // Fetch the URL for the newly added poster
-            const { data: urlData, error: urlError } = await supabase
+            const { data: urlData, error: urlError } = supabase
                 .storage
                 .from("posters")
                 .getPublicUrl(newFileName)

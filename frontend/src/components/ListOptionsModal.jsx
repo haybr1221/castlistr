@@ -1,7 +1,7 @@
 import { supabase } from '../config/supabaseclient'
 import { Link } from 'react-router-dom'
 
-function ListOptionsModal({ onClose, currUserId, listId, creatorId }) {
+function ListOptionsModal({ currUserId, listId, creatorId }) {
     // List options modal
 
     async function deleteList() {

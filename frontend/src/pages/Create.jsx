@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
-import Select from "react-select"
 import CharPerfSelector from '../components/CharPerfSelector.jsx' 
 import ShowDropdown from '../components/ShowDropdown.jsx'
 

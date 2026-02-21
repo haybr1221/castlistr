@@ -1,9 +1,8 @@
 import { useCurrentUser } from "../config/currentUser.js"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-
-import UploadAvatar from "../components/UploadAvatar"
 import { supabase } from "../config/supabaseclient.js"
+import UploadAvatar from "../components/UploadAvatar"
 
 function EditProfilePage() {
     const { user, profile, isLoading, needsProfileSetup } = useCurrentUser()

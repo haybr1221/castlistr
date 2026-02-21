@@ -36,7 +36,11 @@ function CastListPage() {
 
     return (
         <main id="centering">
-            <DisplayCastList castList={castList}/>
+            {castList && 
+                <DisplayCastList castList={castList}/>
+            }
+            {!castList && castListError &&
+            <p>Error fetching cast list</p>}
         </main>
     )
 }

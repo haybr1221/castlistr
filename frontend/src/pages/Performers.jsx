@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../config/supabaseclient.js'
+import { useCurrentUser } from '../config/currentUser.js'
 import DisplayPerformers from '../components/DisplayPerformers.jsx'
 import AddPerformerModal from '../components/AddPerformerModal.jsx'
-import { useCurrentUser } from '../config/currentUser.js'
 
 function PerformersPage() {
     const [performers, setPerformers] = useState([])

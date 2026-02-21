@@ -153,7 +153,7 @@ function DisplayCastList({ castList }) {
 
             {listModal && (
                 <>
-                    <div id="list-overlay"></div>
+                    <div id="list-overlay" onClick={() => setListModal(false)}></div>
                     <ListOptionsModal currUserId={user.id} listId={castList.id} creatorId={creatorId}/>
                 </>
             )}

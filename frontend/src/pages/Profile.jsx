@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
-import DisplayCastLists from '../components/DisplayCastList.jsx'
 import { supabase } from '../config/supabaseclient.js'
+import DisplayCastLists from '../components/DisplayCastList.jsx'
 
 function ProfilePage() {
     const { username } = useParams()
 
     const [profileId, setProfileId] = useState('')
-    const [userIdError, setUserIdError] = useState(null)
     const [userLists, setUserLists] = useState([])
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
@@ -20,7 +19,7 @@ function ProfilePage() {
     const [currentTab, setCurrentTab] = useState("lists")
     const [avatarUrl, setAvatarUrl] = useState(null)
 
-    const { user, profile } = useCurrentUser()
+    const { user } = useCurrentUser()
 
     useEffect(() => { 
         document.title = `${username}'s Profile - castlistr`; 
@@ -36,7 +35,6 @@ function ProfilePage() {
         })
         .catch((err) => {
             console.error("Error fetching user: ", err)
-            setUserIdError(err)
         })
     }, [])
 

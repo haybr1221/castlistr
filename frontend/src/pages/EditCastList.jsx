@@ -1,20 +1,16 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import CharPerfSelector from '../components/CharPerfSelector'
 import { supabase } from '../config/supabaseclient'
+import CharPerfSelector from '../components/CharPerfSelector'
 
 function EditCastListPage() {
     // Display a cast list on its own page
     const { id } = useParams()
     const [castList, setCastList] = useState(null)
-    const [listTitle, setListTitle] = useState("")
     const [characters, setCharacters] = useState([])
     const [performers, setPerformers] = useState([])
     const [selections, setSelections] = useState({})
     const [showId, setShowId] = useState(null)
-    const [username, setUsername] = useState(null)
-    const [step, setStep] = useState(null)
-    const [castListError, setCastListError] = useState(null)
     const navigate = useNavigate()
     
     useEffect(() => {
@@ -23,7 +19,6 @@ function EditCastListPage() {
         .then((response) => response.json())
         .then((data) => {
             setCastList(data)
-            setListTitle(data.title)
             
             // Create a list to store the inital selections
             const initialSelections = {}
@@ -35,7 +30,6 @@ function EditCastListPage() {
         })
         .catch((err) => {
             console.error("Error fetching list: ", err)
-            setCastListError(err)
         })
 
     }, [id])
@@ -77,11 +71,6 @@ function EditCastListPage() {
     }
 
     async function handleSubmit() {
-        const { data: beforeRows } = await supabase
-            .from("cast_list_entry")
-            .select("id, character_id, performer_id")
-            .eq("cast_list_id", castList.id)
-
         // Clear the initial selections in case of any differences
         const { error: deleteError } = await supabase
             .from("cast_list_entry")
@@ -89,11 +78,6 @@ function EditCastListPage() {
             .eq("cast_list_id", castList.id)
 
         if (deleteError) throw deleteError
-
-        const { data: afterRows } = await supabase
-        .from("cast_list_entry")
-        .select("id, character_id, performer_id")
-        .eq("cast_list_id", castList.id)
 
         // Create an array of the selections to add to the database
         const entries = Object.entries(selections).map(([charId, perfId]) => ({
@@ -127,7 +111,7 @@ function EditCastListPage() {
                     <div className="profile-link">
                         <img
                             src={castList.profile.avatar_url}
-                            alt={`Profile picture for ${username}`}
+                            alt={`Profile picture for ${castList.profile.username}`}
                             className="list-avatar"
                         />
                         <div className="title-div">
