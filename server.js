@@ -315,7 +315,7 @@ app.get("/cast-lists", async (req, res) => {
 
 /**
  * GET /cast-lists/:userId
- * Returns information about a specific cast list
+ * Returns a user's cast lists
  * USED BY: Home, Profile
  */
 app.get(`/cast-lists/:userId`, async (req, res) => {
@@ -332,6 +332,8 @@ app.get(`/cast-lists/:userId`, async (req, res) => {
                 performer:performer_id ( * )
             )`)
         .eq("user_id", userId)
+        .order("is_pinned", {ascending: false})
+        .order("created_at", {ascending: false})
 
     if (error) {
         console.error("Error fetching character information: ", error);
@@ -347,7 +349,6 @@ app.get(`/cast-lists/:userId`, async (req, res) => {
  * USED BY: CastList, EditCastList
  */
 app.get("/get-list/:id", async (req, res) => {
-    // Get the information for a specific cast list
     const listId = req.params.id;
 
     const { data, error } = await supabase

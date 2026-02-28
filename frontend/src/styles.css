@@ -55,6 +55,36 @@ footer {
     cursor: pointer;
 }
 
+.confirm-delete {
+    font-family: lexend;
+    text-align: center;
+}
+
+#delete-conf .text {
+    text-align: center;
+}
+
+#delete-yes {
+    background-color: gray;
+    font-family: 'coolvetica', sans-serif;
+    color: white;
+    text-decoration: none;;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    border: none;
+    width: 100%;
+}
+
+#delete-no {
+    width: 100%;
+}
+
+#delete-yes:hover {
+    background-color: #511d5f;
+    cursor: pointer;
+}
+
 .google-btn {
     display: flex;
     align-items: center;
@@ -953,10 +983,10 @@ ul {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 9;
+    z-index: 1000;
 }
 
-#add-modal {
+#add-modal, #delete-conf {
     background-color: white;
     padding: 45px;
     width: 400px;
