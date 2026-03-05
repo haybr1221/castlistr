@@ -43,7 +43,7 @@ function AddCharacterModal({ onCloseChar, onCreateChar }) {
 
     return(
         <div id="add-modal">
-            <p className="cancel" onClick={onCloseChar}>X</p>
+            <p className="cancel" onClick={onCloseChar}>&times;</p>
             <h1 className="adding-new-title">Add a Character</h1>
             <form id="char-form" onSubmit={handleSubmit}>
                 <label className="label">Character Name:</label>

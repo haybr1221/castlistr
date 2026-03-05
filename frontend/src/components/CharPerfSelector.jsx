@@ -10,8 +10,11 @@ import AddPerformerModal from "./AddPerformerModal.jsx"
 function CharPerfSelector({ 
     characters = [], 
     performers = [], 
-    selections = [], 
-    onSelectionChange = [], 
+    selections = {}, 
+    matches = {},
+    onShowCredits = () => {},
+    onSelectionChange = () => {},
+    onPerformerSelected = () => {},
     showId = 0, 
     setCharacters = () => {},
     setPerformers = () => {}}) 
@@ -143,10 +146,12 @@ function CharPerfSelector({
         
         <div id="character-form">
             {characters.map((character) => {
-                console.log("Rendering character:", character);
                 // See if a performer is selected for this character
                 const selectedPerfId = selections?.[character.id] ?? null
                 const selectedOption = performerList.find((opt) => opt.value === selectedPerfId) ?? null
+
+                // check if there is a match with the matches we passed through
+                const hasMatch = matches[character.id]
 
                 // Create the div for each character
                 return (
@@ -158,13 +163,23 @@ function CharPerfSelector({
                                 value={selectedOption}
                                 onChange={(option) => { 
                                     const performerId = option ? option.value : null
-                                    onSelectionChange(character.id, performerId)}}
+                                    onSelectionChange(character.id, performerId)
+                                    onPerformerSelected(performerId, character.id)}}
                                 isClearable
                                 placeholder="Select a performer"
                                 className="search"
                                 />
                             <button type="button" className="add-performer" onClick={() => setPerfModalVisible(true)}>+</button>
                         </div>
+
+                        {hasMatch && (
+                            <p
+                                className="match-text"
+                                onClick={() => onShowCredits(character.id)}
+                            >
+                                This performer has played this role before!
+                            </p>
+                        )}
                     </div>
                 )
             })}

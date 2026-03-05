@@ -4,6 +4,7 @@ import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
 import CharPerfSelector from '../components/CharPerfSelector.jsx' 
 import ShowDropdown from '../components/ShowDropdown.jsx'
+import PerformerCreditModal from '../components/PerformerCreditModal.jsx'
 
 function CreatePage() {
     const [step, setStep] = useState('selectShow')
@@ -12,6 +13,9 @@ function CreatePage() {
     const [performers, setPerformers] = useState([])
     const [selections, setSelections] = useState({})
     const [listTitle, setListTitle] = useState('')
+    const [creditModalVisible, setCreditModalVisible] = useState(false)
+    const [creditModalData, setCreditModalData] = useState(null)
+    const [matches, setMatches] = useState({})
     const navigate = useNavigate()
 
     const { user } = useCurrentUser()
@@ -36,6 +40,41 @@ function CreatePage() {
 
             return next
         })
+    }
+
+    async function handlePerformerCheck(perfId, charId) {
+        if (!perfId) {
+            // reset the matches state in case a performer is removed from the list
+            setMatches(prev => {
+                    const next = { ... prev};
+                    delete next[charId]
+                    return next
+                })
+            return
+        }
+
+        const credits = await fetchCredits(perfId, charId);
+
+        if (credits.length > 0) {
+            // data exists for this pairing
+            setMatches(prev => ({... prev, [charId]: credits}))
+        }
+        else {
+            // clear!
+            setMatches(prev => {
+                const next = { ... prev};
+                delete next[charId]
+                return next
+            })
+        }
+    }
+
+    const openCreditModal = (charId) => {
+        const credits = matches[charId]
+        if (credits) {
+            setCreditModalData({ credits })
+            setCreditModalVisible(true)
+        }
     }
 
     async function handleSubmit() {
@@ -69,6 +108,25 @@ function CreatePage() {
 
         // Send the user to view this cast list
         navigate(`/cast-lists/${castListId}`) 
+    }
+
+    async function fetchCredits(perfId, charId) {
+        const { data, error } = await supabase
+            .from("performer_has_character")
+            .select(`
+                *,
+                character ( name ),
+                performer ( full_name ),
+                tour:tour_id (
+                    *
+                )`)
+            .eq("performer_id", perfId)
+            .eq("char_id", charId)
+            .order("arrived", {ascending : true})
+            
+        if (error) throw error;
+
+        return data
     }
 
     useEffect(() => {
@@ -119,7 +177,10 @@ function CreatePage() {
                             characters={characters}
                             performers={performers}
                             selections={selections}
+                            matches={matches}
+                            onShowCredits={openCreditModal}
                             onSelectionChange={handleSelectionChange}
+                            onPerformerSelected={handlePerformerCheck}
                             showId={selectedShow.value}
                             setCharacters={setCharacters}
                             setPerformers={setPerformers}
@@ -129,6 +190,16 @@ function CreatePage() {
                             <button type="button" onClick={() => setStep("selectTitle")} className="button">Next Step</button>
                         </div>
                     </div>
+                )}
+
+                {creditModalVisible && (
+                    <>
+                        <div id="overlay"></div>
+                        <PerformerCreditModal 
+                            data={creditModalData}
+                            onClose={() => setCreditModalVisible(false)}
+                            />
+                    </>
                 )}
 
                 { step === 'selectTitle' && (

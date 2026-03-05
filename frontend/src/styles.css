@@ -950,10 +950,10 @@ ul {
     background-color: rgb(222, 221, 221);
 }
 
-.tour-title {
+/* .tour-title {
     display: flex;
     align-items: center; 
-}
+} */
 
 .tour-dates, .role-dates {
     display: flex;
@@ -976,6 +976,14 @@ ul {
     text-align: right;
 }
 
+#actor-as-char {
+    color: var(--purple);
+    font-family: lexend;
+    font-size: 24px;
+    text-align: center;
+    padding: 5px;
+}
+
 #overlay {
     background-color: rgba(0,0,0,0.5);
     position: fixed;
@@ -986,7 +994,7 @@ ul {
     z-index: 1000;
 }
 
-#add-modal, #delete-conf {
+#add-modal, #delete-conf, #credit-modal {
     background-color: white;
     padding: 45px;
     width: 400px;
@@ -997,6 +1005,22 @@ ul {
     transform: translate(-50%, -50%);
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#credit-modal {
+    width: 600px;
+}
+
+#credit-modal #role-list .role-box {
+    font-family: lexend;
+    padding: 15px;
+    list-style: none;
+    border-radius: 15px;
+}
+
+.role-info .tour-title {
+    font-weight: bold;
+    
 }
 
 #char-list, #tour-list {
@@ -1011,7 +1035,13 @@ ul {
 
 .cancel {
     font-family: 'coolvetica';
-    text-align: right;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
 }
 
 .cancel:hover {
@@ -1207,4 +1237,12 @@ ul {
     width: 100%;
     height: 100%;
     z-index: 9;
+}
+
+.match-text {
+    font-size: 12px;
+}
+
+.match-text:hover {
+    color: var(--purple)
 }

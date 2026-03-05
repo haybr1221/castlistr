@@ -450,6 +450,7 @@ app.get("/roles/:id", async (req, res) => {
                 show:show_id ( * )
             )`)
         .eq("performer_id", id)
+        .order("arrived", {ascending : true})
 
     if (error) {
         console.error("Error fetching roles for ", id, " : ", error)
