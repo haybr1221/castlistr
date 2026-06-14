@@ -1,0 +1,1171 @@
+/*  =========================================
+    =============== GLOBAL ==================
+    ========================================= */
+
+@font-face {
+    font-family: 'coolvetica';
+    src: url("/fonts/coolvetica rg.otf") format('opentype');
+}
+
+@font-face {
+    font-family: 'lexend';
+    src: url(/fonts/Lexend-VariableFont_wght.ttf) format('truetype');
+}
+
+:root {
+    --purple: #9536AF;
+    --red: #F2545B;
+    --cream: #F3F7F0;
+    --black: #070600;
+    --blue: #279AF1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(246, 246, 246);
+}
+
+main {
+    padding-top: 100px;
+    min-height: calc(100vh - 100px);
+}
+
+.button {
+    background-color: var(--purple);
+    font-family: 'coolvetica', sans-serif;
+    color: white;
+    text-decoration: none;;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    border: none;
+}
+
+.button:hover {
+    background-color: #511d5f;
+    cursor: pointer;
+}
+
+#button-box {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+}
+
+.label {
+    font-family: 'coolvetica';
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.text {
+    font-family: 'coolvetica', sans-serif;
+    color: black;
+}
+
+.red-text {
+    color: red;
+}
+
+/* Search Boxes */
+.search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 10px;
+    height: 100px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-perf {
+    width: 100%;
+}
+
+#overlay {
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+/*  =========================================
+    ============= COMPONENTS ================
+    ========================================= */
+
+/* MODALS */
+
+.modal {
+    background-color: white;
+    padding: 45px;
+    width: 400px;
+    position: fixed;
+    z-index: 1000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    font-family: Lexend;
+}
+
+.modal input {
+    padding: 5px;
+}
+
+.cancel {
+    font-family: 'coolvetica';
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.cancel:hover {
+    color: red;
+}
+
+.adding-new-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 25px;
+    text-align: left;
+}
+
+#form-error {
+    color: red;
+}
+
+/* AddRoleModal */
+#select-dropdown {
+    padding: 5px;
+    font-family: Lexend;
+}
+
+#add-role-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* CharPerfSelector */
+#character-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 100%;
+    height: 250px;
+    gap: 20px;
+    padding: 20px;
+    overflow-y: scroll;
+    font-family: Lexend;
+}
+
+.add-performer {
+    width: 32px; 
+    height: 32px; 
+    border-radius: 6px; 
+    border: none; 
+    background: lightgray; 
+    color: white; 
+    font-size: 20px; 
+    cursor: pointer;
+}
+
+.add-performer:hover {
+    background: gray;
+}
+
+.match-text {
+    font-size: 12px;
+}
+
+.match-text:hover {
+    color: var(--purple)
+}
+
+/* ConfirmDeleteList */
+#delete-conf .text {
+    text-align: center;
+}
+
+.confirm-delete {
+    font-family: lexend;
+    text-align: center;
+}
+
+#delete-yes {
+    background-color: gray;
+    font-family: 'coolvetica', sans-serif;
+    color: white;
+    text-decoration: none;;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    border: none;
+    width: 100%;
+}
+
+#delete-no {
+    width: 100%;
+}
+
+#delete-yes:hover {
+    background-color: #511d5f;
+    cursor: pointer;
+}
+
+/* DisplayCastList */
+.cast-list-card, .edit-cast-list-card {
+    max-height: 600px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 30px;
+    width: 600px;
+    position: relative;
+}
+
+.list-header {
+    font-family: 'coolvetica', sans-serif;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 0.5px solid black;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-link {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: stretch;
+    width: 100%;
+}
+
+.profile-link:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.list-avatar {
+    width: 45px;
+    height: 45px;
+}
+
+.title-div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.list-title {
+    font-size: 20px;
+}
+
+.list-subtitle {
+    font-size: 12px;
+}
+
+.fa-ellipsis {
+    margin-left: auto;
+    color: darkgray;
+}
+
+.fa-ellipsis:hover {
+    color: black;
+}
+
+#list-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+}
+
+.cast-list-body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-height: 100%;
+    overflow: scroll;
+}
+
+.char-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 15px;
+    width: 186px;
+    height: 100%;
+    font-family: 'lexend', sans-serif;
+    text-align: center;
+    font-size: 14px;
+}
+
+.character {
+    font-weight: bold;
+}
+
+.headshot-url {
+    height: 150px;
+}
+
+.performer {
+    font-weight: light;
+}
+
+.cast-list-footer {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 0.5px solid black;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.prev-comments {
+    border-top: 0.5px black solid;
+    max-height: 200px;
+    overflow: scroll;
+    box-sizing: border-box;
+    padding-top: 15px;
+}
+
+.list-comment {
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+    gap: 5px;
+}
+
+.commenting-avatar {
+    width: 45px;
+    height: 45px;
+}
+
+.list-comment input {
+    width: 100%;
+}
+
+.list-comment button {
+    padding: 8px;
+}
+
+/* DISPLAY COMPONENTS  */
+.display-list li:hover {
+    background-color: rgb(222, 221, 221);
+}
+
+/* DisplayCharacters */
+.display-list {
+    overflow: scroll;
+}
+
+/* DisplayComment */
+.comment {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    font-family: lexend;
+}
+
+.comment-username {
+    font-weight: bold;
+}
+
+.comment-avatar {
+    width: 35px;
+    height: 35px;
+}
+
+/* DisplayPerformers */
+
+#performer-table { 
+    margin-top: 0; 
+    width: 100%;
+    font-family: lexend;
+    border-collapse: collapse;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-spacing: 0;
+    table-layout: fixed;
+    border-top-right-radius: 25px; border-top-left-radius: 25px;
+}
+
+#performer-table thead {
+    background-color: rgb(230, 230, 230);
+}
+
+#performer-table th, #performers td { 
+    padding: 8px 12px;
+}
+
+.col-name, .col-count {
+    text-align: center;
+}
+
+.col-name {
+    width: 80%;
+}
+
+.col-count {
+    width: 20%;
+}
+
+.perf-row {
+    padding: 40px;
+    height: 50px;
+}
+
+.perf-row:hover, .perf-row:focus {
+    background-color: rgb(222, 221, 221);
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.perf-row .count {
+    text-align: center;
+}
+
+.perf-row .perf-name {
+    font-weight: normal;
+}
+
+/* also used by DisplayShows */
+.count {
+    font-family: 'Lexend', sans-serif;
+    font-weight: light;
+}
+
+/* DisplayRoles/PerformerCreditModal */
+.role-box {
+    font-family: lexend;
+    padding: 15px;
+    list-style: none;
+    border-radius: 15px;
+}
+
+.role-show-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.info-with-dates {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.info-with-dates .tour-title {
+    font-weight: bold;
+}
+
+.cover-status {
+    color: rgb(101, 101, 101);
+}
+
+/* & DisplayTours */
+
+.role-dates {
+    display: flex;
+    flex-direction: column;
+    font-weight: normal;
+}
+
+.date-label {
+    font-weight: bold;
+    text-align: right;
+}
+
+/* DisplayShows */
+
+#shows {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#show-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    border-radius: 25px;
+    margin: 0 auto;
+    background-color: white;
+    outline: 0.75px solid rgb(192, 192, 192);
+}
+
+.show-div {
+    width: 320px;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    box-sizing: border-box;
+    gap: 20px;
+}
+
+.show-div:hover {
+    background-color: rgb(222, 221, 221);
+    border-radius: 20px;
+}
+
+.show-summary {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: black;
+    text-decoration: none;
+    width: 240px;
+}
+
+.show-title, .perf-name {
+    font-family: 'lexend', sans-serif;
+    font-weight: bold;
+}
+
+/* ListOptionsModal */
+.list-options {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 25%;
+    right: 5%;
+    z-index: 10;
+    border: 1px solid black;
+    width: 125px;
+    box-sizing: content-box;
+}
+
+.list-options .option  {
+    background-color: white;
+    width: 125px;
+    padding: 10px;
+    border-bottom: 0.5px gray solid;
+}
+
+.list-options .option:last-child { 
+    border-bottom: none;
+}
+
+.option:hover {
+    background-color: rgb(216, 216, 216);
+}
+
+/* PerformerCreditModal */
+#credit-modal {
+    width: 600px;
+}
+
+#actor-as-char {
+    color: var(--purple);
+    font-family: lexend;
+    font-size: 24px;
+    text-align: center;
+    padding: 5px;
+}
+
+.tour-title {
+    display: flex;
+    align-items: center; 
+}
+
+/* UPLOAD IMAGES */
+.add-image {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgb(216, 216, 216);
+    border: 2px dotted gray;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*  =========================================
+    ================ PAGES ==================
+    ========================================= */
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Create */
+
+#create-container {
+    background-color: white;
+    border-radius: 20px;
+    width: 800px;
+    height: 500px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#create-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 30px;
+    text-align: left;
+}
+
+.step {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--black);
+    font-size: 20px;
+    text-align: left;
+}
+
+.current-step {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    font-family: Lexend;
+    gap: 15px;
+}
+
+.two-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#name-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#name-list input {
+    padding: 5px;
+}
+
+/* EditCastList */
+
+.edit-cast-list-card {
+    width: 800px;
+}
+
+.edit-cast-list {
+    width: 100%;
+    max-height: 100%;
+    overflow: scroll;
+}
+
+#save-changes {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* EditProfile */
+#edit-profile {
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#edit-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 30px;
+    text-align: left;
+}
+
+/* Home */
+#home-page {
+    flex-direction: row;
+    gap: 20px;
+    height: 600px;
+}
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    max-height: 600px;
+    overflow: scroll;
+    width: 640px;
+}
+
+#profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: white;
+    border-radius: 20px;
+    width: 185px;
+    max-height: 500px;
+    font-size: 20px;
+    gap: 10px;
+}
+
+#user-info-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 10px;
+}
+
+#user-information #profile-pic {
+    height: 100px;
+    width: 100px;
+    display: block;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+}
+
+#user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+#username {
+    font-family: 'coolvetica', sans-serif;
+    font-size: 20px;
+}
+
+#user-list-count {
+    font-family: 'coolvetica', sans-serif;
+    font-size: 15px;
+}
+
+.user-options {
+    flex: 2;
+    margin-top: auto;
+    padding: 10px;
+}
+
+#user-settings li {
+    font-family: 'coolvetica', sans-serif;
+    padding: 10px;
+    border-top: 0.5px black solid;
+    list-style: none;
+    font-size: 13.5px;
+}
+
+#user-settings li:hover {
+    background-color: rgb(222, 221, 221);
+    cursor: pointer;
+}
+
+/* Index */
+
+#main-container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0px 0px 10px black;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    max-width: 425px;
+}
+
+#title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 50px;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+/* Performer/Show base pages */
+.static-main {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.static-info {
+    height: 600px;
+    width: 300px;
+    background-color: white;
+    border-radius: 25px;
+}
+
+.static-info img {
+    height: 350px;
+}
+
+#basic-static-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.active-tab {
+    background-color: white;
+}
+
+#tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: -15px;
+}
+
+#tabs p {
+    border-radius: 20px;
+    padding: 20px;
+    font-weight: bold;
+    font-family: 'coolvetica';
+    cursor: pointer;
+}
+
+#tabs p:hover {
+    background-color: rgb(222, 222, 222);
+}
+
+/* Performer specific */
+#static-img-div {
+    height: 350px;
+    width: 250px;
+}
+
+#perf-basic-info {
+    display: flex;
+    flex-direction: column;
+    font-family: 'lexend', sans-serif;
+    justify-content: center;
+    align-items: left;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#interesting-info {
+    font-family: 'lexend', sans-serif;
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-tab {
+    background-color: white;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#performer-page {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
+
+#performers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-radius: 25px;
+    /* margin: 0 auto; */
+    padding: 20px;
+}
+
+.search { 
+    margin-bottom: 0; 
+} 
+
+/* Show specific */
+#dynamic-info {
+    font-family: 'lexend', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.poster {
+    height: 100%;
+    overflow: hidden;
+    background-color: graay;
+    width: 80px;
+}
+
+.show-info-tab {
+    background-color: white;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.show-info-tab li {
+    border-top: 0.5px solid black;
+    padding: 10px;
+}
+
+.poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s;
+}
+
+/* Performers/Shows */
+.pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* gap: 250px; */
+    padding: 20px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;;
+    background-color: rgb(230, 230, 230);
+    font-family: lexend;
+}
+
+.search {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    background-color: rgb(230, 230, 230);
+}
+
+.search input {
+    padding: 10px 15px;
+    width: 400px;
+}
+
+/* Profile */
+#user-profile {
+    flex-direction: column;
+    gap: 10px;
+}
+
+#user-information {
+    width: 800px;
+    height: 130px;
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    gap: 20px;
+}
+
+#user-information #basic-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;  
+}
+
+#user-sections #tabs {
+    margin-bottom: 0px;
+}
+
+#user-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-lists {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    overflow: scroll;
+    width: 640px;
+    max-height: 600px;
+    overflow: scroll;
+}
+
+/* SignIn */
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 50px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: 1px solid #dadce0;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.google-btn:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+.google-icon-wrapper {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-icon {
+    width: 18px;
+}
+
+.google-btn-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #3c4043;
+    margin-left: 8px;
+}
+
+#or-divider {
+    display: flex; 
+    align-items: center; 
+    text-align: center; 
+    color: #888; 
+    margin: 1.5rem 0;
+    font-family: Lexend;
+}
+
+.display-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+}
+
+/* App */
+.link {
+    text-decoration: none;
+}
+
+#header-title {
+    font-family: 'coolvetica', sans-serif;
+    color: var(--purple);
+    font-size: 40px;
+    text-decoration: none;
+}
+
+.nav-bar {
+    color: black;
+    text-decoration: none;
+    font-family: 'coolvetica', sans-serif;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.nav-bar:hover {
+    background-color: var(--red);
+    color: white;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: stretch;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    width: 100%;
+    padding: 20px;
+}
+
+#navbar {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 100px;
+}
