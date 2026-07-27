@@ -146,7 +146,7 @@ function DisplayCastList({ castList }) {
                             {castList.title}
                         </p>
                         <p className="list-subtitle">
-                            {`${username}'s cast for ${showTitle}`}
+                            {`${username}'s cast for`} <span class="show-title-cast-list">{`${showTitle}`}</span>
                         </p>
                     </div>
                 </Link>

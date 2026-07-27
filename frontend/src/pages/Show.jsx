@@ -71,7 +71,7 @@ function ShowPage() {
         const { data: existingData, error: existingError } = await supabase 
             .from("show_has_character")
             .select(`id,
-                character:char_id ( id, name) `)
+                character:char_id!inner ( id, name) `)
             .eq("show_id", showData.showId)
             .eq("character.name", name)
             .limit(1)
@@ -117,6 +117,8 @@ function ShowPage() {
             setCharModalVisible(false)
             return
         }
+
+        return { ok: true, data: data[0] }
     }
 
     async function handleCreateTour(info, isMultiple) {

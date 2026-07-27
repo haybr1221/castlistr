@@ -50,7 +50,7 @@ function AddTourModal({ onCloseTour, onCreateTour }) {
             <h1 className="adding-new-title">
                 Create a Tour
             </h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id="tour-form">
                 <label className="label" htmlFor="newTour">
                     Tour Name:
                 </label>

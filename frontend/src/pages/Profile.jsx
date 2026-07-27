@@ -12,7 +12,7 @@ function ProfilePage() {
     const [userLists, setUserLists] = useState([])
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
-    const [isFollowing, setIsFollowing] = useState(null)
+    // const [isFollowing, setIsFollowing] = useState(null)
     const [likedLists, setLikedLists] = useState([])
     const [likedListsLoading, setLikedListsLoading] = useState(null)
     const [likedListsError, setLikedListsError] = useState(null)
@@ -77,59 +77,59 @@ function ProfilePage() {
         
     }, [profileId])
 
-    useEffect(() => {
-        if (!user) return
+    // useEffect(() => {
+    //     if (!user) return
 
-        let isCancelled = false
-        console.log(user.id)
-        console.log(profileId)
+    //     let isCancelled = false
+    //     console.log(user.id)
+    //     console.log(profileId)
 
-        async function loadFollowed() {
-            const response = await fetch(`http://localhost:3000/is-following/${user.id}/${profileId}`)
-            const isFollowing = await response.json()
-            console.log(isFollowing)
-            if (!isCancelled) setIsFollowing(isFollowing)
-        }
+    //     async function loadFollowed() {
+    //         const response = await fetch(`http://localhost:3000/is-following/${user.id}/${profileId}`)
+    //         const isFollowing = await response.json()
+    //         console.log(isFollowing)
+    //         if (!isCancelled) setIsFollowing(isFollowing)
+    //     }
 
-        loadFollowed()
+    //     loadFollowed()
 
-        return () => { isCancelled = true }
+    //     return () => { isCancelled = true }
 
-    }, [user, profileId])
+    // }, [user, profileId])
 
-    async function toggleFollow() {
-        if (!isFollowing)
-        {
-            // User is not following yet, so add it to the table
-            const { error } = await supabase
-                .from("follow")
-                .insert({
-                    following: profileId,
-                    follower: user.id
-                })
+    // async function toggleFollow() {
+    //     if (!isFollowing)
+    //     {
+    //         // User is not following yet, so add it to the table
+    //         const { error } = await supabase
+    //             .from("follow")
+    //             .insert({
+    //                 following: profileId,
+    //                 follower: user.id
+    //             })
 
-            if (error) throw error
+    //         if (error) throw error
 
-            // We know they are now following this user
-            setIsFollowing(true)
-        }
-        else {
-            // User is following, so delete it to the table
+    //         // We know they are now following this user
+    //         setIsFollowing(true)
+    //     }
+    //     else {
+    //         // User is following, so delete it to the table
             
-            const { error } = await supabase
-                .from("following")
-                .delete()
-                .eq("following_id", profileId)
-                .eq("follower_id", user.id)
+    //         const { error } = await supabase
+    //             .from("following")
+    //             .delete()
+    //             .eq("following_id", profileId)
+    //             .eq("follower_id", user.id)
 
-            if (error) throw error
+    //         if (error) throw error
 
-            // We know they are no longer following this user
-            setIsFollowing(false)
-        }
+    //         // We know they are no longer following this user
+    //         setIsFollowing(false)
+    //     }
 
 
-    }
+    // }
 
     const isOwnProfile = user && user.id == profileId
 
@@ -148,12 +148,12 @@ function ProfilePage() {
                     {isOwnProfile && (
                         <Link to={`/users/edit-profile`}><button className="button">Edit Profile</button></Link>
                     )}
-                    {!isOwnProfile && !isFollowing && (
+                    {/* {!isOwnProfile && !isFollowing && (
                         <button onClick={toggleFollow} className="button">Follow</button>
                     )}
                     {!isOwnProfile && isFollowing  && (
                         <button onClick={toggleFollow} className="button">Unfollow</button>
-                    )}
+                    )} */}
                 </div>
             </div>
             <div id="user-sections">
