@@ -102,4 +102,4 @@ To run Castlistr on your local machine:
 **Hayley Branchflower**
 
 * Live App: [castlistr.vercel.app](https://castlistr.vercel.app)
-* GitHub: @haybr1221
+* GitHub: [@haybr1221](https://github.com/haybr1221)
