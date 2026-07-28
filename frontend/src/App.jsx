@@ -4,6 +4,7 @@ import SignOutButton from './components/SignOut.jsx'
 import SignInButton from './components/SignIn.jsx'
 import RequireProfile from './components/RequireProfile.jsx'
 import { useCurrentUser } from './config/currentUser.js'
+import { Analytics } from '@vercel/analytics/react'
 // import pages
 import IndexPage from './pages/Index.jsx'
 import SignInPage from './pages/SignIn.jsx'
@@ -49,7 +50,7 @@ function App() {
         <Route path="/cast-lists/:id/edit" element={<RequireProfile><EditCastListPage /></RequireProfile>} />
         <Route path="/performers/:slug" element={<PerformerPage />}/>
       </Routes>
-
+      <Analytics />
       <footer>
         
       </footer>
