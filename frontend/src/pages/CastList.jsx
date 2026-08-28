@@ -1,12 +1,15 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DisplayCastList from '../components/DisplayCastList'
+import { useScreenshot } from '../hooks/useScreenshot.js'
 
 function CastListPage() {
     // Display a cast list on its own page
     const { id } = useParams()
     const [castList, setCastList] = useState(null)
     const [castListError, setCastListError] = useState(null)
+    const captureRef = useRef(null)
+    const { capture } = useScreenshot()
 
     useEffect(() => {
         // Fetch the cast list
@@ -30,15 +33,24 @@ function CastListPage() {
     
     }, [castList])
 
+    const handleDownload = () => { 
+        return capture(captureRef.current, {
+            format: 'png',
+            filename: `cast-list-${id}`,
+        })
+    }
+
     if (!castList) {
         return <p>Loading cast list...</p>
     }
 
     return (
         <main className="center-content">
-            {castList && 
-                <DisplayCastList castList={castList}/>
-            }
+            {castList && (
+                <div ref={captureRef}>
+                    <DisplayCastList castList={castList} onDownload={handleDownload}/>
+                </div>
+            )}
             {!castList && castListError &&
             <p className="text">Error fetching cast list</p>}
         </main>

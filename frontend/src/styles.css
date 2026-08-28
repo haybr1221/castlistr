@@ -280,7 +280,7 @@ a {
     flex-direction: row;
     gap: 10px;
     justify-content: stretch;
-    width: 100%;
+    width: 100;
 }
 
 .profile-link:hover {
@@ -320,7 +320,7 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100;
     height: 100%;
     z-index: 9;
 }
@@ -395,6 +395,11 @@ a {
 
 .list-comment button {
     padding: 8px;
+}
+
+.capturing .fa-ellipsis, .capturing .list-options,
+.capturing .fa-heart, .capturing .fa-comment {
+    display: none;
 }
 
 /* DISPLAY COMPONENTS  */

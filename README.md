@@ -90,7 +90,7 @@ To run Castlistr on your local machine:
 
 ## 🗺️ Roadmap (Upcoming V2 Features)
 
-- [ ] **Export Cast List to Image:** Download rendered cast lists as formatted graphic cards (`html2canvas`) for sharing on social media.
+- [x] **Export Cast List to Image:** Download rendered cast lists as formatted graphic cards (`html2canvas`) for sharing on social media.
 - [ ] **Enhanced Social Feed:** Follow system with custom algorithmic feed updates.
 - [ ] **Collaborative Lists:** "Co-director" permissions allowing multiple users to edit shared cast lists.
 - [ ] **Nested Comment Replies:** Multi-threaded discussions on community cast lists.

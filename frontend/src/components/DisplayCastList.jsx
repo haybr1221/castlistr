@@ -7,7 +7,8 @@ import { supabase } from '../config/supabaseclient.js';
 import ListOptionsModal from './ListOptionsModal.jsx';
 import DisplayComment  from './DisplayComment.jsx';
 
-function DisplayCastList({ castList }) {
+function DisplayCastList({ castList, onDownload }) {
+    console.log('onDownload:', onDownload)
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
     const [avatarUrl, setAvatarUrl] = useState(null)
@@ -132,8 +133,21 @@ function DisplayCastList({ castList }) {
         setNewComment('')
     }
 
+    const cardRef = useRef(null)
+
+    // reset castlist for exporting
+    const handleDownloadClick = async () => {
+        setListModal(false) // make sure dropdown is closed
+        cardRef.current.classList.add('capturing') // add css class for capture styling
+        try {
+            await onDownload(cardRef.current)
+        } finally {
+            cardRef.current.classList.remove('capturing') // remove css class after capture
+        }
+    }
+
     return (
-        <div className="cast-list-card">
+        <div className="cast-list-card" ref={cardRef}>
             <div className="list-header">
                 <Link to={username ? `/users/${username}` : '#'} className="profile-link">
                     <img
@@ -146,7 +160,7 @@ function DisplayCastList({ castList }) {
                             {castList.title}
                         </p>
                         <p className="list-subtitle">
-                            {`${username}'s cast for`} <span class="show-title-cast-list">{`${showTitle}`}</span>
+                            {`${username}'s cast for`} <span className="show-title-cast-list">{`${showTitle}`}</span>
                         </p>
                     </div>
                 </Link>
@@ -156,7 +170,12 @@ function DisplayCastList({ castList }) {
             {listModal && (
                 <>
                     <div id="list-overlay" onClick={() => setListModal(false)}></div>
-                    <ListOptionsModal currUserId={user.id} listId={castList.id} creatorId={creatorId}/>
+                    <ListOptionsModal 
+                        currUserId={user.id} 
+                        listId={castList.id}
+                        creatorId={creatorId}
+                        onDownload={handleDownloadClick}
+                    />
                 </>
             )}
 

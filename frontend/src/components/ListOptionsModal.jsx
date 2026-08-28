@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import ConfirmDeleteList from '../components/ConfirmDeleteList.jsx'
 
-function ListOptionsModal({ currUserId, listId, creatorId }) {
+function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
     const [ isPinned, setIsPinned ] = useState(false)
     const [ confirmDeleteModal, setConfirmDeleteModal ] = useState(false)
 
@@ -102,6 +102,9 @@ function ListOptionsModal({ currUserId, listId, creatorId }) {
                 )}
                 <p className="red-text option">
                     Report List
+                </p>
+                <p onClick={onDownload} className="option">
+                    Download as Image
                 </p>
             </div>
         </>
