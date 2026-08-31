@@ -6,9 +6,9 @@ import { useCurrentUser } from '../config/currentUser.js'
 import { supabase } from '../config/supabaseclient.js';
 import ListOptionsModal from './ListOptionsModal.jsx';
 import DisplayComment  from './DisplayComment.jsx';
+import { useScreenshot } from '../hooks/useScreenshot.js'
 
-function DisplayCastList({ castList, onDownload }) {
-    console.log('onDownload:', onDownload)
+function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
     const [avatarUrl, setAvatarUrl] = useState(null)
@@ -19,6 +19,7 @@ function DisplayCastList({ castList, onDownload }) {
     const [isCommenting, setIsCommenting] = useState(false)
     const [newComment, setNewComment] = useState('')
     const [listComments, setListComments] = useState(castList.user_comments)
+    const { capture } = useScreenshot()
     
     const { user, profile } = useCurrentUser()
     const commentsRef = useRef(null)
@@ -137,10 +138,13 @@ function DisplayCastList({ castList, onDownload }) {
 
     // reset castlist for exporting
     const handleDownloadClick = async () => {
-        setListModal(false) // make sure dropdown is closed
+        setListModal(false) // make sure dropdown is closed, we don't want it there!
         cardRef.current.classList.add('capturing') // add css class for capture styling
         try {
-            await onDownload(cardRef.current)
+            await capture(cardRef.current, {
+                format: 'png',
+                filename: `cast-list-${castList.id}`,
+            })
         } finally {
             cardRef.current.classList.remove('capturing') // remove css class after capture
         }
