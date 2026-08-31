@@ -5,6 +5,7 @@ import ConfirmDeleteList from '../components/ConfirmDeleteList.jsx'
 
 function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
     const [ isPinned, setIsPinned ] = useState(false)
+    const [ createdDate, setCreatedDate ] = useState(null)
     const [ confirmDeleteModal, setConfirmDeleteModal ] = useState(false)
 
     useEffect(() => {
@@ -20,6 +21,25 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
         }
 
         fetchIsPinned()
+    }, [listId])
+
+    useEffect(() => {
+        async function fetchCreatedDate() {
+            // fetch the creation date for the list
+            const { data, error } = await supabase 
+                .from("cast_lists")
+                .select("created_at")
+                .eq("id", listId)
+                .single()
+
+            if (!error && data) {
+                const createdDate = new Date(data.created_at)
+                const formattedDate = createdDate.toLocaleDateString()
+                setCreatedDate(formattedDate)
+            }
+        }
+
+        fetchCreatedDate()
     }, [listId])
 
     async function deleteList() {
@@ -93,7 +113,7 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
                         </p>
                     </>
                 )}
-                { currUserId != creatorId && (
+                {/* { currUserId != creatorId && (
                     <>
                         <p className="red-text option">
                             Block User
@@ -102,9 +122,12 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
                 )}
                 <p className="red-text option">
                     Report List
-                </p>
+                </p> */}
                 <p onClick={onDownload} className="option">
                     Download as Image
+                </p>
+                <p className="option" id="created-date">
+                    Created on {createdDate}
                 </p>
             </div>
         </>

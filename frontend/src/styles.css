@@ -618,6 +618,10 @@ a {
     background-color: rgb(216, 216, 216);
 }
 
+#created-date {
+    color: gray;
+}
+
 /* PerformerCreditModal */
 #credit-modal {
     width: 600px;
