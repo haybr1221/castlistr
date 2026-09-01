@@ -128,7 +128,7 @@ function PerformerPage() {
                 </div>
                 <div id="interesting-info">
                     <div className="info-tab">
-                        <button onClick={() => setRoleModalVisible(true)} className="button">Add Role</button>
+                        { user && (<button onClick={() => setRoleModalVisible(true)} className="button">Add Role</button>)}
                         {/* Display actor's previous roles */}
                         {rolesLoading && <p>Loading...</p>}
                         {rolesError && (<p>Error loading: {roles.messages}</p>)}

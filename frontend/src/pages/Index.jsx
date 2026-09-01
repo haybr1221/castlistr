@@ -5,6 +5,7 @@ function IndexPage() {
         <main className="center-content">
             <div id="main-container">
                 <h1 id="title">castlistr</h1>
+                <p className="text" id="tagline">Fancasting, made simple.</p>
                 <Link to="/signin"> <button className="button">Get Started</button></Link>
             </div>
         </main>

@@ -854,6 +854,10 @@ a {
     padding-bottom: 15px;
 }
 
+#tagline {
+    padding: 10px;
+}
+
 /* Performer/Show base pages */
 .static-main {
     display: flex;
@@ -1125,8 +1129,9 @@ a {
 
 #or-divider {
     display: flex; 
-    align-items: center; 
-    text-align: center; 
+    align-items: center;
+    text-align: center;
+    justify-content: center;
     color: #888; 
     margin: 1.5rem 0;
     font-family: Lexend;
@@ -1141,6 +1146,17 @@ a {
 
 input {
     padding: 10px;
+}
+
+#guest-option {
+    color: gray;
+    font-size: 12.5px;
+    padding-top: 30px;
+}
+
+#guest-option:hover {
+    cursor: pointer;
+    color: var(--purple);
 }
 
 /* App */

@@ -59,6 +59,10 @@ function SignInPage() {
         if (error) setError(error.message)
     }
 
+    async function handleGuestRedirect() {
+        navigate("/home");
+    }
+
     return (
         <main className="center-content">
             <div id="main-container">
@@ -81,6 +85,7 @@ function SignInPage() {
                             <input id="email" type="email" placeholder="Email for a one-time passcode" value={email} onChange={e => setEmail(e.target.value)}/>
                             <button type="submit" className="button">Send Code</button>
                         </form>
+                        <div id="guest-option" className="text" onClick={handleGuestRedirect}>Want to browse as a guest?</div>
                     </>
                 )}
 

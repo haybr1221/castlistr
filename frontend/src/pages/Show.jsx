@@ -205,7 +205,7 @@ function ShowPage() {
                     </div>
                     {currentTab == 'characters' && (                    
                         <div className="show-info-tab">
-                        <button onClick={() => setCharModalVisible(true)} className="button">Add Character</button>
+                        { user && (<button onClick={() => setCharModalVisible(true)} className="button">Add Character</button>)}
                         {/* Display characters */}
                             {charLoading && <p>Loading...</p>}
                             {charError && (
@@ -216,7 +216,7 @@ function ShowPage() {
                     )}
                     {currentTab == 'tours' && (
                         <div className="show-info-tab">
-                            <button onClick={() => setTourModalVisible(true)} className="button">Add Tour</button>
+                            { user && (<button onClick={() => setTourModalVisible(true)} className="button">Add Tour</button>)}
                             {/* Display tours */}
                                 {tourLoading && <p>Loading...</p>}
                                 {tourError && (

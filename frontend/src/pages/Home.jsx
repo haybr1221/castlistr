@@ -62,41 +62,43 @@ function HomePage() {
                 )}
             </div>
 
-            <div id="profile-container">
-                <div id="user-info-container">
-                    <div id="profile-pic">
-                        {!userLoading &&  profile?.avatar_url &&(                            
-                            <img 
-                                src={profile.avatar_url} 
-                                alt={`Profile picture for ${profile.username}`}
-                                className="avatar"
-                                referrerPolicy="no-referrer"
-                            />
-                        )}
+            { !userLoading && user && profile && (
+                <div id="profile-container">
+                    <div id="user-info-container">
+                        <div id="profile-pic">
+                            {!userLoading &&  profile?.avatar_url &&(                            
+                                <img 
+                                    src={profile.avatar_url} 
+                                    alt={`Profile picture for ${profile.username}`}
+                                    className="avatar"
+                                    referrerPolicy="no-referrer"
+                                />
+                            )}
+                        </div>
+                        <div id="user-info">
+                            {!userLoading && profile?.username && (
+                                <p id="username">{profile.username}</p>
+                            )}
+                            <p id="user-list-count">{userListCount} {userListCount === 1 ? "Cast List" : "Cast Lists"}</p>
+                        </div>
                     </div>
-                    <div id="user-info">
-                        {!userLoading && profile?.username && (
-                            <p id="username">{profile.username}</p>
+                    <div className="user-options">
+                    <ul id="user-settings">
+                        {profile && (
+                            <Link to={`/users/${profile.username}`}>
+                            <li>My Profile</li>
+                            </Link>
                         )}
-                        <p id="user-list-count">{userListCount} {userListCount === 1 ? "Cast List" : "Cast Lists"}</p>
-                    </div>
-                </div>
-                <div className="user-options">
-                <ul id="user-settings">
-                    {profile && (
-                        <Link to={`/users/${profile.username}`}>
-                        <li>My Profile</li>
+                        <Link to="/create">
+                            <li>Create a New List</li>
                         </Link>
-                    )}
-                    <Link to="/create">
-                        <li>Create a New List</li>
-                    </Link>
-                    <Link to="/users/edit-profile">
-                        <li>Settings</li>
-                    </Link>
-                </ul>
+                        <Link to="/users/edit-profile">
+                            <li>Settings</li>
+                        </Link>
+                    </ul>
+                    </div>
                 </div>
-            </div>
+            )}
         </main>
     )
 }

@@ -118,7 +118,7 @@ function ShowsPage() {
                                 setSearchTerm(e.target.value)}
                             }
                         />
-                        <button onClick={() => setModalVisible(true)} className="button">Add New Show</button>
+                        { user && (<button onClick={() => setModalVisible(true)} className="button">Add New Show</button>)}
                     </div>
                     <div>
                         {isLoading && <p>Loading shows..</p>}

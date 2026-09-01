@@ -144,7 +144,7 @@ function PerformersPage() {
                 {modalVisible && (
                     <>
                         <div id="overlay"></div>
-                        <AddPerformerModal onClose={() => setModalVisible(false)} onCreate={handleCreate}/>
+                        { user && (<AddPerformerModal onClose={() => setModalVisible(false)} onCreate={handleCreate}/>)}
                     </>
                 )}
             </div>
