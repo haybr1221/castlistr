@@ -179,18 +179,26 @@ app.get(`/show/:id/characters`, async (req, res) => {
     const showId = req.params.id;
 
     const { data, error } = await supabase
-        .from("character")
+        .from("show_has_character")
         .select(`
-            *,
-            show_has_character!inner (show_id, char_id)`)
-        .eq("show_has_character.show_id", showId);
+            sort_order,
+            char_id,
+            character (*)
+        `)
+        .eq("show_id", showId)
+        .order("sort_order", { ascending: true });
 
     if (error) {
-        console.error("Error fetching shows: ", error);
-        return res.status(500).json({error: "Failed to fetch shows."})
+        console.error("Error fetching characters: ", error);
+        return res.status(500).json({error: "Failed to fetch characters."})
     }
 
-    res.json(data);
+    const characters = data.map(row => ({
+        ...row.character,
+        sort_order: row.sort_order
+    }));
+
+    res.json(characters);
 });
 
 /**
@@ -216,23 +224,30 @@ app.get(`/show-info/:slug`, async (req, res) => {
 
     // Get character info for this show
     const { data: charData, error: charError } = await supabase
-        .from("character")
+        .from("show_has_character")
         .select(`
             *,
-            show_has_character!inner (show_id, char_id)`)
-        .eq("show_has_character.show_id", show.id);
+            character (*)
+        `)
+        .eq("show_id", show.id)
+        .order("sort_order", { ascending: true });
 
     if (charError) {
         console.error("Error fetching character information: ", charError);
         return res.status(500).json({error: "Failed to fetch character information."})
     }
 
+    const charDataMapped = charData.map(row => ({
+        ...row.character,
+        sort_order: row.sort_order
+    }));
+
     // Get tour info for this show
     const { data: tourData, error: tourError } = await supabase
         .from("tour")
         .select(`*`)
         .eq("show_id", show.id)
-        .order("opening", ascending = true)
+        .order("opening", { ascending: true })
 
     if (tourError){
         console.error("Error fetching tour information: ", tourError);
@@ -252,7 +267,7 @@ app.get(`/show-info/:slug`, async (req, res) => {
 
     res.json({
         show,
-        charData,
+        charData: charDataMapped,
         tourData,
         castListCount
     });
@@ -270,7 +285,7 @@ app.get(`/tour/:id`, async (req, res) => {
         .from("tour")
         .select(`*`)
         .eq("show_id", showId)
-        .order("opening", ascending = true)
+        .order("opening", { ascending: true })
 
     if (error) {
         console.error("Error fetching tour information: ", error);
