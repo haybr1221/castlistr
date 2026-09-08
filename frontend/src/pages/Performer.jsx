@@ -115,7 +115,7 @@ function PerformerPage() {
                             { performer.headshot_url && (
                                 <img src={performer.headshot_url} alt={`Headshot for ${performer.full_name}`}/>
                             )}
-                            { !performer.headshot_url && !headshotLoading && (
+                            { !performer.headshot_url && !headshotLoading && user && (
                                 <UploadHeadshot perfId={performer.id} onUploaded={handleUpload} />
                             )}
                         </div>

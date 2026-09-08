@@ -171,7 +171,7 @@ function ShowPage() {
                             { showData.poster && (
                                 <img src={showData.poster} alt={`Poster for ${showData.title}`}/>
                             )}
-                            { !showData.poster && !posterLoading && (
+                            { !showData.poster && !posterLoading && user && (
                                 <UploadPoster showId={showData.showId} onUploaded={handleUpload} />
                             )}
                         </div>
