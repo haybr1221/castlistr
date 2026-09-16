@@ -165,15 +165,19 @@ a {
 }
 
 /* AddRoleModal */
-#select-dropdown {
-    padding: 5px;
-    font-family: Lexend;
-}
-
 #add-role-form {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.create-role-select {
+    font-family: 'lexend', sans-serif;
+    font-size: 16px;
+    padding: 8px 5px;
+    border: solid lightgray;
+    border-width: 1px;
+    border-radius: 5px;
 }
 
 /* AddTourModal */
