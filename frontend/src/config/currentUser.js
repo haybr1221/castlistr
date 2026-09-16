@@ -1,5 +1,6 @@
 import { supabase } from './supabaseclient.js';
 import { useState, useEffect } from 'react';
+import { API_URL } from './api'
 
 export function useCurrentUser() {
     const [user, setUser] = useState(null)
@@ -35,7 +36,7 @@ export function useCurrentUser() {
                 }
 
                 // Fetch profile info for this user
-                const res = await fetch(`http://localhost:3000/get-profile/${supaUser.id}`)
+                const res = await fetch(`${API_URL}/get-profile/${supaUser.id}`)
 
                 const profileData = await res.json()
                 

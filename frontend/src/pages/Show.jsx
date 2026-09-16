@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { API_URL } from '../config/api'
 import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
 import DisplayCharacters from '../components/DisplayCharacters.jsx'
@@ -36,7 +37,7 @@ function ShowPage() {
         setCharLoading(true)
         setTourLoading(true)
 
-        fetch(`http://localhost:3000/show-info/${slug}`)
+        fetch(`${API_URL}/show-info/${slug}`)
         .then(response => response.json())
         .then((data) => {
             setShowData({

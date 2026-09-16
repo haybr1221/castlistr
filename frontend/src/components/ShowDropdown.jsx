@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import Select from "react-select"
+import { API_URL } from '../config/api'
 
 function ShowDropdown({ value, onChange }) {
     const [shows, setShows] = useState(null)
 
     useEffect(() => {
-        fetch('http://localhost:3000/show-titles')
+        fetch(`${API_URL}/show-titles`)
         .then((response => response.json()))
         .then((data) => {
             const options = data.map((show) => ({

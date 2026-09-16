@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { supabase } from '../config/supabaseclient'
+import { API_URL } from '../config/api'
 import CharPerfSelector from '../components/CharPerfSelector'
 
 function EditCastListPage() {
@@ -15,7 +16,7 @@ function EditCastListPage() {
     
     useEffect(() => {
         // Fetch the cast list
-        fetch(`http://localhost:3000/get-list/${id}`)
+        fetch(`${API_URL}/get-list/${id}`)
         .then((response) => response.json())
         .then((data) => {
             setCastList(data)
@@ -35,7 +36,7 @@ function EditCastListPage() {
     }, [id])
 
     useEffect(() => {
-        fetch('http://localhost:3000/performer')
+        fetch(`${API_URL}/performer`)
         .then((response => response.json()))
         .then((data) => {
             setPerformers(data)
@@ -45,7 +46,7 @@ function EditCastListPage() {
     useEffect(() => {
         if (!showId) return
 
-        fetch(`http://localhost:3000/show/${showId}/characters`)
+        fetch(`${API_URL}/show/${showId}/characters`)
         .then((response => response.json()))
         .then((data) => {
             setCharacters(data)

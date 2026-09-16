@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
+import { API_URL } from '../config/api'
 import DisplayCastList from '../components/DisplayCastList'
 
 function CastListPage() {
@@ -11,7 +12,7 @@ function CastListPage() {
 
     useEffect(() => {
         // Fetch the cast list
-        fetch(`http://localhost:3000/get-list/${id}`)
+        fetch(`${API_URL}/get-list/${id}`)
         .then((response) => response.json())
         .then((data) => {
             console.log(data)

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom"
+import { API_URL } from '../config/api'
 import { useCurrentUser } from '../config/currentUser.js'
 import DisplayCastList from '../components/DisplayCastList.jsx'
 
@@ -19,7 +20,7 @@ function HomePage() {
         setIsLoading(true)
         setError(null)
 
-        fetch('http://localhost:3000/cast-lists')
+        fetch(`${API_URL}/cast-lists`)
         .then((response => response.json()))
         .then((data) => {
             setCastLists(data)
@@ -36,7 +37,7 @@ function HomePage() {
         if (!profile) return 
 
         // Fetch the cast lists for this user
-        fetch(`http://localhost:3000/cast-lists/${profile.id}`)
+        fetch(`${API_URL}/cast-lists/${profile.id}`)
         .then((response => response.json()))
         .then((data) => {
             // Add the count

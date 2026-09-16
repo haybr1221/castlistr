@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../config/api'
 import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
 import DisplayPerformers from '../components/DisplayPerformers.jsx'
@@ -35,7 +36,7 @@ function PerformersPage() {
             params.set("search", searchTerm)
         }
 
-        fetch(`http://localhost:3000/performer-pagination?${params.toString()}`)
+        fetch(`${API_URL}/performer-pagination?${params.toString()}`)
             .then(response => response.json())
             .then((result) => {
                 setPerformers(result.perfWithCounts)

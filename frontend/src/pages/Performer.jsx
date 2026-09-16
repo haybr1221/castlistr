@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { API_URL } from '../config/api'
 import { useCurrentUser } from '../config/currentUser.js'
 import { supabase } from '../config/supabaseclient.js'
 import DisplayRoles from '../components/DisplayRoles'
@@ -22,7 +23,7 @@ function PerformerPage() {
         // Fetch the information for this performer
         setHeadshotLoading(true)
         
-        fetch(`http://localhost:3000/performer/by-slug/${slug}`)
+        fetch(`${API_URL}/performer/by-slug/${slug}`)
         .then(response => response.json())
         .then((data) => {
             setPerformer(data)
@@ -64,7 +65,7 @@ function PerformerPage() {
         // // data.id is the new role ID 
         // const newRoleId = data.id 
         
-        // const fullRole = await fetch(`http://localhost:3000/roles/single/${newRoleId}`).then(res => res.json())
+        // const fullRole = await fetch(`${API_URL}/roles/single/${newRoleId}`).then(res => res.json())
         
         // setRoles(prev => [...prev, fullRole])
 
@@ -80,7 +81,7 @@ function PerformerPage() {
         // Fetch roles for this performer
         setRolesLoading(true)
 
-        fetch(`http://localhost:3000/roles/${performer.id}`)
+        fetch(`${API_URL}/roles/${performer.id}`)
         .then(response => response.json())
         .then((data) => {
             if (!data) throw "No data to fetch!"

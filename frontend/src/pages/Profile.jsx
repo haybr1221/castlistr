@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { API_URL } from '../config/api'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
 import { supabase } from '../config/supabaseclient.js'
@@ -27,7 +28,7 @@ function ProfilePage() {
 
     // First fetch the ID for this user
     useEffect(() => {
-        fetch(`http://localhost:3000/get-user/${username}`)
+        fetch(`${API_URL}/get-user/${username}`)
         .then((response => response.json()))
         .then((data) => {
             setProfileId(data.id)
@@ -47,7 +48,7 @@ function ProfilePage() {
         setUserListsError(null)
 
         // Fetch the cast lists for this user
-        fetch(`http://localhost:3000/cast-lists/${profileId}`)
+        fetch(`${API_URL}/cast-lists/${profileId}`)
         .then((response => response.json()))
         .then((data) => {
             setUserLists(data)
@@ -63,7 +64,7 @@ function ProfilePage() {
         setLikedListsError(null)
 
         // Fetch the liked casts lists for this user
-        fetch(`http://localhost:3000/liked-lists/${profileId}`)
+        fetch(`${API_URL}/liked-lists/${profileId}`)
         .then((response => response.json()))
         .then((data) => {
             setLikedLists(data)
@@ -85,7 +86,7 @@ function ProfilePage() {
     //     console.log(profileId)
 
     //     async function loadFollowed() {
-    //         const response = await fetch(`http://localhost:3000/is-following/${user.id}/${profileId}`)
+    //         const response = await fetch(`${API_URL}/is-following/${user.id}/${profileId}`)
     //         const isFollowing = await response.json()
     //         console.log(isFollowing)
     //         if (!isCancelled) setIsFollowing(isFollowing)

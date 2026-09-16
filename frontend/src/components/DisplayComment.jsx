@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_URL } from '../config/api'
 
 function DisplayComment({ comment }) {
     const [commentUser, setCommentUser] = useState({})
@@ -6,7 +7,7 @@ function DisplayComment({ comment }) {
     useEffect(() => {
         if (!comment.user_id) return
 
-        fetch(`http://localhost:3000/get-profile/${comment.user_id}`)
+        fetch(`${API_URL}/get-profile/${comment.user_id}`)
         .then(response => response.json())
         .then((data) => {
             setCommentUser(data)

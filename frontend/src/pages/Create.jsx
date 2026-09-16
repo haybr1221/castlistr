@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
+import { API_URL } from '../config/api';
 import CharPerfSelector from '../components/CharPerfSelector.jsx' 
 import ShowDropdown from '../components/ShowDropdown.jsx'
 import PerformerCreditModal from '../components/PerformerCreditModal.jsx'
@@ -130,7 +131,7 @@ function CreatePage() {
     }
 
     useEffect(() => {
-        fetch('http://localhost:3000/performer')
+        fetch(`${API_URL}/performer`)
         .then((response => response.json()))
         .then((data) => {
             setPerformers(data)
@@ -147,7 +148,7 @@ function CreatePage() {
             return
         }
 
-        fetch(`http://localhost:3000/show/${selectedShow?.value}/characters`)
+        fetch(`${API_URL}/show/${selectedShow?.value}/characters`)
         .then((response => response.json()))
         .then((data) => {
             setCharacters(data)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import ShowDropdown from '../components/ShowDropdown.jsx'
+import { API_URL } from '../config/api'
 
 function AddRoleModal({ onClose, onCreate }) {
     const [roleInfo, setRoleInfo] = useState({
@@ -70,7 +71,7 @@ function AddRoleModal({ onClose, onCreate }) {
         // in case the show is changed, reset role info
         setRoleInfo({})
         
-        fetch(`http://localhost:3000/show/${show?.value}/characters`)
+        fetch(`${API_URL}/show/${show?.value}/characters`)
         .then((response => response.json()))
         .then((data) => {
             const options = data.map((char) => ({
@@ -88,7 +89,7 @@ function AddRoleModal({ onClose, onCreate }) {
         // in case the show is changed, reset role info
         setRoleInfo({})
         
-        fetch(`http://localhost:3000/tour/${show?.value}`)
+        fetch(`${API_URL}/tour/${show?.value}`)
         .then((response => response.json()))
         .then((data) => {
             const options = data.map((tour) => ({
@@ -155,19 +156,18 @@ function AddRoleModal({ onClose, onCreate }) {
                             value={roleInfo.cover_status}
                             onChange={e => setRoleInfo(prev => ({ ...prev, cover_status: e.target.value}))}
                             placeholder="Select a cover status"
-                            id="select-dropdown"
+                            className="create-role-select"
                         >
-                            <option value="
-                            ">
+                            <option value="">
                                 Select
                             </option>
-                            <option value="original">
+                            <option value="Original">
                                 Original
                             </option>
-                            <option value="replacement">
+                            <option value="Replacement">
                                 Replacement
                             </option>
-                            <option value="temporary replacement">
+                            <option value="Temporary Replacement">
                                 Temporary Replacement
                             </option>
                         </select>
@@ -183,9 +183,10 @@ function AddRoleModal({ onClose, onCreate }) {
                             type="date"
                             name="arrivedDate"
                             value={(roleInfo.arrivedDate)}
-                            onChange={e => setRoleInfo(prev => ({ ...prev, arrivedDate: e.target.value}))}>
+                            onChange={e => setRoleInfo(prev => ({ ...prev, arrivedDate: e.target.value}))}
+                            className="create-role-select"
+                        >
                         </input>
-                        <br></br>
                         <label htmlFor="left" className="label">
                             Left Date:
                         </label>
@@ -193,7 +194,9 @@ function AddRoleModal({ onClose, onCreate }) {
                             type="date"
                             name="leftDate"
                             value={(roleInfo.leftDate)}
-                            onChange={e => setRoleInfo(prev => ({ ...prev, leftDate: e.target.value }))}>
+                            onChange={e => setRoleInfo(prev => ({ ...prev, leftDate: e.target.value }))}
+                            className="create-role-select"
+                        >
                         </input>
                     </>
                 )}

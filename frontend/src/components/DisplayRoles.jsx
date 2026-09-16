@@ -12,11 +12,13 @@ function DisplayRole({rolesList}) {
                                 {role.tour.title}
                             </p>
                             <div className="role-dates">
+                                {role.arrived && (
                                 <p>
                                     <span className="date-label">
                                         Arrived: 
                                     </span> {role.arrived}
-                                    </p>
+                                </p>
+                                )}
                                 {role.left && (
                                 <p>
                                     <span className="date-label">

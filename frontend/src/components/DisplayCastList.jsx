@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../config/currentUser.js'
 import { supabase } from '../config/supabaseclient.js';
+import { API_URL } from '../config/api'
 import ListOptionsModal from './ListOptionsModal.jsx';
 import DisplayComment  from './DisplayComment.jsx';
 import { useScreenshot } from '../hooks/useScreenshot.js'
@@ -32,7 +33,7 @@ function DisplayCastList({ castList }) {
         async function loadProfile() {
             try {
                 setError(null)
-                const response = await fetch(`http://localhost:3000/get-profile/${castList.user_id}`)
+                const response = await fetch(`${API_URL}/get-profile/${castList.user_id}`)
                 if (!response.ok)
                 {
                     throw new Error(`Error fetching profile for ${castList.user_id}`)
@@ -68,7 +69,7 @@ function DisplayCastList({ castList }) {
         let isCancelled = false
 
         async function loadLiked() {
-            const response = await fetch(`http://localhost:3000/get-likes/${user.id}/${castList.id}`)
+            const response = await fetch(`${API_URL}/get-likes/${user.id}/${castList.id}`)
             const isLiked = await response.json()
             if (!isCancelled) setIsLiked(isLiked)
         }
