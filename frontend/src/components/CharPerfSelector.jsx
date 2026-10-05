@@ -80,7 +80,6 @@ function CharPerfSelector({
             ]
         }
 
-        console.log("Supabase returned:", data[0]);
         setCharacters([...characters, newChar]);
 
         if (!isMultiple) {

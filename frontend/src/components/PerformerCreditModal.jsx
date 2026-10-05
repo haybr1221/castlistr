@@ -6,7 +6,6 @@ function PerformerCreditModal({ data, onClose }) {
     const charName = data.credits[0].character.name
     const credits = data.credits
 
-    console.log(data)
     return (
         <div className="modal" id="credit-modal">
             <button onClick={onClose} className="cancel">&times;</button>
