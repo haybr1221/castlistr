@@ -3,10 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentUser } from '../config/currentUser.js'
-import { supabase } from '../config/supabaseclient.js';
 import { API_URL } from '../config/api'
 import ListOptionsModal from './ListOptionsModal.jsx';
-import DisplayComment  from './DisplayComment.jsx';
 import { useScreenshot } from '../hooks/useScreenshot.js'
 
 function DisplayCastList({ castList }) {
@@ -15,15 +13,10 @@ function DisplayCastList({ castList }) {
     const [avatarUrl, setAvatarUrl] = useState(null)
     const [creatorId, setCreatorId] = useState(null)
     const [error, setError] = useState(null)
-    const [isLiked, setIsLiked] = useState(null)
     const [listModal, setListModal] = useState(false)
-    const [isCommenting, setIsCommenting] = useState(false)
-    const [newComment, setNewComment] = useState('')
-    const [listComments, setListComments] = useState(castList.user_comments)
     const { capture } = useScreenshot()
     
     const { user, profile } = useCurrentUser()
-    const commentsRef = useRef(null)
 
     useEffect(() => {
         if (!castList.user_id) return
@@ -62,78 +55,6 @@ function DisplayCastList({ castList }) {
         }
 
     }, [castList.user_id])
-
-    useEffect(() => {
-        if (!user) return
-
-        let isCancelled = false
-
-        async function loadLiked() {
-            const response = await fetch(`${API_URL}/get-likes/${user.id}/${castList.id}`)
-            const isLiked = await response.json()
-            if (!isCancelled) setIsLiked(isLiked)
-        }
-
-        loadLiked()
-
-        return () => { isCancelled = true }
-    }, [user, castList.id])
-
-    useEffect(() => { 
-        if (commentsRef.current) 
-            { commentsRef.current.scrollTop = commentsRef.current.scrollHeight; } 
-    }, [listComments]);
-
-    async function toggleLike() {
-        if (!isLiked)
-        {
-            // It is not liked yet, so add it to the table
-            const { error } = await supabase
-                .from("user_likes")
-                .insert({
-                    user_id: user.id,
-                    cast_list_id: castList.id
-                })
-
-            if (error) throw error
-
-            // We know it is now liked
-            setIsLiked(true)
-        }
-        else
-        {
-            // It is already liked, so delete from the table
-            const { error } = await supabase
-                .from("user_likes")
-                .delete()
-                .eq("user_id", user.id)
-                .eq("cast_list_id", castList.id)
-
-            if (error) throw error
-
-            // We know it is now unliked
-            setIsLiked(false)
-        }
-    }
-
-    async function handleSubmit() {
-        // submit the comment into supabase
-
-        const { data, error } = await supabase
-            .from("user_comments")
-            .insert({
-                user_id: user.id,
-                cast_list_id: castList.id,
-                text: newComment
-            })
-            .select()
-
-        if (error) throw error;
-
-        setListComments(prev => [...prev, data[0]]) 
-
-        setNewComment('')
-    }
 
     const cardRef = useRef(null)
 
@@ -202,34 +123,6 @@ function DisplayCastList({ castList }) {
                     })}
                 </div>
             </Link>
-            {/* Footer with interaction buttons */}
-            <div className="cast-list-footer">
-                <i role="button" className={isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"} onClick={toggleLike} />
-                <i className={isCommenting ? "fa-solid fa-comment" : "fa-regular fa-comment"} onClick={() => isCommenting ? setIsCommenting(false) : setIsCommenting(true)}></i>
-            </div>
-            {isCommenting && (
-                <>
-                    <div className="prev-comments" ref={commentsRef}>
-                        {listComments && listComments.map((comment) =>
-                            <DisplayComment comment={comment} key={comment.id}>
-                            </DisplayComment>
-                        )}
-                    </div>
-
-                    <div className="list-comment">
-                        <img src={profile.avatar_url} className="commenting-avatar"></img>
-                        <input 
-                            name="new-comment"
-                            type="text"
-                            value={newComment}
-                            onChange={e => setNewComment(e.target.value)}
-                            required
-                            placeholder="Type a comment here..."
-                            />
-                        <button type="button" onClick={handleSubmit} className="button">Submit</button>
-                    </div>
-                </>
-            )}
         </div>
     )
 }
