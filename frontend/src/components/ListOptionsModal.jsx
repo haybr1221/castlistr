@@ -113,16 +113,6 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
                         </p>
                     </>
                 )}
-                {/* { currUserId != creatorId && (
-                    <>
-                        <p className="red-text option">
-                            Block User
-                        </p>
-                    </>
-                )}
-                <p className="red-text option">
-                    Report List
-                </p> */}
                 <p onClick={onDownload} className="option">
                     Download as Image
                 </p>
