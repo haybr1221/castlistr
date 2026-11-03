@@ -373,36 +373,7 @@ a {
     gap: 10px;
 }
 
-.prev-comments {
-    border-top: 0.5px black solid;
-    max-height: 200px;
-    overflow: scroll;
-    box-sizing: border-box;
-    padding-top: 15px;
-}
-
-.list-comment {
-    display: flex;
-    flex-direction: row;
-    padding-top: 5px;
-    gap: 5px;
-}
-
-.commenting-avatar {
-    width: 45px;
-    height: 45px;
-}
-
-.list-comment input {
-    width: 100%;
-}
-
-.list-comment button {
-    padding: 8px;
-}
-
-.capturing .fa-ellipsis, .capturing .list-options,
-.capturing .fa-heart, .capturing .fa-comment {
+.capturing .fa-ellipsis, .capturing .list-options {
     display: none;
 }
 
@@ -414,29 +385,6 @@ a {
 /* DisplayCharacters */
 .display-list {
     overflow: scroll;
-}
-
-/* DisplayComment */
-.comment {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    font-size: 12px;
-}
-
-.comment-body {
-    display: flex;
-    flex-direction: column;
-    font-family: lexend;
-}
-
-.comment-username {
-    font-weight: bold;
-}
-
-.comment-avatar {
-    width: 35px;
-    height: 35px;
 }
 
 /* DisplayPerformers */
