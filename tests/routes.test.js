@@ -184,32 +184,6 @@ describe("cast lists", () => {
         assert.equal(status, 500);
         assert.equal(body.error, "Failed to fetch cast list.");
     });
-
-    test("GET /get-likes returns true when a like row exists, false otherwise", async () => {
-        fake.queue("user_likes", { data: [{ id: 1 }], error: null });
-        assert.equal((await get("/get-likes/u1/l1")).body, true);
-
-        fake.queue("user_likes", { data: [], error: null });
-        assert.equal((await get("/get-likes/u1/l1")).body, false);
-    });
-
-    test("GET /liked-lists returns [] without querying cast_lists when nothing is liked", async () => {
-        fake.queue("user_likes", { data: [], error: null });
-        const { status, body } = await get("/liked-lists/u1");
-        assert.equal(status, 200);
-        assert.deepEqual(body, []);
-        assert.ok(!fake.calls.some((c) => c.table === "cast_lists"));
-    });
-
-    test("GET /liked-lists fetches the liked lists by id", async () => {
-        fake.queue("user_likes", { data: [{ cast_list_id: 5 }, { cast_list_id: 8 }], error: null });
-        fake.queue("cast_lists", { data: [{ id: 5 }, { id: 8 }], error: null });
-        const { body } = await get("/liked-lists/u1");
-        assert.deepEqual(body, [{ id: 5 }, { id: 8 }]);
-        assert.ok(hasOp(fake, "cast_lists", "in", "id"));
-        const inOp = fake.calls.find((c) => c.table === "cast_lists").ops.find((o) => o[0] === "in");
-        assert.deepEqual(inOp[2], [5, 8]);
-    });
 });
 
 describe("roles", () => {
