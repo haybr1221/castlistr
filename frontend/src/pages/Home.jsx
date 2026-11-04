@@ -66,16 +66,6 @@ function HomePage() {
             { !userLoading && user && profile && (
                 <div id="profile-container">
                     <div id="user-info-container">
-                        <div id="profile-pic">
-                            {!userLoading &&  profile?.avatar_url &&(                            
-                                <img 
-                                    src={profile.avatar_url} 
-                                    alt={`Profile picture for ${profile.username}`}
-                                    className="avatar"
-                                    referrerPolicy="no-referrer"
-                                />
-                            )}
-                        </div>
                         <div id="user-info">
                             {!userLoading && profile?.username && (
                                 <p id="username">{profile.username}</p>
