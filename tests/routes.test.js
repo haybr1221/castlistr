@@ -14,7 +14,7 @@ before(async () => {
 after(() => app.close());
 beforeEach(() => fake.reset());
 
-const get = async (path) => {a
+const get = async (path) => {
     const res = await fetch(app.baseUrl + path);
     return { status: res.status, body: await res.json() };
 };
@@ -222,4 +222,5 @@ describe("users", () => {
         const { status } = await get("/get-profile/u1");
         assert.equal(status, 500);
     });
+
 });
