@@ -18,7 +18,7 @@ router.get("/cast-lists", async (req, res) => {
                 id,
                 character:character_id ( * ),
                 performer:performer_id ( full_name, id, headshot_url )
-            `)
+            )`)
         .order("created_at", { ascending: false })
 
     if (error) {
