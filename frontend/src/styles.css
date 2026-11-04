@@ -292,11 +292,6 @@ a {
     cursor: pointer;
 }
 
-.list-avatar {
-    width: 45px;
-    height: 45px;
-}
-
 .title-div {
     display: flex;
     flex-direction: column;
@@ -738,17 +733,6 @@ a {
     flex-wrap: wrap;
     padding: 20px;
     gap: 10px;
-}
-
-#user-information #profile-pic {
-    height: 100px;
-    width: 100px;
-    display: block;
-}
-
-.avatar {
-    width: 100px;
-    height: 100px;
 }
 
 #user-info {

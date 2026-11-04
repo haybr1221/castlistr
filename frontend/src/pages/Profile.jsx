@@ -14,7 +14,6 @@ function ProfilePage() {
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
     const [currentTab, setCurrentTab] = useState("lists")
-    const [avatarUrl, setAvatarUrl] = useState(null)
 
     const { user } = useCurrentUser()
 
@@ -28,7 +27,6 @@ function ProfilePage() {
         .then((response => response.json()))
         .then((data) => {
             setProfileId(data.id)
-            setAvatarUrl(data.avatar_url)
         })
         .catch((err) => {
             console.error("Error fetching user: ", err)
@@ -57,10 +55,6 @@ function ProfilePage() {
     return (
         <main className="center-content" id="user-profile">
             <div id="user-information">
-                <div id="profile-pic">
-                    <img src={avatarUrl} className="avatar"
-                    referrerPolicy="no-referrer" />
-                </div>
                 <div id="basic-info">
                     <p id="username">{username}</p>
                     <p id="user-list-count">{userLists.length} {userLists.length === 1 ? "Cast List" : "Cast Lists"}</p>

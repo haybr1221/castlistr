@@ -110,11 +110,6 @@ function EditCastListPage() {
             <div className="edit-cast-list-card">
                 <div className="list-header">
                     <div className="profile-link">
-                        <img
-                            src={castList.profile.avatar_url}
-                            alt={`Profile picture for ${castList.profile.username}`}
-                            className="list-avatar"
-                        />
                         <div className="title-div">
                             <p className="list-title">{castList.title}</p>
                             <p className="list-subtitle">

@@ -10,7 +10,6 @@ import { useScreenshot } from '../hooks/useScreenshot.js'
 function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
-    const [avatarUrl, setAvatarUrl] = useState(null)
     const [creatorId, setCreatorId] = useState(null)
     const [error, setError] = useState(null)
     const [listModal, setListModal] = useState(false)
@@ -36,7 +35,6 @@ function DisplayCastList({ castList }) {
                 if (!isCancelled)
                 {
                     setUsername(data.username)
-                    setAvatarUrl(data.avatar_url)
                     setCreatorId(data.id)
                 }
             }
@@ -76,11 +74,6 @@ function DisplayCastList({ castList }) {
         <div className="cast-list-card" ref={cardRef}>
             <div className="list-header">
                 <Link to={username ? `/users/${username}` : '#'} className="profile-link">
-                    <img
-                        src={avatarUrl}
-                        alt={`Profile picture for ${username}`}
-                        className="list-avatar"
-                    />
                     <div className="title-div">
                         <p className="list-title">
                             {castList.title}
