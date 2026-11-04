@@ -1003,25 +1003,69 @@ a {
     align-items: flex-start;  
 }
 
-#user-sections #tabs {
-    margin-bottom: 0px;
-}
-
 #user-sections {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
+/* Gallery of compact list cards */
 .profile-lists {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    width: min(960px, 100%);
+    font-family: lexend;
+}
+
+/* ListCard */
+.list-card {
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    overflow: scroll;
-    width: 640px;
-    max-height: 600px;
-    overflow: scroll;
-    font-family: lexend;
+    gap: 6px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 30px;
+    font-family: lexend, sans-serif;
+    font-size: 14px;
+}
+
+.list-card:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.list-card-title {
+    font-family: 'coolvetica', sans-serif;
+    font-size: 18px;
+}
+
+.list-card-show {
+    color: var(--purple);
+    margin-bottom: 8px;
+}
+
+.list-card-entries {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.list-card-entries li {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-card-character {
+    font-weight: bold;
+}
+
+.list-card-more {
+    margin-top: 6px;
+    font-style: italic;
 }
 
 /* SignIn */
