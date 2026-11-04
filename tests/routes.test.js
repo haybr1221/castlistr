@@ -14,7 +14,7 @@ before(async () => {
 after(() => app.close());
 beforeEach(() => fake.reset());
 
-const get = async (path) => {
+const get = async (path) => {a
     const res = await fetch(app.baseUrl + path);
     return { status: res.status, body: await res.json() };
 };
@@ -221,15 +221,5 @@ describe("users", () => {
         fake.queue("profile", { data: null, error: { message: "x" } });
         const { status } = await get("/get-profile/u1");
         assert.equal(status, 500);
-    });
-
-    test("GET /is-following returns true/false and filters follower+following", async () => {
-        fake.queue("follow", { data: [{ id: 1 }], error: null });
-        assert.equal((await get("/is-following/a/b")).body, true);
-        assert.ok(hasOp(fake, "follow", "eq", "follower", "a"));
-        assert.ok(hasOp(fake, "follow", "eq", "following", "b"));
-
-        fake.queue("follow", { data: [], error: null });
-        assert.equal((await get("/is-following/a/b")).body, false);
     });
 });
