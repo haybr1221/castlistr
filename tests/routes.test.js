@@ -169,6 +169,15 @@ describe("cast lists", () => {
         assert.ok(hasOp(fake, "cast_lists", "eq", "user_id", "u1"));
     });
 
+    test("GET /cast-lists/:userId sorts newest first, with no pinning", async () => {
+        fake.queue("cast_lists", { data: [], error: null });
+        await get("/cast-lists/u1");
+        const orders = fake.calls[0].ops.filter((o) => o[0] === "order");
+        assert.equal(orders.length, 1);
+        assert.equal(orders[0][1], "created_at");
+        assert.deepEqual(orders[0][2], { ascending: false });
+    });
+
     test("GET /get-list/:id select string has balanced parentheses (regression)", async () => {
         fake.queue("cast_lists", { data: { id: 1 }, error: null });
         await get("/get-list/1");
