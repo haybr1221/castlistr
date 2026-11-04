@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { API_URL } from '../config/api'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
-import { supabase } from '../config/supabaseclient.js'
 import DisplayCastLists from '../components/DisplayCastList.jsx'
 
 function ProfilePage() {
