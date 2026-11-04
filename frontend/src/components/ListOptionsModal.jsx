@@ -4,24 +4,8 @@ import { useState, useEffect } from 'react'
 import ConfirmDeleteList from '../components/ConfirmDeleteList.jsx'
 
 function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
-    const [ isPinned, setIsPinned ] = useState(false)
     const [ createdDate, setCreatedDate ] = useState(null)
     const [ confirmDeleteModal, setConfirmDeleteModal ] = useState(false)
-
-    useEffect(() => {
-        async function fetchIsPinned() {
-            // check if this list is already pinned
-            const { data, error } = await supabase
-                .from("cast_lists")
-                .select("is_pinned")
-                .eq("id", listId)
-                .single()
-
-            if (!error && data) setIsPinned(data.is_pinned)
-        }
-
-        fetchIsPinned()
-    }, [listId])
 
     useEffect(() => {
         async function fetchCreatedDate() {
@@ -54,43 +38,6 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
         if (error) throw error
     }
 
-    async function pinList() {
-        // is the list already pinned?
-        if (isPinned) {
-            // unpin in!
-            const { error } = await supabase
-                .from("cast_lists")
-                .update({is_pinned: false})
-                .eq("user_id", currUserId)
-                .eq("id", listId)
-
-            if (error) throw error
-
-            // reset isPinned, we just changed that
-            setIsPinned(false)
-            return
-        }
-
-        // it must not be pinned right now, so unpin the list that's there
-
-        const {error: unPinError} = await supabase
-            .from("cast_lists")
-            .update({is_pinned: false})
-            .eq("user_id", currUserId)
-            .eq("is_pinned", true)
-
-        if (unPinError) throw unPinError
-
-        // now we can pin it
-        const { error: pinError } = await supabase
-            .from("cast_lists")
-            .update({is_pinned: true})
-            .eq("user_id", currUserId)
-            .eq("id", listId)
-
-        if (pinError) throw error
-    }
-
     return(
         <>       
             {confirmDeleteModal && (
@@ -107,9 +54,6 @@ function ListOptionsModal({ currUserId, listId, creatorId, onDownload }) {
                         </Link>
                         <p onClick={() => setConfirmDeleteModal(true)} className="option">
                             Delete List
-                        </p>
-                        <p onClick={pinList} className="option">
-                            {isPinned ? "Unpin List" : "Pin List"}
                         </p>
                     </>
                 )}

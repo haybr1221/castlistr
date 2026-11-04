@@ -48,7 +48,6 @@ router.get(`/cast-lists/:userId`, async (req, res) => {
                 performer:performer_id ( * )
             )`)
         .eq("user_id", userId)
-        .order("is_pinned", {ascending: false})
         .order("created_at", {ascending: false})
 
     if (error) {
