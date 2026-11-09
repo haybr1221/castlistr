@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import { API_URL } from '../config/api'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
-import DisplayCastLists from '../components/DisplayCastList.jsx'
+import { supabase } from '../config/supabaseclient.js'
+import ListCard from '../components/ListCard.jsx'
 
 function ProfilePage() {
     const { username } = useParams()
@@ -12,7 +13,6 @@ function ProfilePage() {
     const [userLists, setUserLists] = useState([])
     const [userListsLoading, setUserListsLoading] = useState(null)
     const [userListsError, setUserListsError] = useState(null)
-    const [currentTab, setCurrentTab] = useState("lists")
 
     const { user } = useCurrentUser()
 
@@ -65,21 +65,14 @@ function ProfilePage() {
                 </div>
             </div>
             <div id="user-sections">
-                <div id="tabs">
-                    <p
-                        className={currentTab === "lists" ? "tab active-tab" : "tab"}
-                        onClick={() => setCurrentTab("lists")}>
-                        Lists
-                    </p>
-                </div>
-                { currentTab == 'lists' && !userListsLoading && (
+                { !userListsLoading && (
                     <div className="profile-lists">
-                    {userLists.length === 0 && !userListsError && (
-                    <p>No lists yet.</p>
+                        {userLists.length === 0 && !userListsError && (
+                            <p>No lists yet.</p>
                         )}
-                    {userLists.map((list) => (
-                        <DisplayCastLists key={list.id} castList={list} />
-                    ))}
+                        {userLists.map((list) => (
+                            <ListCard key={list.id} castList={list} />
+                        ))}
                     </div>
                 )}
             </div>
