@@ -15,7 +15,7 @@ function DisplayCastList({ castList }) {
     const [listModal, setListModal] = useState(false)
     const { capture } = useScreenshot()
     
-    const { user, profile } = useCurrentUser()
+    const { user } = useCurrentUser()
 
     useEffect(() => {
         if (!castList.user_id) return
