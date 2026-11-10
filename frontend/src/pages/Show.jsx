@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { API_URL } from '../config/api'
 import { supabase } from '../config/supabaseclient.js'
 import { useCurrentUser } from '../config/currentUser.js'
@@ -27,8 +27,6 @@ function ShowPage() {
         title: "",
         showId: null
     })
-
-    const navigate = useNavigate()
 
     const { user } = useCurrentUser()
 

@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { API_URL } from '../config/api'
 import { Link } from "react-router-dom"
 import { useCurrentUser } from '../config/currentUser'
-import { supabase } from '../config/supabaseclient.js'
 import ListCard from '../components/ListCard.jsx'
 
 function ProfilePage() {
@@ -18,7 +17,7 @@ function ProfilePage() {
 
     useEffect(() => { 
         document.title = `${username}'s Profile - castlistr`; 
-    }, [])
+    }, [username])
 
     // First fetch the ID for this user
     useEffect(() => {
@@ -30,7 +29,7 @@ function ProfilePage() {
         .catch((err) => {
             console.error("Error fetching user: ", err)
         })
-    }, [])
+    }, [username])
 
 
     // Fetch the user's cast lists

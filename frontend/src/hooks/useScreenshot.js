@@ -28,7 +28,7 @@ const addSiteWatermark = async (sourceCanvas, text = "castlistr") => {
 }
 
 export function useScreenshot() {
-    const capture = async (element, { format = 'png', filename = 'castlist', watermark = true} = {} ) => {
+    const capture = async (element, { filename = 'castlist', watermark = true} = {} ) => {
         if (!element) return
 
         let canvas = await html2canvas(element, {
