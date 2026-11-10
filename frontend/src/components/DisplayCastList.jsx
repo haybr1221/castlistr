@@ -11,7 +11,6 @@ function DisplayCastList({ castList }) {
     const showTitle = castList.show?.title;
     const [username, setUsername] = useState(null)
     const [creatorId, setCreatorId] = useState(null)
-    const [error, setError] = useState(null)
     const [listModal, setListModal] = useState(false)
     const { capture } = useScreenshot()
     
@@ -24,7 +23,6 @@ function DisplayCastList({ castList }) {
 
         async function loadProfile() {
             try {
-                setError(null)
                 const response = await fetch(`${API_URL}/get-profile/${castList.user_id}`)
                 if (!response.ok)
                 {
@@ -40,8 +38,7 @@ function DisplayCastList({ castList }) {
             }
             catch (err) {
                 if (!isCancelled) {
-                    console.error("Error fetching profile: ", error)
-                    setError(err)
+                    console.error("Error fetching profile: ", err)
                 }
             }
         }
@@ -62,7 +59,6 @@ function DisplayCastList({ castList }) {
         cardRef.current.classList.add('capturing') // add css class for capture styling
         try {
             await capture(cardRef.current, {
-                format: 'png',
                 filename: `cast-list-${castList.id}`,
             })
         } finally {

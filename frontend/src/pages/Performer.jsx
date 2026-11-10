@@ -47,7 +47,7 @@ function PerformerPage() {
         //     .eq("performer.full_name", performer.full_name)
         
         // Insert into performer_has_char
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("performer_has_character")
             .insert({
                 performer_id: performer.id,

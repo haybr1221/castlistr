@@ -24,6 +24,11 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Pages set loading flags at the top of their fetch effects. React discourages
+      // that, but it works; fixing it means a data-fetching rewrite (Suspense or a
+      // query library), not a lint chore. Kept visible as warnings so they are not
+      // forgotten. Raise back to 'error' when the pages are reworked.
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
   {
