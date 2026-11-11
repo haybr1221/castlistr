@@ -53,6 +53,14 @@ function DisplayCastList({ castList }) {
 
     const cardRef = useRef(null)
 
+    // what shape? the smallest one that holds every entry, else the largest
+    const charCount = castList.cast_list_entry.length
+
+    const cardShape =
+        charCount >= 6 ? 'cast-list-square':
+        charCount >= 8 ? 'cast-list-short-rect':
+        'cast-list-long-rect'
+
     // reset castlist for exporting
     const handleDownloadClick = async () => {
         setListModal(false) // make sure dropdown is closed, we don't want it there!
@@ -67,7 +75,7 @@ function DisplayCastList({ castList }) {
     }
 
     return (
-        <div className="cast-list-card" ref={cardRef}>
+        <div className={cardShape} ref={cardRef}>
             <div className="list-header">
                 <Link to={username ? `/users/${username}` : '#'} className="profile-link">
                     <div className="title-div">
@@ -96,12 +104,12 @@ function DisplayCastList({ castList }) {
 
             <Link to={`/cast-lists/${castList.id}`}>
                 <div className="cast-list-body">
-                    {castList.cast_list_entry?.map((entry) => {
+                    {castList.cast_list_entry?.map((entry, index) => {
                         const charName = entry.character.name
                         const perfName = entry.performer.full_name
-                        
+
                         return (
-                            <div className="char-div" key={entry.id}>
+                            <div className={'char-div'} key={entry.id}>
                                 <p className="character">
                                     {charName}
                                 </p>
